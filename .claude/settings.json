@@ -1,7 +1,13 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(git rm:*)",
+      "Bash(git reset:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker rm:*)"
+    ],
     "additionalDirectories": [
-      "/Users/ameno/projects/nehemiah/node_modules"
+      "/Users/ameno/.claude/commands"
     ]
   }
 }
