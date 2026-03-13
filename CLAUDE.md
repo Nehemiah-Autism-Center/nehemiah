@@ -138,6 +138,22 @@ All routes are prefixed with `/api/v1` (set in `main.ts`). Controllers should NO
 
 This project uses Fastify, NOT Express. Do not import Express types or middleware. Use `@nestjs/platform-fastify`.
 
+### Frontend — Development Guide (MUST follow)
+
+**All frontend work MUST follow the rules in [`docs/frontend-development.md`](docs/frontend-development.md).** Read it before building any frontend feature or component.
+
+Key rules enforced by the guide:
+- **Mobile-first design** — base styles for mobile, layer responsive prefixes up
+- **Max 1000 lines per file** — split if approaching limit
+- **Component placement** — check `ui/` and `shared/` before creating new components; reusable components get their own folder in `ui/<name>/`
+- **Page structure** — `page.tsx` stays thin, renders a feature listing component that handles `isLoading`/`isError`/`data` states; child components receive resolved data as props
+- **Optional chaining** — always use `?.` and `??` for nullable access
+- **Performance** — apply `memo`, `useCallback`, `useMemo` where beneficial (lists 20+ items, callbacks to memoized children, array transformations)
+- **Types in type files** — never inline, always in `types/` folders
+- **TanStack Query** for all server state, **Zustand** for client state
+- **Path aliases only** — `@/` and `@shared/`, no relative `../../../`
+- **Forms** — Zod schema + react-hook-form + zodResolver + shadcn Form
+
 ### Frontend — Feature Modules
 
 Organize domain logic in `src/features/<name>/`:
@@ -151,29 +167,6 @@ Organize domain logic in `src/features/<name>/`:
 ├── types/           # Feature-local types
 └── index.ts         # Barrel export
 ```
-
-### Frontend — State Management
-
-- **Server state**: TanStack Query — all API data fetching goes through query hooks
-- **Client state**: Zustand stores in `src/store/`
-  - `auth.store.ts` — user session + JWT (persisted)
-  - `ui.store.ts` — global UI state (modals, sidebar, toasts)
-- Do NOT use React Context for state that changes frequently
-
-### Frontend — Forms
-
-Always use this pattern:
-1. Define Zod schema in `features/<name>/schemas/`
-2. Infer TypeScript type with `z.infer<typeof schema>`
-3. Use `react-hook-form` with `zodResolver`
-4. Render with shadcn Form components
-
-### Frontend — Components
-
-- `src/components/ui/` — shadcn/ui primitives (do not modify these directly)
-- `src/components/layout/` — Navbar, Sidebar, Footer
-- `src/components/shared/` — Reusable non-shadcn components
-- Feature-specific components go in `src/features/<name>/components/`
 
 ### Frontend — App Router
 
