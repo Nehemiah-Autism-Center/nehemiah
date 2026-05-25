@@ -22,9 +22,9 @@ export const slides = [
 ];
 
 export const counterItems = [
-  { icon: createElement(Users, { className: 'size-10' }), label: 'Children Currently Served', value: 90 },
+  { icon: createElement(Users, { className: 'size-10' }), label: 'Children Served', value: "300+" },
   { icon: createElement(Briefcase, { className: 'size-10' }), label: 'Dedicated Staff', value: 30 },
-  { icon: createElement(HandHeart, { className: 'size-10' }), label: 'Families Supported', value: 500 },
+  { icon: createElement(HandHeart, { className: 'size-10' }), label: 'Families Supported', value: '500+' },
   { icon: createElement(Trophy, { className: 'size-10' }), label: 'Years of Care', value: 15 },
 ];
 

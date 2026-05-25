@@ -93,7 +93,7 @@ export function VolunteerForm() {
             <Label htmlFor="fullName">Full Name *</Label>
             <Input
               id="fullName"
-              placeholder="e.g. Tigist Bekele"
+              placeholder=""
               {...register('fullName')}
               className={`mt-1 ${errors.fullName ? 'border-red-400' : ''}`}
             />
@@ -122,7 +122,7 @@ export function VolunteerForm() {
             <Input
               id="age"
               type="number"
-              placeholder="e.g. 25"
+              
               min={16}
               max={80}
               {...register('age')}
@@ -138,7 +138,7 @@ export function VolunteerForm() {
             <Label htmlFor="address">Address *</Label>
             <Input
               id="address"
-              placeholder="e.g. Bole, Addis Ababa"
+             
               {...register('address')}
               className={`mt-1 ${errors.address ? 'border-red-400' : ''}`}
             />
@@ -153,7 +153,7 @@ export function VolunteerForm() {
             <Input
               id="phone"
               type="tel"
-              placeholder="e.g. +251 912 345 678"
+              
               {...register('phone')}
               className={`mt-1 ${errors.phone ? 'border-red-400' : ''}`}
             />
@@ -175,7 +175,7 @@ export function VolunteerForm() {
             <Label htmlFor="educationBackground">Education Background *</Label>
             <Input
               id="educationBackground"
-              placeholder="e.g. BSc in Psychology, Addis Ababa University"
+              placeholder=""
               {...register('educationBackground')}
               className={`mt-1 ${errors.educationBackground ? 'border-red-400' : ''}`}
             />
@@ -216,8 +216,8 @@ export function VolunteerForm() {
               id="institutionName"
               placeholder={
                 occupationStatus === 'Student'
-                  ? 'e.g. Addis Ababa University'
-                  : 'e.g. Ethiopian Airlines'
+                  ? ''
+                  : ''
               }
               {...register('institutionName')}
               className="mt-1"
