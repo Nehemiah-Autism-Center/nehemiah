@@ -1,5 +1,5 @@
 FROM node:22-alpine AS base
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.30.3 --activate
 
 # ── Install dependencies ───────────────────────────────────────
 FROM base AS deps
@@ -31,8 +31,16 @@ RUN addgroup --system --gid 1001 nestjs && \
 
 COPY --from=prod-deps --chown=nestjs:nestjs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nestjs /app/dist ./dist
+# Keep migrations as an explicit runner-image contract instead of relying only
+# on Nest CLI asset copying performed during compilation.
+COPY --from=builder --chown=nestjs:nestjs /app/src/database/migrations ./dist/database/migrations
 COPY --chown=nestjs:nestjs package.json ./
+
+RUN test -f ./dist/database/migrations/meta/_journal.json && \
+    test -n "$(find ./dist/database/migrations -maxdepth 1 -name '*.sql' -print -quit)"
 
 USER nestjs
 EXPOSE 8000
-CMD ["dumb-init", "node", "dist/main.js"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:8000/api/v1/system/health >/dev/null || exit 1
+CMD ["dumb-init", "node", "dist/src/main.js"]
