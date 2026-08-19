@@ -1,0 +1,367 @@
+import { validateEnvironment } from './env.validation';
+
+describe('validateEnvironment', () => {
+  const validProductionEnvironment = {
+    NODE_ENV: 'production',
+    TRIAL_MODE: false,
+    JWT_ACCESS_SECRET: 'a'.repeat(32),
+    JWT_REFRESH_SECRET: 'b'.repeat(32),
+    IP_HASH_SECRET: 'c'.repeat(32),
+    INTERNAL_API_KEY: 'd'.repeat(32),
+    FRONTEND_URL: 'https://www.example.org',
+    STORAGE_ENDPOINT: 'http://minio:9000',
+    STORAGE_BUCKET: 'nehemiah-media',
+    STORAGE_ACCESS_KEY_ID: 'production-access-key',
+    STORAGE_SECRET_ACCESS_KEY: 'production-storage-key',
+    STORAGE_PUBLIC_URL: 'https://media.example.org',
+    PASSWORD_RESET_URL: 'https://www.example.org/admin/reset-password',
+    CONTACT_NOTIFICATION_EMAIL: 'contact@example.org',
+    MAIL_DRIVER: 'smtp',
+    MAIL_HOST: 'smtp.example.org',
+    MAIL_USER: 'apikey',
+    MAIL_PASSWORD: 'smtp-credential',
+    MAIL_FROM: 'noreply@example.org',
+  } as const;
+
+  it('applies safe development defaults', () => {
+    expect(validateEnvironment({})).toMatchObject({
+      NODE_ENV: 'development',
+      API_HOST: '0.0.0.0',
+      API_PORT: 8000,
+      DATABASE_PORT: 5432,
+      JWT_ACCESS_EXPIRY: '15m',
+      JWT_REFRESH_EXPIRY: '7d',
+      STORAGE_DRIVER: 'minio',
+      MAIL_DRIVER: 'mailpit',
+      PAYMENT_DRIVER: 'fake',
+      CACHE_DRIVER: 'redis',
+      PAYMENTS_ENABLED: false,
+      TRIAL_MODE: true,
+      RATE_LIMIT_TTL_MS: 60_000,
+      RATE_LIMIT_REQUESTS: 100,
+      HTTP_LOG_SUCCESS_SAMPLE_RATE: 1,
+      HTTP_SLOW_REQUEST_MS: 750,
+      WEB_CONCURRENCY: 1,
+      SCHEDULED_PUBLISHING_ENABLED: true,
+      SCHEDULED_PUBLISHING_INTERVAL_MS: 60_000,
+      RESOURCE_DOWNLOAD_LOG_CLEANUP_ENABLED: true,
+      RESOURCE_DOWNLOAD_LOG_RETENTION_DAYS: 365,
+      RESOURCE_DOWNLOAD_LOG_CLEANUP_INTERVAL_MS: 86_400_000,
+      STORAGE_DELETION_WORKER_ENABLED: true,
+      STORAGE_DELETION_WORKER_INTERVAL_MS: 5_000,
+      STORAGE_DELETION_WORKER_BATCH_SIZE: 10,
+      STORAGE_DELETION_WORKER_MAX_ATTEMPTS: 5,
+      STORAGE_DELETION_WORKER_BACKOFF_MS: 30_000,
+      STORAGE_DELETION_WORKER_LOCK_TIMEOUT_MS: 300_000,
+      PASSWORD_RESET_TTL_MINUTES: 20,
+      PASSWORD_RESET_URL: 'http://localhost:3000/admin/reset-password',
+      MAIL_CONNECTION_TIMEOUT_MS: 3_000,
+      MAIL_GREETING_TIMEOUT_MS: 3_000,
+      MAIL_SOCKET_TIMEOUT_MS: 10_000,
+      CONTACT_NOTIFICATION_EMAIL: 'contact@nehemiah.local',
+      OUTBOX_WORKER_ENABLED: true,
+      OUTBOX_WORKER_INTERVAL_MS: 5_000,
+      OUTBOX_WORKER_BATCH_SIZE: 10,
+      OUTBOX_WORKER_MAX_ATTEMPTS: 5,
+      OUTBOX_WORKER_BACKOFF_MS: 30_000,
+      OUTBOX_WORKER_LOCK_TIMEOUT_MS: 300_000,
+    });
+  });
+
+  it('bounds resource download location-data retention settings', () => {
+    expect(() => validateEnvironment({ RESOURCE_DOWNLOAD_LOG_RETENTION_DAYS: 0 })).toThrow(
+      'RESOURCE_DOWNLOAD_LOG_RETENTION_DAYS must be between 1 and 3650',
+    );
+    expect(() =>
+      validateEnvironment({ RESOURCE_DOWNLOAD_LOG_CLEANUP_INTERVAL_MS: 3_599_999 }),
+    ).toThrow('RESOURCE_DOWNLOAD_LOG_CLEANUP_INTERVAL_MS must be between 3600000 and 604800000');
+  });
+
+  it('bounds storage deletion retry settings', () => {
+    expect(() => validateEnvironment({ STORAGE_DELETION_WORKER_BATCH_SIZE: 101 })).toThrow(
+      'STORAGE_DELETION_WORKER_BATCH_SIZE must be between 1 and 100',
+    );
+    expect(() => validateEnvironment({ STORAGE_DELETION_WORKER_MAX_ATTEMPTS: 0 })).toThrow(
+      'STORAGE_DELETION_WORKER_MAX_ATTEMPTS must be between 1 and 20',
+    );
+  });
+
+  it('requires a valid contact notification mailbox in production', () => {
+    expect(() =>
+      validateEnvironment({
+        ...validProductionEnvironment,
+        CONTACT_NOTIFICATION_EMAIL: 'not-an-email',
+      }),
+    ).toThrow('CONTACT_NOTIFICATION_EMAIL must be a valid email address');
+
+    expect(() =>
+      validateEnvironment({
+        ...validProductionEnvironment,
+        CONTACT_NOTIFICATION_EMAIL: undefined,
+      }),
+    ).toThrow('CONTACT_NOTIFICATION_EMAIL is required in production');
+  });
+
+  it('never permits trial payment routes in production', () => {
+    expect(() =>
+      validateEnvironment({
+        NODE_ENV: 'production',
+        TRIAL_MODE: true,
+      }),
+    ).toThrow('TRIAL_MODE cannot be enabled in production');
+  });
+
+  it('rejects unsupported local adapter drivers', () => {
+    expect(() => validateEnvironment({ PAYMENT_DRIVER: 'unknown' })).toThrow(
+      'PAYMENT_DRIVER must be one of: fake, paypal',
+    );
+  });
+
+  it('requires an explicit PayPal enable switch for real payment mode', () => {
+    expect(() =>
+      validateEnvironment({
+        PAYMENT_DRIVER: 'paypal',
+        PAYMENTS_ENABLED: true,
+        PAYPAL_ENABLED: false,
+      }),
+    ).toThrow('PAYPAL_ENABLED must be true when real PayPal payments are enabled');
+  });
+
+  it('rejects invalid ports', () => {
+    expect(() => validateEnvironment({ API_PORT: '70000' })).toThrow(
+      'API_PORT must be an integer between 1 and 65535',
+    );
+  });
+
+  it('requires strong JWT secrets in production', () => {
+    expect(() =>
+      validateEnvironment({
+        NODE_ENV: 'production',
+        JWT_ACCESS_SECRET: 'too-short',
+        JWT_REFRESH_SECRET: 'a'.repeat(32),
+        IP_HASH_SECRET: 'b'.repeat(32),
+        INTERNAL_API_KEY: 'c'.repeat(32),
+      }),
+    ).toThrow('JWT_ACCESS_SECRET must contain at least 32 characters in production');
+  });
+
+  it('requires a strong internal API key in production', () => {
+    expect(() =>
+      validateEnvironment({
+        NODE_ENV: 'production',
+        JWT_ACCESS_SECRET: 'a'.repeat(32),
+        JWT_REFRESH_SECRET: 'b'.repeat(32),
+        IP_HASH_SECRET: 'c'.repeat(32),
+        INTERNAL_API_KEY: 'too-short',
+      }),
+    ).toThrow('INTERNAL_API_KEY must contain at least 32 characters in production');
+  });
+
+  it('requires distinct secrets in production', () => {
+    const sharedSecret = 'a'.repeat(32);
+
+    expect(() =>
+      validateEnvironment({
+        NODE_ENV: 'production',
+        JWT_ACCESS_SECRET: sharedSecret,
+        JWT_REFRESH_SECRET: sharedSecret,
+        IP_HASH_SECRET: 'b'.repeat(32),
+        INTERNAL_API_KEY: 'c'.repeat(32),
+      }),
+    ).toThrow(
+      'JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, IP_HASH_SECRET, and INTERNAL_API_KEY must be different',
+    );
+  });
+
+  it('rejects malformed token durations during startup', () => {
+    expect(() =>
+      validateEnvironment({
+        JWT_ACCESS_EXPIRY: 'fifteen minutes',
+      }),
+    ).toThrow('JWT_ACCESS_EXPIRY must use a duration such as 15m, 1h, or 7d');
+  });
+
+  it('requires explicit object-storage configuration in production', () => {
+    expect(() =>
+      validateEnvironment({
+        NODE_ENV: 'production',
+        JWT_ACCESS_SECRET: 'a'.repeat(32),
+        JWT_REFRESH_SECRET: 'b'.repeat(32),
+        IP_HASH_SECRET: 'c'.repeat(32),
+        INTERNAL_API_KEY: 'd'.repeat(32),
+        FRONTEND_URL: 'https://example.org',
+      }),
+    ).toThrow('STORAGE_ENDPOINT is required in production');
+  });
+
+  it('rejects oversized JSON request limits', () => {
+    expect(() => validateEnvironment({ REQUEST_BODY_LIMIT_BYTES: 6_000_000 })).toThrow(
+      'REQUEST_BODY_LIMIT_BYTES must be between 1024 and 5242880',
+    );
+  });
+
+  it('rejects invalid global rate-limit settings', () => {
+    expect(() => validateEnvironment({ RATE_LIMIT_REQUESTS: 0 })).toThrow(
+      'RATE_LIMIT_REQUESTS must be between 1 and 2000000',
+    );
+    expect(() => validateEnvironment({ RATE_LIMIT_TTL_MS: 999 })).toThrow(
+      'RATE_LIMIT_TTL_MS must be between 1000 and 3600000',
+    );
+  });
+
+  it('validates HTTP log sampling and slow-request thresholds', () => {
+    expect(() => validateEnvironment({ HTTP_LOG_SUCCESS_SAMPLE_RATE: 1.1 })).toThrow(
+      'HTTP_LOG_SUCCESS_SAMPLE_RATE must be between 0 and 1',
+    );
+    expect(() => validateEnvironment({ HTTP_SLOW_REQUEST_MS: 0 })).toThrow(
+      'HTTP_SLOW_REQUEST_MS must be between 1 and 60000',
+    );
+  });
+
+  it('restricts API worker concurrency to a safe range', () => {
+    expect(() => validateEnvironment({ WEB_CONCURRENCY: 0 })).toThrow(
+      'WEB_CONCURRENCY must be between 1 and 16',
+    );
+    expect(() => validateEnvironment({ WEB_CONCURRENCY: 17 })).toThrow(
+      'WEB_CONCURRENCY must be between 1 and 16',
+    );
+  });
+
+  it('disables scheduled publishing by default in tests and validates its interval', () => {
+    expect(validateEnvironment({ NODE_ENV: 'test' })).toMatchObject({
+      SCHEDULED_PUBLISHING_ENABLED: false,
+    });
+    expect(() => validateEnvironment({ SCHEDULED_PUBLISHING_INTERVAL_MS: 999 })).toThrow(
+      'SCHEDULED_PUBLISHING_INTERVAL_MS must be between 1000 and 3600000',
+    );
+  });
+
+  it('restricts password-reset expiration to the documented 15–30 minute range', () => {
+    expect(() => validateEnvironment({ PASSWORD_RESET_TTL_MINUTES: 14 })).toThrow(
+      'PASSWORD_RESET_TTL_MINUTES must be between 15 and 30',
+    );
+    expect(() => validateEnvironment({ PASSWORD_RESET_TTL_MINUTES: 31 })).toThrow(
+      'PASSWORD_RESET_TTL_MINUTES must be between 15 and 30',
+    );
+  });
+
+  it('validates SMTP connection and protocol timeouts', () => {
+    expect(() => validateEnvironment({ MAIL_CONNECTION_TIMEOUT_MS: 99 })).toThrow(
+      'MAIL_CONNECTION_TIMEOUT_MS must be between 100 and 60000',
+    );
+    expect(() => validateEnvironment({ MAIL_GREETING_TIMEOUT_MS: 60_001 })).toThrow(
+      'MAIL_GREETING_TIMEOUT_MS must be between 100 and 60000',
+    );
+    expect(() => validateEnvironment({ MAIL_SOCKET_TIMEOUT_MS: 120_001 })).toThrow(
+      'MAIL_SOCKET_TIMEOUT_MS must be between 100 and 120000',
+    );
+  });
+
+  it('disables the outbox worker in tests and validates retry controls', () => {
+    expect(validateEnvironment({ NODE_ENV: 'test' })).toMatchObject({
+      OUTBOX_WORKER_ENABLED: false,
+    });
+    expect(() => validateEnvironment({ OUTBOX_WORKER_BATCH_SIZE: 101 })).toThrow(
+      'OUTBOX_WORKER_BATCH_SIZE must be between 1 and 100',
+    );
+    expect(() => validateEnvironment({ OUTBOX_WORKER_MAX_ATTEMPTS: 0 })).toThrow(
+      'OUTBOX_WORKER_MAX_ATTEMPTS must be between 1 and 20',
+    );
+  });
+
+  it('requires non-local HTTPS frontend origins in production', () => {
+    expect(() =>
+      validateEnvironment({
+        NODE_ENV: 'production',
+        JWT_ACCESS_SECRET: 'a'.repeat(32),
+        JWT_REFRESH_SECRET: 'b'.repeat(32),
+        IP_HASH_SECRET: 'c'.repeat(32),
+        INTERNAL_API_KEY: 'd'.repeat(32),
+        FRONTEND_URL: 'http://example.org',
+      }),
+    ).toThrow('FRONTEND_URL must use a non-local HTTPS origin in production');
+
+    expect(() =>
+      validateEnvironment({
+        NODE_ENV: 'production',
+        JWT_ACCESS_SECRET: 'a'.repeat(32),
+        JWT_REFRESH_SECRET: 'b'.repeat(32),
+        IP_HASH_SECRET: 'c'.repeat(32),
+        INTERNAL_API_KEY: 'd'.repeat(32),
+        FRONTEND_URL: 'https://localhost',
+      }),
+    ).toThrow('FRONTEND_URL must use a non-local HTTPS origin in production');
+  });
+
+  it('refuses the unauthenticated mail driver in production', () => {
+    expect(() =>
+      validateEnvironment({ ...validProductionEnvironment, MAIL_DRIVER: 'mailpit' }),
+    ).toThrow('MAIL_DRIVER must be smtp in production');
+
+    expect(() =>
+      validateEnvironment({ ...validProductionEnvironment, MAIL_DRIVER: undefined }),
+    ).toThrow('MAIL_DRIVER must be smtp in production');
+  });
+
+  it('requires SMTP credentials whenever the smtp driver is selected', () => {
+    expect(() =>
+      validateEnvironment({ ...validProductionEnvironment, MAIL_USER: undefined }),
+    ).toThrow('MAIL_USER and MAIL_PASSWORD are required when MAIL_DRIVER is smtp');
+
+    expect(() =>
+      validateEnvironment({ ...validProductionEnvironment, MAIL_PASSWORD: '   ' }),
+    ).toThrow('MAIL_USER and MAIL_PASSWORD are required when MAIL_DRIVER is smtp');
+
+    // The requirement follows the driver, not the environment.
+    expect(() =>
+      validateEnvironment({ NODE_ENV: 'development', MAIL_DRIVER: 'smtp' }),
+    ).toThrow('MAIL_USER and MAIL_PASSWORD are required when MAIL_DRIVER is smtp');
+  });
+
+  it('defaults the SMTP port to submission and keeps STARTTLS as the default posture', () => {
+    const validated = validateEnvironment({
+      ...validProductionEnvironment,
+    });
+    expect(validated.MAIL_PORT).toBe(587);
+    expect(validated.MAIL_SECURE).toBe(false);
+
+    expect(
+      validateEnvironment({ ...validProductionEnvironment, MAIL_SECURE: 'true', MAIL_PORT: '465' }),
+    ).toMatchObject({ MAIL_SECURE: true, MAIL_PORT: 465 });
+  });
+
+  it('requires a valid sender address in production', () => {
+    expect(() =>
+      validateEnvironment({ ...validProductionEnvironment, MAIL_FROM: undefined }),
+    ).toThrow('MAIL_FROM is required in production');
+
+    expect(() =>
+      validateEnvironment({ ...validProductionEnvironment, MAIL_FROM: 'not-an-address' }),
+    ).toThrow('MAIL_FROM must be a valid email address');
+  });
+
+  it('never permits Swagger in production', () => {
+    expect(() =>
+      validateEnvironment({
+        ...validProductionEnvironment,
+        SWAGGER_ENABLED: true,
+      }),
+    ).toThrow('SWAGGER_ENABLED cannot be enabled in production');
+  });
+
+  it('accepts a production-safe configuration with trial routes and Swagger disabled', () => {
+    expect(
+      validateEnvironment({
+        ...validProductionEnvironment,
+        SWAGGER_ENABLED: false,
+        PAYMENTS_ENABLED: false,
+      }),
+    ).toMatchObject({
+      NODE_ENV: 'production',
+      TRIAL_MODE: false,
+      SWAGGER_ENABLED: false,
+      PAYMENTS_ENABLED: false,
+      FRONTEND_URL: 'https://www.example.org',
+    });
+  });
+});
