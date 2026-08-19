@@ -14,7 +14,10 @@ import { NavigationModule } from './modules/navigation/navigation.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { MediaModule } from './modules/media/media.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ContactModule } from './modules/contact/contact.module';
+import { EngagementModule } from './modules/engagement/engagement.module';
 import paymentConfig from './config/payment.config';
+import { DonationsModule } from './modules/donations/donations.module';
 import { EventsModule } from './modules/events/events.module';
 import { GalleryModule } from './modules/gallery/gallery.module';
 import { SecurityHeadersMiddleware } from './common/middleware/security-headers.middleware';
@@ -63,6 +66,9 @@ import { SeoModule } from './modules/seo/seo.module';
     NavigationModule,
     SettingsModule,
     MediaModule,
+    ContactModule,
+    EngagementModule,
+    DonationsModule,
     EventsModule,
     GalleryModule,
     MailModule,
