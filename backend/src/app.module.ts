@@ -9,6 +9,8 @@ import { validateEnvironment } from './config/env.validation';
 import { DrizzleModule } from './database/drizzle.module';
 import { AdminsModule } from './modules/admins/admins.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { NavigationModule } from './modules/navigation/navigation.module';
+import { MediaModule } from './modules/media/media.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import paymentConfig from './config/payment.config';
 import { SecurityHeadersMiddleware } from './common/middleware/security-headers.middleware';
@@ -17,6 +19,7 @@ import mailConfig from './config/mail.config';
 import cacheConfig from './config/cache.config';
 import { MailModule } from './modules/mail/mail.module';
 import { CacheModule } from './modules/cache/cache.module';
+import { SeoModule } from './modules/seo/seo.module';
 
 @Module({
   imports: [
@@ -49,8 +52,11 @@ import { CacheModule } from './modules/cache/cache.module';
     }),
     AuthModule,
     AdminsModule,
+    NavigationModule,
+    MediaModule,
     MailModule,
     CacheModule,
+    SeoModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
