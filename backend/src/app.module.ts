@@ -7,6 +7,8 @@ import jwtConfig from './config/jwt.config';
 import storageConfig from './config/storage.config';
 import { validateEnvironment } from './config/env.validation';
 import { DrizzleModule } from './database/drizzle.module';
+import { AdminsModule } from './modules/admins/admins.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import paymentConfig from './config/payment.config';
 import { SecurityHeadersMiddleware } from './common/middleware/security-headers.middleware';
@@ -45,6 +47,8 @@ import { CacheModule } from './modules/cache/cache.module';
         },
       ],
     }),
+    AuthModule,
+    AdminsModule,
     MailModule,
     CacheModule,
   ],
