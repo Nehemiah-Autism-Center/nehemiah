@@ -8,6 +8,7 @@ import storageConfig from './config/storage.config';
 import { validateEnvironment } from './config/env.validation';
 import { DrizzleModule } from './database/drizzle.module';
 import { AdminsModule } from './modules/admins/admins.module';
+import { AuditModule } from './modules/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CmsModule } from './modules/cms/cms.module';
 import { NavigationModule } from './modules/navigation/navigation.module';
@@ -20,7 +21,9 @@ import paymentConfig from './config/payment.config';
 import { DonationsModule } from './modules/donations/donations.module';
 import { EventsModule } from './modules/events/events.module';
 import { GalleryModule } from './modules/gallery/gallery.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { SecurityHeadersMiddleware } from './common/middleware/security-headers.middleware';
+import { SystemModule } from './modules/system/system.module';
 import runtimeConfig from './config/runtime.config';
 import mailConfig from './config/mail.config';
 import cacheConfig from './config/cache.config';
@@ -28,6 +31,7 @@ import { MailModule } from './modules/mail/mail.module';
 import { CacheModule } from './modules/cache/cache.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { FaqModule } from './modules/faq/faq.module';
+import { SearchModule } from './modules/search/search.module';
 import { ResourcesModule } from './modules/resources/resources.module';
 import { SeoModule } from './modules/seo/seo.module';
 
@@ -62,6 +66,7 @@ import { SeoModule } from './modules/seo/seo.module';
     }),
     AuthModule,
     AdminsModule,
+    AuditModule,
     CmsModule,
     NavigationModule,
     SettingsModule,
@@ -71,10 +76,13 @@ import { SeoModule } from './modules/seo/seo.module';
     DonationsModule,
     EventsModule,
     GalleryModule,
+    AnalyticsModule,
+    SystemModule,
     MailModule,
     CacheModule,
     BlogModule,
     FaqModule,
+    SearchModule,
     ResourcesModule,
     SeoModule,
   ],
