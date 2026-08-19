@@ -11,9 +11,12 @@ import { AdminsModule } from './modules/admins/admins.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CmsModule } from './modules/cms/cms.module';
 import { NavigationModule } from './modules/navigation/navigation.module';
+import { SettingsModule } from './modules/settings/settings.module';
 import { MediaModule } from './modules/media/media.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import paymentConfig from './config/payment.config';
+import { EventsModule } from './modules/events/events.module';
+import { GalleryModule } from './modules/gallery/gallery.module';
 import { SecurityHeadersMiddleware } from './common/middleware/security-headers.middleware';
 import runtimeConfig from './config/runtime.config';
 import mailConfig from './config/mail.config';
@@ -58,7 +61,10 @@ import { SeoModule } from './modules/seo/seo.module';
     AdminsModule,
     CmsModule,
     NavigationModule,
+    SettingsModule,
     MediaModule,
+    EventsModule,
+    GalleryModule,
     MailModule,
     CacheModule,
     BlogModule,
