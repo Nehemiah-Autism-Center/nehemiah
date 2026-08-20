@@ -10,6 +10,7 @@ build/
 
 # Environment files
 .env
+.env.production
 .env.local
 .env.*.local
 frontend/.env
@@ -26,6 +27,7 @@ pnpm-debug.log*
 coverage/
 playwright-report/
 test-results/
+.lighthouseci/
 
 # OS
 .DS_Store
@@ -33,6 +35,7 @@ Thumbs.db
 
 # Docker
 docker-compose.override.yml
+backups/
 
 # IDE
 .idea/
@@ -50,3 +53,9 @@ docker-compose.override.yml
 
 # Drizzle
 drizzle/meta/
+
+# Per-suite coverage output merged by test:coverage:all
+coverage-unit/
+coverage-e2e/
+coverage-integration/
+coverage-merged/
