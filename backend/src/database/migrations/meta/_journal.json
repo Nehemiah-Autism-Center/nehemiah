@@ -1,0 +1,160 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1785333254690,
+      "tag": "0000_initialize_backend_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785336945651,
+      "tag": "0001_add_contact_submissions",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1785340676508,
+      "tag": "0002_add_volunteer_engagement",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1785343146228,
+      "tag": "0003_add_donation_payments",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1785343615110,
+      "tag": "0004_add_events_rsvps",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1785344105535,
+      "tag": "0005_add_gallery_items",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1785344673918,
+      "tag": "0006_add_anonymous_analytics",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1785399817534,
+      "tag": "0007_add_demo_content_features",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1785440668439,
+      "tag": "0008_add_search_trigram_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1785936808893,
+      "tag": "0009_add_auth_session_active_index",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1785938687102,
+      "tag": "0010_add_password_reset_tokens",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1785942272670,
+      "tag": "0011_add_cms_seo_keywords",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1786467268390,
+      "tag": "0012_add-site-social-links",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1786617082647,
+      "tag": "0013_add_notification_outbox_delivery",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1786709874780,
+      "tag": "0014_add_resource_download_logs",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1786710583968,
+      "tag": "0015_add_storage_deletion_outbox",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1786774512290,
+      "tag": "0016_add_simulated_donation_gateway",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1786775681281,
+      "tag": "0017_backfill_simulated_donation_gateways",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1786883514309,
+      "tag": "0018_add_faq_entries",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1786883515309,
+      "tag": "0019_backfill_faqs_from_cms_pages",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1787129510256,
+      "tag": "0020_add_launch_content_columns",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1787133932188,
+      "tag": "0021_add_page_banners",
+      "breakpoints": true
+    }
+  ]
+}
