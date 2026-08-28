@@ -140,7 +140,7 @@ This project uses Fastify, NOT Express. Do not import Express types or middlewar
 
 ### Frontend — Development Guide (MUST follow)
 
-**All frontend work MUST follow the rules in [`docs/frontend-development.md`](docs/frontend-development.md).** Read it before building any frontend feature or component.
+**All frontend work MUST follow the rules in [`.docs/frontend-development.md`](.docs/frontend-development.md).** Read it before building any frontend feature or component.
 
 Key rules enforced by the guide:
 - **Mobile-first design** — base styles for mobile, layer responsive prefixes up
