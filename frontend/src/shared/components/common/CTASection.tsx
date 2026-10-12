@@ -16,7 +16,7 @@ export default function CTASection({
   backgroundImage,
 }: CTASectionProps) {
   return (
-    <section className="relative bg-primary py-20 text-center text-white">
+    <section className="bg-primary relative py-20 text-center text-white">
       {backgroundImage && (
         <>
           <Image
@@ -35,7 +35,7 @@ export default function CTASection({
         <h2 className="mb-8 font-serif text-3xl font-bold md:text-4xl">{title}</h2>
         <Link
           href={buttonHref}
-          className="inline-block rounded bg-white px-8 py-3 text-sm font-semibold uppercase text-primary transition hover:bg-gray-100"
+          className="text-primary inline-block rounded bg-white px-8 py-3 text-sm font-semibold uppercase transition hover:bg-gray-100"
         >
           {buttonLabel}
         </Link>

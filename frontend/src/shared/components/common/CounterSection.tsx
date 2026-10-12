@@ -21,21 +21,14 @@ export default function CounterSection({
 }: CounterSectionProps) {
   return (
     <section className="relative">
-      <Image
-        src={backgroundImage}
-        alt="Counter background"
-        fill
-        className="object-cover"
-      />
+      <Image src={backgroundImage} alt="Counter background" fill className="object-cover" />
       <div className="absolute inset-0 bg-black/70" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-20">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {items.map((item, index) => (
             <div key={index} className="text-center text-white">
-              <div className="mb-4 flex justify-center text-4xl text-primary">{item.icon}</div>
-              <p className="mb-2 text-sm uppercase tracking-wider text-white/80">
-                {item.label}
-              </p>
+              <div className="text-primary mb-4 flex justify-center text-4xl">{item.icon}</div>
+              <p className="mb-2 text-sm tracking-wider text-white/80 uppercase">{item.label}</p>
               <div className="text-4xl font-bold md:text-5xl">
                 <CountUp
                   end={item.value}

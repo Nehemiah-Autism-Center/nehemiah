@@ -7,10 +7,7 @@ import { Input } from '@/shared/components/ui/input';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Label } from '@/shared/components/ui/label';
 import { cn } from '@/shared/lib/utils';
-import {
-  donationSchema,
-  type DonationFormData,
-} from '@/features/donation/schemas/donation.schema';
+import { donationSchema, type DonationFormData } from '@/features/donation/schemas/donation.schema';
 
 const presetAmounts = [25, 50, 100, 250, 500];
 
@@ -52,7 +49,7 @@ export function DonationForm() {
                 'rounded px-6 py-3 font-semibold transition',
                 selectedPreset === amount
                   ? 'bg-primary text-white'
-                  : 'bg-gray-100 text-text-dark hover:bg-gray-200',
+                  : 'text-text-dark bg-gray-100 hover:bg-gray-200',
               )}
             >
               ${amount}
@@ -75,7 +72,7 @@ export function DonationForm() {
           }}
           className="mt-1"
         />
-        {errors.amount && <p className="mt-1 text-sm text-destructive">{errors.amount.message}</p>}
+        {errors.amount && <p className="text-destructive mt-1 text-sm">{errors.amount.message}</p>}
       </div>
 
       {/* Personal Info */}
@@ -89,19 +86,14 @@ export function DonationForm() {
             className="mt-1"
           />
           {errors.firstName && (
-            <p className="mt-1 text-sm text-destructive">{errors.firstName.message}</p>
+            <p className="text-destructive mt-1 text-sm">{errors.firstName.message}</p>
           )}
         </div>
         <div>
           <Label htmlFor="lastName">Last Name</Label>
-          <Input
-            id="lastName"
-            placeholder="Last name"
-            {...register('lastName')}
-            className="mt-1"
-          />
+          <Input id="lastName" placeholder="Last name" {...register('lastName')} className="mt-1" />
           {errors.lastName && (
-            <p className="mt-1 text-sm text-destructive">{errors.lastName.message}</p>
+            <p className="text-destructive mt-1 text-sm">{errors.lastName.message}</p>
           )}
         </div>
         <div>
@@ -113,9 +105,7 @@ export function DonationForm() {
             {...register('email')}
             className="mt-1"
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="text-destructive mt-1 text-sm">{errors.email.message}</p>}
         </div>
         <div>
           <Label htmlFor="phone">Phone (Optional)</Label>
@@ -144,7 +134,7 @@ export function DonationForm() {
       {/* Submit */}
       <button
         type="submit"
-        className="w-full rounded bg-primary py-3 text-lg font-semibold uppercase text-white transition hover:bg-primary-hover"
+        className="bg-primary hover:bg-primary-hover w-full rounded py-3 text-lg font-semibold text-white uppercase transition"
       >
         Donate Now
       </button>

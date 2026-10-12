@@ -26,8 +26,8 @@ export default function TeamSingle({ member }: TeamSingleProps) {
 
         {/* Info */}
         <div>
-          <h2 className="font-serif text-3xl font-medium text-heading">{member.name}</h2>
-          <p className="mt-1 text-sm font-semibold uppercase text-primary">{member.role}</p>
+          <h2 className="text-heading font-serif text-3xl font-medium">{member.name}</h2>
+          <p className="text-primary mt-1 text-sm font-semibold uppercase">{member.role}</p>
 
           <Separator className="my-6" />
 
@@ -44,13 +44,13 @@ export default function TeamSingle({ member }: TeamSingleProps) {
 
           {/* Social Links */}
           <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-heading">Follow:</span>
+            <span className="text-heading text-sm font-semibold">Follow:</span>
             {member.social?.facebook && (
               <a
                 href={member.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary transition hover:bg-primary hover:text-white"
+                className="bg-primary/10 text-primary hover:bg-primary flex h-10 w-10 items-center justify-center rounded-full transition hover:text-white"
               >
                 <Facebook size={18} />
               </a>
@@ -60,7 +60,7 @@ export default function TeamSingle({ member }: TeamSingleProps) {
                 href={member.social.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary transition hover:bg-primary hover:text-white"
+                className="bg-primary/10 text-primary hover:bg-primary flex h-10 w-10 items-center justify-center rounded-full transition hover:text-white"
               >
                 <Twitter size={18} />
               </a>
@@ -70,7 +70,7 @@ export default function TeamSingle({ member }: TeamSingleProps) {
                 href={member.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary transition hover:bg-primary hover:text-white"
+                className="bg-primary/10 text-primary hover:bg-primary flex h-10 w-10 items-center justify-center rounded-full transition hover:text-white"
               >
                 <Linkedin size={18} />
               </a>
@@ -81,12 +81,12 @@ export default function TeamSingle({ member }: TeamSingleProps) {
 
       {/* Skills */}
       <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h3 className="mb-6 font-serif text-xl font-semibold text-heading">Skills</h3>
+        <h3 className="text-heading mb-6 font-serif text-xl font-semibold">Skills</h3>
         <div className="space-y-4">
           {skills.map((skill) => (
             <div key={skill.name}>
               <div className="mb-1 flex items-center justify-between text-sm">
-                <span className="font-semibold text-heading">{skill.name}</span>
+                <span className="text-heading font-semibold">{skill.name}</span>
                 <span className="text-primary">{skill.value}%</span>
               </div>
               <Progress value={skill.value} />

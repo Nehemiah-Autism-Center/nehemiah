@@ -39,7 +39,7 @@ export default function GalleryGrid() {
               'rounded px-6 py-2 text-sm font-semibold capitalize transition',
               activeFilter === category
                 ? 'bg-primary text-white'
-                : 'bg-gray-100 text-text-dark hover:bg-gray-200',
+                : 'text-text-dark bg-gray-100 hover:bg-gray-200',
             )}
           >
             {category === 'all' ? 'All' : category}
@@ -55,7 +55,7 @@ export default function GalleryGrid() {
             className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg"
           >
             <Image src={item.src} alt={item.alt} fill className="object-cover" />
-            <div className="absolute inset-0 flex items-center justify-center bg-primary/60 opacity-0 transition group-hover:opacity-100">
+            <div className="bg-primary/60 absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
               <ZoomIn className="size-8 text-white" />
             </div>
           </div>

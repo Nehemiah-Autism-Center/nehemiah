@@ -11,7 +11,7 @@ export default function NewsletterSection() {
     <section className="bg-primary py-16">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-4 md:flex-row">
         <div>
-          <h2 className="font-serif text-2xl font-bold uppercase text-white md:text-3xl">
+          <h2 className="font-serif text-2xl font-bold text-white uppercase md:text-3xl">
             Subscribe Newsletter
           </h2>
           <p className="mt-2 text-sm text-white/80">
@@ -23,11 +23,11 @@ export default function NewsletterSection() {
             type="email"
             placeholder="Enter your email"
             required
-            className="min-w-[250px] flex-1 rounded-l px-4 py-3 text-text-dark outline-none"
+            className="text-text-dark min-w-[250px] flex-1 rounded-l px-4 py-3 outline-none"
           />
           <button
             type="submit"
-            className="rounded-r bg-text-dark px-6 py-3 text-sm font-semibold uppercase text-white transition hover:bg-black"
+            className="bg-text-dark rounded-r px-6 py-3 text-sm font-semibold text-white uppercase transition hover:bg-black"
           >
             Subscribe
           </button>

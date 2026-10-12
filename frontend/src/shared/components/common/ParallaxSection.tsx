@@ -29,12 +29,7 @@ export default function ParallaxSection({
   return (
     <div ref={ref} className={cn('relative overflow-hidden', className)}>
       <motion.div className="absolute inset-0 -top-[15%] -bottom-[15%]" style={{ y }}>
-        <Image
-          src={backgroundImage}
-          alt=""
-          fill
-          className="object-cover"
-        />
+        <Image src={backgroundImage} alt="" fill className="object-cover" />
       </motion.div>
 
       <div

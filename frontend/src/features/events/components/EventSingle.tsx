@@ -17,31 +17,31 @@ export default function EventSingle({ event }: EventSingleProps) {
       {/* Event Details */}
       <div className="grid grid-cols-2 gap-4 rounded-lg bg-white p-6 shadow-sm md:grid-cols-4">
         <div className="flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-primary" />
+          <Calendar className="text-primary h-5 w-5" />
           <div>
-            <p className="text-xs text-foreground">Date</p>
-            <p className="text-sm font-semibold text-heading">{event.date}</p>
+            <p className="text-foreground text-xs">Date</p>
+            <p className="text-heading text-sm font-semibold">{event.date}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Clock className="h-5 w-5 text-primary" />
+          <Clock className="text-primary h-5 w-5" />
           <div>
-            <p className="text-xs text-foreground">Time</p>
-            <p className="text-sm font-semibold text-heading">{event.time}</p>
+            <p className="text-foreground text-xs">Time</p>
+            <p className="text-heading text-sm font-semibold">{event.time}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-primary" />
+          <MapPin className="text-primary h-5 w-5" />
           <div>
-            <p className="text-xs text-foreground">Location</p>
-            <p className="text-sm font-semibold text-heading">{event.location}</p>
+            <p className="text-foreground text-xs">Location</p>
+            <p className="text-heading text-sm font-semibold">{event.location}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <User className="h-5 w-5 text-primary" />
+          <User className="text-primary h-5 w-5" />
           <div>
-            <p className="text-xs text-foreground">Organizer</p>
-            <p className="text-sm font-semibold text-heading">{event.organizer}</p>
+            <p className="text-foreground text-xs">Organizer</p>
+            <p className="text-heading text-sm font-semibold">{event.organizer}</p>
           </div>
         </div>
       </div>

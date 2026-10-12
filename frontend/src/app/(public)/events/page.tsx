@@ -14,10 +14,7 @@ export default function EventsPage() {
     <>
       <PageBanner
         title="Our Events"
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Events' },
-        ]}
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Events' }]}
         backgroundImage="/images/event_1.jpg"
       />
       <section className="bg-secondary-bg py-20">

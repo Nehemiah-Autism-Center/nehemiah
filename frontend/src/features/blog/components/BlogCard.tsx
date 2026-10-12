@@ -11,21 +11,14 @@ interface BlogCardProps {
   slug: string;
 }
 
-export default function BlogCard({
-  image,
-  title,
-  excerpt,
-  date,
-  author,
-  slug,
-}: BlogCardProps) {
+export default function BlogCard({ image, title, excerpt, date, author, slug }: BlogCardProps) {
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-sm transition hover:shadow-md">
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image src={image} alt={title} fill className="object-cover" />
       </div>
       <div className="p-6">
-        <div className="mb-3 flex items-center gap-4 text-xs text-foreground">
+        <div className="text-foreground mb-3 flex items-center gap-4 text-xs">
           <span className="flex items-center gap-1">
             <Calendar size={12} />
             {date}
@@ -35,13 +28,13 @@ export default function BlogCard({
             {author}
           </span>
         </div>
-        <h5 className="font-serif text-lg font-semibold text-heading transition hover:text-primary">
+        <h5 className="text-heading hover:text-primary font-serif text-lg font-semibold transition">
           <Link href={`/blog/${slug}`}>{title}</Link>
         </h5>
-        <p className="mt-2 line-clamp-2 text-sm text-foreground">{excerpt}</p>
+        <p className="text-foreground mt-2 line-clamp-2 text-sm">{excerpt}</p>
         <Link
           href={`/blog/${slug}`}
-          className="mt-4 inline-block text-sm font-semibold text-primary transition hover:text-primary-dark"
+          className="text-primary hover:text-primary-dark mt-4 inline-block text-sm font-semibold transition"
         >
           Read More &raquo;
         </Link>

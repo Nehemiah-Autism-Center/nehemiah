@@ -26,7 +26,7 @@ export default function GalleryMasonryPage() {
 
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="columns-2 gap-4 md:columns-3 lg:columns-4 [column-fill:_balance]">
+          <div className="columns-2 gap-4 [column-fill:_balance] md:columns-3 lg:columns-4">
             {masonryImages.map((img) => (
               <div key={img.src} className="mb-4 break-inside-avoid">
                 <div className={`relative ${img.aspect} overflow-hidden rounded-lg`}>

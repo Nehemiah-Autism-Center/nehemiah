@@ -13,13 +13,7 @@ export default function PageBanner({ title, breadcrumbs, backgroundImage }: Page
     <section className="relative flex min-h-[300px] items-center justify-center py-24">
       {backgroundImage && (
         <div className="absolute inset-0">
-          <Image
-            src={backgroundImage}
-            alt={title}
-            fill
-            className="object-cover"
-            priority
-          />
+          <Image src={backgroundImage} alt={title} fill className="object-cover" priority />
         </div>
       )}
       <div className="absolute inset-0 bg-black/60" />

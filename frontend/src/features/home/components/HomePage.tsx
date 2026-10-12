@@ -45,15 +45,10 @@ export default function HomePage() {
                   and create lasting, positive change.
                 </p>
                 <div className="mt-8 flex items-center gap-4">
-                  <Image
-                    src="/images/signature.png"
-                    alt="CEO Signature"
-                    width={120}
-                    height={50}
-                  />
+                  <Image src="/images/signature.png" alt="CEO Signature" width={120} height={50} />
                   <div>
-                    <p className="font-serif font-semibold text-heading">Brandon Munson</p>
-                    <p className="text-sm text-foreground">CEO, Generosity Club</p>
+                    <p className="text-heading font-serif font-semibold">Brandon Munson</p>
+                    <p className="text-foreground text-sm">CEO, Generosity Club</p>
                   </div>
                 </div>
               </div>
@@ -72,18 +67,18 @@ export default function HomePage() {
           {/* 3. Highlight Boxes */}
           <div className="mt-12 grid grid-cols-1 gap-0 md:grid-cols-3">
             <div className="flex gap-4 border bg-white p-8">
-              <div className="text-4xl text-primary">
+              <div className="text-primary text-4xl">
                 <Users className="size-10" />
               </div>
               <div>
-                <h3 className="font-serif font-semibold text-heading">Volunteering</h3>
-                <p className="mt-2 text-sm text-foreground">
+                <h3 className="text-heading font-serif font-semibold">Volunteering</h3>
+                <p className="text-foreground mt-2 text-sm">
                   Join our global network of volunteers and make a direct impact in the lives of
                   those who need it most.
                 </p>
               </div>
             </div>
-            <div className="flex gap-4 bg-primary p-8 text-white">
+            <div className="bg-primary flex gap-4 p-8 text-white">
               <div className="text-4xl text-white">
                 <Heart className="size-10" />
               </div>
@@ -96,12 +91,12 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex gap-4 border bg-white p-8">
-              <div className="text-4xl text-primary">
+              <div className="text-primary text-4xl">
                 <LifeBuoy className="size-10" />
               </div>
               <div>
-                <h3 className="font-serif font-semibold text-heading">Help &amp; Support</h3>
-                <p className="mt-2 text-sm text-foreground">
+                <h3 className="text-heading font-serif font-semibold">Help &amp; Support</h3>
+                <p className="text-foreground mt-2 text-sm">
                   We provide comprehensive support services including counseling, legal aid, and
                   emergency assistance.
                 </p>
@@ -128,37 +123,37 @@ export default function HomePage() {
             </div>
             <div className="lg:col-span-5">
               <AnimateOnScroll animation="fadeRight">
-                <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+                <span className="text-primary text-xs font-semibold tracking-wider uppercase">
                   Urgent Cause
                 </span>
-                <hr className="my-3 h-0.5 w-12 border-0 bg-primary" />
-                <h2 className="font-serif text-3xl font-medium text-heading">
+                <hr className="bg-primary my-3 h-0.5 w-12 border-0" />
+                <h2 className="text-heading font-serif text-3xl font-medium">
                   Ensure Education for All
                 </h2>
-                <p className="mt-4 text-foreground">
-                  Every child deserves access to quality education regardless of their background
-                  or circumstances. Our education program provides scholarships, school supplies,
-                  and learning resources to underprivileged communities. Help us build more schools
-                  and train teachers to create brighter futures.
+                <p className="text-foreground mt-4">
+                  Every child deserves access to quality education regardless of their background or
+                  circumstances. Our education program provides scholarships, school supplies, and
+                  learning resources to underprivileged communities. Help us build more schools and
+                  train teachers to create brighter futures.
                 </p>
                 <div className="mt-6">
                   <div className="mb-2 flex items-center justify-between text-sm">
-                    <span className="font-semibold text-heading">TARGET: $10,000</span>
-                    <span className="font-semibold text-heading">RAISED: $6,000</span>
+                    <span className="text-heading font-semibold">TARGET: $10,000</span>
+                    <span className="text-heading font-semibold">RAISED: $6,000</span>
                   </div>
                   <Progress value={60} />
-                  <p className="mt-1 text-right text-xs font-bold text-primary">60%</p>
+                  <p className="text-primary mt-1 text-right text-xs font-bold">60%</p>
                 </div>
                 <div className="mt-6 flex gap-4">
                   <Link
                     href="/about"
-                    className="inline-block rounded bg-text-dark px-6 py-2.5 text-xs font-semibold uppercase text-white transition hover:bg-black"
+                    className="bg-text-dark inline-block rounded px-6 py-2.5 text-xs font-semibold text-white uppercase transition hover:bg-black"
                   >
                     View Details
                   </Link>
                   <Link
                     href="/donate"
-                    className="inline-block rounded bg-primary px-6 py-2.5 text-xs font-semibold uppercase text-white transition hover:bg-primary-hover"
+                    className="bg-primary hover:bg-primary-hover inline-block rounded px-6 py-2.5 text-xs font-semibold text-white uppercase transition"
                   >
                     Donate Now
                   </Link>
@@ -191,7 +186,7 @@ export default function HomePage() {
           <div className="mt-10 text-center">
             <Link
               href="/events"
-              className="font-semibold text-primary transition hover:text-primary-dark"
+              className="text-primary hover:text-primary-dark font-semibold transition"
             >
               Load All Events &raquo;
             </Link>
@@ -219,11 +214,7 @@ export default function HomePage() {
       </section>
 
       {/* 8. CTA Section */}
-      <CTASection
-        title="Awesome Voluntary Work"
-        buttonLabel="Join With Us"
-        buttonHref="/contact"
-      />
+      <CTASection title="Awesome Voluntary Work" buttonLabel="Join With Us" buttonHref="/contact" />
 
       {/* 9. Testimonials Section */}
       <TestimonialCarousel
@@ -263,10 +254,7 @@ export default function HomePage() {
           />
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {galleryImages.map((img, index) => (
-              <div
-                key={index}
-                className="relative aspect-square overflow-hidden rounded-lg"
-              >
+              <div key={index} className="relative aspect-square overflow-hidden rounded-lg">
                 <Image
                   src={img.src}
                   alt={img.alt}

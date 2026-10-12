@@ -14,10 +14,7 @@ export default function BlogPage() {
     <>
       <PageBanner
         title="Our Blog"
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Blog' },
-        ]}
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blog' }]}
         backgroundImage="/images/blog_1.jpg"
       />
       <section className="bg-secondary-bg py-20">

@@ -26,7 +26,7 @@ export function ContactForm() {
       <div>
         <Label htmlFor="name">Your Name</Label>
         <Input id="name" placeholder="Enter your name" {...register('name')} className="mt-1" />
-        {errors.name && <p className="mt-1 text-sm text-destructive">{errors.name.message}</p>}
+        {errors.name && <p className="text-destructive mt-1 text-sm">{errors.name.message}</p>}
       </div>
 
       <div>
@@ -38,19 +38,14 @@ export function ContactForm() {
           {...register('email')}
           className="mt-1"
         />
-        {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>}
+        {errors.email && <p className="text-destructive mt-1 text-sm">{errors.email.message}</p>}
       </div>
 
       <div>
         <Label htmlFor="subject">Subject</Label>
-        <Input
-          id="subject"
-          placeholder="Enter subject"
-          {...register('subject')}
-          className="mt-1"
-        />
+        <Input id="subject" placeholder="Enter subject" {...register('subject')} className="mt-1" />
         {errors.subject && (
-          <p className="mt-1 text-sm text-destructive">{errors.subject.message}</p>
+          <p className="text-destructive mt-1 text-sm">{errors.subject.message}</p>
         )}
       </div>
 
@@ -64,13 +59,13 @@ export function ContactForm() {
           className="mt-1"
         />
         {errors.message && (
-          <p className="mt-1 text-sm text-destructive">{errors.message.message}</p>
+          <p className="text-destructive mt-1 text-sm">{errors.message.message}</p>
         )}
       </div>
 
       <button
         type="submit"
-        className="rounded bg-primary px-8 py-3 font-semibold uppercase text-white transition hover:bg-primary-hover"
+        className="bg-primary hover:bg-primary-hover rounded px-8 py-3 font-semibold text-white uppercase transition"
       >
         Send Message
       </button>

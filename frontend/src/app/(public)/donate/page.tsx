@@ -17,10 +17,10 @@ export default function DonatePage() {
       <section className="py-20">
         <div className="mx-auto max-w-3xl px-4">
           <div className="mb-10 text-center">
-            <h2 className="font-serif text-3xl font-medium text-heading">
+            <h2 className="text-heading font-serif text-3xl font-medium">
               Your Generosity Makes a Difference
             </h2>
-            <p className="mt-4 text-foreground">
+            <p className="text-foreground mt-4">
               Every donation, no matter how small, goes directly to supporting children&apos;s
               education, healthcare, and community development programs. Together, we can build a
               brighter future.

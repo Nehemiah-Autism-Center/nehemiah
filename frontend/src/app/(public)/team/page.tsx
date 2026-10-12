@@ -13,10 +13,7 @@ export default function TeamPage() {
     <>
       <PageBanner
         title="Our Team"
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Team' },
-        ]}
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Team' }]}
         backgroundImage="/images/team_6.jpg"
       />
       <section className="py-20">

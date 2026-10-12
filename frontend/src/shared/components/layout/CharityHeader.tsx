@@ -17,7 +17,13 @@ import {
 } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { NAV_ITEMS, type NavItem } from '@/shared/lib/constants';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/shared/components/ui/sheet';
 
 export function CharityHeader() {
   const [isSticky, setIsSticky] = useState(false);
@@ -47,32 +53,32 @@ export function CharityHeader() {
   return (
     <header>
       {/* Tier 1: Top Bar */}
-      <div className="hidden bg-topbar-bg text-white md:block">
+      <div className="bg-topbar-bg hidden text-white md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2">
           <div className="flex items-center gap-3">
-            <a href="#" aria-label="Facebook" className="transition hover:text-primary">
+            <a href="#" aria-label="Facebook" className="hover:text-primary transition">
               <Facebook className="size-4" />
             </a>
-            <a href="#" aria-label="Twitter" className="transition hover:text-primary">
+            <a href="#" aria-label="Twitter" className="hover:text-primary transition">
               <Twitter className="size-4" />
             </a>
-            <a href="#" aria-label="Instagram" className="transition hover:text-primary">
+            <a href="#" aria-label="Instagram" className="hover:text-primary transition">
               <Instagram className="size-4" />
             </a>
-            <a href="#" aria-label="Youtube" className="transition hover:text-primary">
+            <a href="#" aria-label="Youtube" className="hover:text-primary transition">
               <Youtube className="size-4" />
             </a>
           </div>
           <div className="flex items-center gap-3 text-sm">
-            <a href="#" className="transition hover:text-primary">
+            <a href="#" className="hover:text-primary transition">
               Email
             </a>
             <span className="text-white/40">|</span>
-            <a href="#" className="transition hover:text-primary">
+            <a href="#" className="hover:text-primary transition">
               Community
             </a>
             <span className="text-white/40">|</span>
-            <a href="#" className="transition hover:text-primary">
+            <a href="#" className="hover:text-primary transition">
               Support
             </a>
           </div>
@@ -83,13 +89,7 @@ export function CharityHeader() {
       <div className="border-b bg-white py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4">
           <Link href="/">
-            <Image
-              src="/images/logo.png"
-              alt="Nehemiah"
-              width={180}
-              height={50}
-              priority
-            />
+            <Image src="/images/logo.png" alt="Nehemiah" width={180} height={50} priority />
           </Link>
           <div className="hidden items-center gap-8 md:flex">
             <InfoBox
@@ -130,8 +130,8 @@ export function CharityHeader() {
           <Link
             href="/donate"
             className={cn(
-              'hidden rounded bg-primary-hover px-6 py-2 text-sm font-semibold uppercase',
-              'text-white transition hover:bg-primary-dark lg:inline-block',
+              'bg-primary-hover hidden rounded px-6 py-2 text-sm font-semibold uppercase',
+              'hover:bg-primary-dark text-white transition lg:inline-block',
             )}
           >
             Donate Now
@@ -145,7 +145,7 @@ export function CharityHeader() {
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <button aria-label="Open menu" className="p-2">
-                  <Menu className="size-6 text-text-dark" />
+                  <Menu className="text-text-dark size-6" />
                 </button>
               </SheetTrigger>
               <SheetContent side="right" className="overflow-y-auto">
@@ -168,8 +168,8 @@ export function CharityHeader() {
                     href="/donate"
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      'mt-4 block rounded bg-primary-hover px-6 py-2 text-center text-sm',
-                      'font-semibold uppercase text-white transition hover:bg-primary-dark',
+                      'bg-primary-hover mt-4 block rounded px-6 py-2 text-center text-sm',
+                      'hover:bg-primary-dark font-semibold text-white uppercase transition',
                     )}
                   >
                     Donate Now
@@ -201,14 +201,14 @@ function InfoBox({
       <div
         className={cn(
           'flex h-12 w-12 items-center justify-center rounded-full',
-          'border-2 border-primary text-primary',
+          'border-primary text-primary border-2',
         )}
       >
         {icon}
       </div>
       <div>
-        <p className="text-sm font-semibold text-heading">{heading}</p>
-        <p className="text-sm text-foreground">{content}</p>
+        <p className="text-heading text-sm font-semibold">{heading}</p>
+        <p className="text-foreground text-sm">{content}</p>
       </div>
     </div>
   );
@@ -224,7 +224,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
           href={item.href ?? '#'}
           className={cn(
             'flex items-center px-3 py-4 text-sm font-semibold uppercase',
-            'tracking-wide text-text-dark transition hover:text-primary',
+            'text-text-dark hover:text-primary tracking-wide transition',
           )}
         >
           {item.label}
@@ -239,7 +239,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
         href={item.href ?? '#'}
         className={cn(
           'flex items-center gap-1 px-3 py-4 text-sm font-semibold uppercase',
-          'tracking-wide text-text-dark transition hover:text-primary',
+          'text-text-dark hover:text-primary tracking-wide transition',
         )}
       >
         {item.label}
@@ -269,8 +269,8 @@ function DesktopDropdownItem({ item }: { item: NavItem }) {
         <Link
           href={item.href ?? '#'}
           className={cn(
-            'block px-4 py-2 text-sm text-foreground transition',
-            'hover:bg-gray-50 hover:text-primary',
+            'text-foreground block px-4 py-2 text-sm transition',
+            'hover:text-primary hover:bg-gray-50',
           )}
         >
           {item.label}
@@ -284,7 +284,7 @@ function DesktopDropdownItem({ item }: { item: NavItem }) {
       <span
         className={cn(
           'flex cursor-default items-center justify-between px-4 py-2 text-sm',
-          'text-foreground transition hover:bg-gray-50 hover:text-primary',
+          'text-foreground hover:text-primary transition hover:bg-gray-50',
         )}
       >
         {item.label}
@@ -328,7 +328,7 @@ function MobileNavItem({
           href={item.href ?? '#'}
           onClick={onNavigate}
           className={cn(
-            'block py-2 text-sm text-text-dark transition hover:text-primary',
+            'text-text-dark hover:text-primary block py-2 text-sm transition',
             depth > 0 && 'pl-4',
           )}
         >
@@ -344,7 +344,7 @@ function MobileNavItem({
         onClick={() => toggleExpanded(item.label)}
         className={cn(
           'flex w-full items-center justify-between py-2 text-sm',
-          'font-semibold text-text-dark transition hover:text-primary',
+          'text-text-dark hover:text-primary font-semibold transition',
           depth > 0 && 'pl-4',
         )}
       >

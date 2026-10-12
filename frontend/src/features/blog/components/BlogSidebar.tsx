@@ -31,26 +31,22 @@ export default function BlogSidebar() {
     <aside className="space-y-8">
       {/* Search */}
       <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h4 className="mb-4 font-serif text-lg font-semibold text-heading">Search</h4>
+        <h4 className="text-heading mb-4 font-serif text-lg font-semibold">Search</h4>
         <div className="relative">
-          <Input
-            type="text"
-            placeholder="Search posts..."
-            className="pr-10"
-          />
-          <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground" />
+          <Input type="text" placeholder="Search posts..." className="pr-10" />
+          <Search className="text-foreground absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2" />
         </div>
       </div>
 
       {/* Categories */}
       <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h4 className="mb-4 font-serif text-lg font-semibold text-heading">Categories</h4>
+        <h4 className="text-heading mb-4 font-serif text-lg font-semibold">Categories</h4>
         <ul className="space-y-3">
           {categories.map((category) => (
             <li key={category.name}>
               <Link
                 href={`/blog?category=${category.name.toLowerCase()}`}
-                className="flex items-center justify-between text-sm text-foreground transition hover:text-primary"
+                className="text-foreground hover:text-primary flex items-center justify-between text-sm transition"
               >
                 <span>{category.name}</span>
                 <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-semibold">
@@ -64,22 +60,22 @@ export default function BlogSidebar() {
 
       {/* Recent Posts */}
       <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h4 className="mb-4 font-serif text-lg font-semibold text-heading">Recent Posts</h4>
+        <h4 className="text-heading mb-4 font-serif text-lg font-semibold">Recent Posts</h4>
         <div className="space-y-4">
           {blogPosts.slice(0, 3).map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="flex items-center gap-3 group"
+              className="group flex items-center gap-3"
             >
               <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded">
                 <Image src={post.image} alt={post.title} fill className="object-cover" />
               </div>
               <div>
-                <h5 className="text-sm font-semibold text-heading transition group-hover:text-primary">
+                <h5 className="text-heading group-hover:text-primary text-sm font-semibold transition">
                   {post.title}
                 </h5>
-                <p className="text-xs text-foreground">{post.date}</p>
+                <p className="text-foreground text-xs">{post.date}</p>
               </div>
             </Link>
           ))}
@@ -88,13 +84,13 @@ export default function BlogSidebar() {
 
       {/* Tags Cloud */}
       <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h4 className="mb-4 font-serif text-lg font-semibold text-heading">Tags</h4>
+        <h4 className="text-heading mb-4 font-serif text-lg font-semibold">Tags</h4>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <Link key={tag} href={`/blog?tag=${tag}`}>
               <Badge
                 variant="secondary"
-                className="cursor-pointer transition hover:bg-primary hover:text-white"
+                className="hover:bg-primary cursor-pointer transition hover:text-white"
               >
                 {tag}
               </Badge>

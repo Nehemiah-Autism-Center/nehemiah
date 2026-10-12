@@ -14,7 +14,7 @@ export default function ContactPage() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
             <div className="lg:col-span-2">
-              <h2 className="mb-6 font-serif text-3xl font-medium text-heading">Get In Touch</h2>
+              <h2 className="text-heading mb-6 font-serif text-3xl font-medium">Get In Touch</h2>
               <ContactForm />
             </div>
 
@@ -25,12 +25,12 @@ export default function ContactPage() {
                     key={info.title}
                     className="flex gap-4 rounded-lg border bg-white p-6 shadow-sm"
                   >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <div className="bg-primary/10 text-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-full">
                       {info.icon}
                     </div>
                     <div>
-                      <h3 className="font-serif font-semibold text-heading">{info.title}</h3>
-                      <p className="mt-1 text-sm text-foreground">{info.text}</p>
+                      <h3 className="text-heading font-serif font-semibold">{info.title}</h3>
+                      <p className="text-foreground mt-1 text-sm">{info.text}</p>
                     </div>
                   </div>
                 ))}

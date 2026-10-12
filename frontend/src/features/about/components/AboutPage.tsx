@@ -138,10 +138,10 @@ export default function AboutPage() {
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="font-serif text-base font-semibold text-heading">
+                <AccordionTrigger className="text-heading font-serif text-base font-semibold">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="leading-relaxed text-foreground">
+                <AccordionContent className="text-foreground leading-relaxed">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

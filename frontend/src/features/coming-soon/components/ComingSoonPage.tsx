@@ -28,7 +28,7 @@ function CountdownRenderer({ days, hours, minutes, seconds }: CountdownRendererP
           className="rounded-lg bg-white/10 px-6 py-4 text-center backdrop-blur"
         >
           <p className="text-3xl font-bold md:text-5xl">{String(block.value).padStart(2, '0')}</p>
-          <p className="text-sm uppercase tracking-wider text-white/70">{block.label}</p>
+          <p className="text-sm tracking-wider text-white/70 uppercase">{block.label}</p>
         </div>
       ))}
     </div>
@@ -68,12 +68,7 @@ export default function ComingSoonPage() {
         <Countdown
           date={launchDate}
           renderer={({ days, hours, minutes, seconds }) => (
-            <CountdownRenderer
-              days={days}
-              hours={hours}
-              minutes={minutes}
-              seconds={seconds}
-            />
+            <CountdownRenderer days={days} hours={hours} minutes={minutes} seconds={seconds} />
           )}
         />
 
@@ -83,21 +78,18 @@ export default function ComingSoonPage() {
             type="email"
             placeholder="Enter your email"
             required
-            className="flex-1 rounded-l px-4 py-3 text-text-dark outline-none"
+            className="text-text-dark flex-1 rounded-l px-4 py-3 outline-none"
           />
           <button
             type="submit"
-            className="rounded-r bg-primary px-6 py-3 text-sm font-semibold uppercase text-white transition hover:bg-primary-hover"
+            className="bg-primary hover:bg-primary-hover rounded-r px-6 py-3 text-sm font-semibold text-white uppercase transition"
           >
             Notify Me
           </button>
         </form>
 
         {/* Back to Home */}
-        <Link
-          href="/"
-          className="mt-8 text-sm text-white/70 transition hover:text-white"
-        >
+        <Link href="/" className="mt-8 text-sm text-white/70 transition hover:text-white">
           &larr; Back to Home
         </Link>
       </div>

@@ -40,14 +40,11 @@ export default function SectionHeading({
 
   return (
     <div className={cn('mb-10', align === 'center' ? 'text-center' : 'text-left')}>
-      <h2 className="font-serif text-3xl font-medium text-heading md:text-4xl">{renderTitle()}</h2>
+      <h2 className="text-heading font-serif text-3xl font-medium md:text-4xl">{renderTitle()}</h2>
       <hr
-        className={cn(
-          'mt-4 h-0.5 w-12 border-0 bg-primary',
-          align === 'center' ? 'mx-auto' : '',
-        )}
+        className={cn('bg-primary mt-4 h-0.5 w-12 border-0', align === 'center' ? 'mx-auto' : '')}
       />
-      {subtitle && <p className="mt-4 text-foreground">{subtitle}</p>}
+      {subtitle && <p className="text-foreground mt-4">{subtitle}</p>}
     </div>
   );
 }

@@ -21,7 +21,7 @@ export default function TeamCard({ image, name, role, slug, social }: TeamCardPr
         <div className="relative aspect-[3/4] overflow-hidden">
           <Image src={image} alt={name} fill className="object-cover" />
         </div>
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-primary/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div className="bg-primary/80 absolute inset-0 flex flex-col items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <div className="flex gap-3">
             {social?.facebook && (
               <a
@@ -57,10 +57,10 @@ export default function TeamCard({ image, name, role, slug, social }: TeamCardPr
         </div>
       </div>
       <div className="mt-4 text-center">
-        <Link href={`/team/${slug}`} className="font-serif font-semibold text-heading">
+        <Link href={`/team/${slug}`} className="text-heading font-serif font-semibold">
           {name}
         </Link>
-        <p className="text-sm text-foreground">{role}</p>
+        <p className="text-foreground text-sm">{role}</p>
       </div>
     </div>
   );
