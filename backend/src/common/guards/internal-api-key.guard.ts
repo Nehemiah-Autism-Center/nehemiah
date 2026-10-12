@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FastifyRequest } from 'fastify';
-import { timingSafeEqual } from 'node:crypto';
+import { createHash, timingSafeEqual } from 'node:crypto';
 
 @Injectable()
 export class InternalApiKeyGuard implements CanActivate {
@@ -20,12 +20,12 @@ export class InternalApiKeyGuard implements CanActivate {
   }
 
   private keysMatch(supplied: string, expected: string): boolean {
-    const suppliedBuffer = Buffer.from(supplied);
-    const expectedBuffer = Buffer.from(expected);
+    // Hash both sides to a fixed width first: timingSafeEqual throws on unequal lengths, and a
+    // length check that short-circuits beforehand would leak the key length through timing.
+    return timingSafeEqual(this.digest(supplied), this.digest(expected));
+  }
 
-    return (
-      suppliedBuffer.length === expectedBuffer.length &&
-      timingSafeEqual(suppliedBuffer, expectedBuffer)
-    );
+  private digest(value: string): Buffer {
+    return createHash('sha256').update(value).digest();
   }
 }
