@@ -1,4 +1,13 @@
-import { index, integer, pgTable, text, timestamp, uniqueIndex, uuid, varchar } from 'drizzle-orm/pg-core';
+import {
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core';
 import { admins } from './admin.schema';
 import { contentStatusEnum, languageCodeEnum } from './enums';
 
@@ -21,7 +30,10 @@ export const faqs = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true, precision: 3 }).defaultNow().notNull(),
   },
   (table) => [
-    uniqueIndex('faqs_translation_language_unique_idx').on(table.translationKey, table.languageCode),
+    uniqueIndex('faqs_translation_language_unique_idx').on(
+      table.translationKey,
+      table.languageCode,
+    ),
     index('faqs_language_status_order_idx').on(table.languageCode, table.status, table.sortOrder),
     index('faqs_category_idx').on(table.category),
     index('faqs_question_trgm_idx').using('gin', table.question.asc().op('gin_trgm_ops')),

@@ -15,7 +15,9 @@ export const blogPosts = pgTable(
     seoTitle: varchar('seo_title', { length: 70 }),
     seoDescription: varchar('seo_description', { length: 160 }),
     seoImageUrl: varchar('seo_image_url', { length: 2048 }),
-    createdBy: uuid('created_by').notNull().references(() => admins.id, { onDelete: 'restrict' }),
+    createdBy: uuid('created_by')
+      .notNull()
+      .references(() => admins.id, { onDelete: 'restrict' }),
     publishedAt: timestamp('published_at', { withTimezone: true, precision: 3 }),
     createdAt: timestamp('created_at', { withTimezone: true, precision: 3 }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true, precision: 3 }).defaultNow().notNull(),

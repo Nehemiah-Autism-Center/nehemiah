@@ -313,9 +313,9 @@ describe('validateEnvironment', () => {
     ).toThrow('MAIL_USER and MAIL_PASSWORD are required when MAIL_DRIVER is smtp');
 
     // The requirement follows the driver, not the environment.
-    expect(() =>
-      validateEnvironment({ NODE_ENV: 'development', MAIL_DRIVER: 'smtp' }),
-    ).toThrow('MAIL_USER and MAIL_PASSWORD are required when MAIL_DRIVER is smtp');
+    expect(() => validateEnvironment({ NODE_ENV: 'development', MAIL_DRIVER: 'smtp' })).toThrow(
+      'MAIL_USER and MAIL_PASSWORD are required when MAIL_DRIVER is smtp',
+    );
   });
 
   it('defaults the SMTP port to submission and keeps STARTTLS as the default posture', () => {

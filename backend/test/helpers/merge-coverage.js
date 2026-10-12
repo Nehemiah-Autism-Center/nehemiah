@@ -6,9 +6,7 @@ const sources = ['coverage-unit', 'coverage-e2e', 'coverage-integration'];
 
 function loadIstanbul() {
   const base = path.join(backendRoot, 'node_modules/.pnpm');
-  const entry = fs
-    .readdirSync(base)
-    .find((name) => name.startsWith('istanbul-lib-coverage@'));
+  const entry = fs.readdirSync(base).find((name) => name.startsWith('istanbul-lib-coverage@'));
   if (!entry) throw new Error('istanbul-lib-coverage is not installed');
   return require(path.join(base, entry, 'node_modules/istanbul-lib-coverage'));
 }
