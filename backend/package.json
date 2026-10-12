@@ -23,6 +23,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:migrate:local": "ts-node src/database/migrate.ts",
+    "db:migrate:prod": "node dist/src/database/run-migrations.js",
     "db:check": "drizzle-kit check",
     "db:studio": "drizzle-kit studio"
   },

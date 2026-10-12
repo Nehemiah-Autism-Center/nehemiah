@@ -194,7 +194,10 @@ Always use path aliases, never relative imports like `../../../`.
 
 ## Docker
 
-- `docker compose up` starts: Postgres, pgAdmin, Redis, MinIO, Mailpit, backend, frontend
+- `docker compose up` starts: Postgres, pgAdmin, backend, frontend. Redis, MinIO and Mailpit are commented out until the modules that use them land
+- Compose reads `${...}` values from the root `.env` (copy from `.env.example`); keep `POSTGRES_*` in step with `DATABASE_URL` in `backend/.env`
+- `docker compose -f docker-compose.test.yml up -d` starts the disposable Postgres + Mailpit that e2e/integration suites need (`TEST_DATABASE_URL`, `TEST_MAIL_HOST`)
+- Production (`docker-compose.prod.yml`): a one-shot `migrate` service applies migrations before `backend` starts; operator tools sit behind Traefik basic auth
 - Backend and frontend have volume mounts for hot reload
 - Each app has its own `Dockerfile` inside its directory
 

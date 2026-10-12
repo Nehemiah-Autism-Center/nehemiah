@@ -32,10 +32,11 @@ git clone <your-repo-url>
 cd nehemiah
 
 # Copy env files
+cp .env.example .env
 cp frontend/.env.example frontend/.env
 cp backend/.env.example backend/.env
 
-# Start everything (Postgres, Redis, MinIO, Mailpit, backend, frontend)
+# Start Postgres, pgAdmin, backend and frontend
 docker compose up
 ```
 
@@ -45,7 +46,7 @@ docker compose up
 # Frontend (requires backend services running)
 cd frontend && pnpm install && pnpm dev
 
-# Backend (requires Postgres + Redis)
+# Backend (requires Postgres)
 cd backend && pnpm install && pnpm dev
 ```
 
@@ -56,12 +57,10 @@ cd backend && pnpm install && pnpm dev
 | Frontend  | http://localhost:3000         | Next.js app         |
 | Backend   | http://localhost:8000/api/v1  | NestJS API          |
 | pgAdmin   | http://localhost:5050         | Postgres GUI        |
-| MinIO UI  | http://localhost:9001         | Object storage GUI  |
-| Mailpit   | http://localhost:8025         | Email catcher UI    |
-| Redis     | localhost:6379                | Cache               |
 
-**pgAdmin login:** `admin@admin.com` / `admin`
-**MinIO login:** `minioadmin` / `minioadmin`
+**pgAdmin login:** `PGADMIN_DEFAULT_EMAIL` / `PGADMIN_DEFAULT_PASSWORD` from the root `.env` (defaults `admin@example.com` / `admin`; bound to localhost only)
+
+Redis, MinIO and Mailpit are added to the stack together with the backend modules that use them.
 
 ## Project Structure
 
