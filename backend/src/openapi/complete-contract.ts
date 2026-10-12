@@ -146,11 +146,12 @@ function successSchema(statusCode: number): SchemaObject {
   };
 }
 
-function successResponses(
-  operation: OperationObject,
-): Array<[string, Exclude<OperationObject['responses'][string], undefined>]> {
-  return Object.entries(operation.responses ?? {}).filter(([statusCode]) =>
-    /^2\d\d$/.test(statusCode),
+type DefinedResponse = Exclude<OperationObject['responses'][string], undefined>;
+
+function successResponses(operation: OperationObject): Array<[string, DefinedResponse]> {
+  return Object.entries(operation.responses ?? {}).filter(
+    (entry): entry is [string, DefinedResponse] =>
+      /^2\d\d$/.test(entry[0]) && entry[1] !== undefined,
   );
 }
 
