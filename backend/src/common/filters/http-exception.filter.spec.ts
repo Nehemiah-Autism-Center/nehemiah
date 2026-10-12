@@ -1,4 +1,4 @@
-import { ArgumentsHost, Logger } from '@nestjs/common';
+import { ArgumentsHost, Logger, NotFoundException } from '@nestjs/common';
 import { HttpExceptionFilter } from './http-exception.filter';
 
 describe('HttpExceptionFilter', () => {
@@ -27,5 +27,27 @@ describe('HttpExceptionFilter', () => {
     );
     expect(JSON.stringify(error.mock.calls)).not.toContain('subscriber');
     expect(status).toHaveBeenCalledWith(500);
+  });
+
+  it('applies the same redaction to the path it returns in the error body', () => {
+    const send = jest.fn();
+    const status = jest.fn(() => ({ send }));
+    const host = {
+      switchToHttp: () => ({
+        getRequest: () => ({
+          method: 'GET',
+          url: '/api/v1/public/newsletter/unsubscribe-token-123?email=someone%40example.com',
+          routeOptions: {},
+        }),
+        getResponse: () => ({ status }),
+      }),
+    } as unknown as ArgumentsHost;
+
+    new HttpExceptionFilter().catch(new NotFoundException(), host);
+
+    const body = send.mock.calls[0][0];
+    expect(body.path).toBe('/api/v1/public/newsletter/[REDACTED]');
+    expect(JSON.stringify(body)).not.toContain('someone');
+    expect(JSON.stringify(body)).not.toContain('unsubscribe-token-123');
   });
 });

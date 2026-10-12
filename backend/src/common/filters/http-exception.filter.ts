@@ -33,13 +33,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
         : undefined;
     const message =
       details?.message ?? (typeof response === 'string' ? response : 'Request failed');
+    // Error bodies are captured by proxies and client error trackers, so they get the same
+    // redaction as logs: no query string, no emails or newsletter tokens.
+    const path = safeRequestPath(request);
 
     if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR) {
       const stack = exception instanceof Error ? exception.stack : String(exception);
-      this.logger.error(
-        `${request.method} ${safeRequestPath(request)} failed with ${statusCode}`,
-        stack,
-      );
+      this.logger.error(`${request.method} ${path} failed with ${statusCode}`, stack);
     }
 
     reply.status(statusCode).send({
@@ -47,7 +47,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode,
       message,
       error: details?.error,
-      path: request.url,
+      path,
       timestamp: new Date().toISOString(),
     });
   }
