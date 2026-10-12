@@ -9,6 +9,7 @@ import { cn } from '@/shared/lib/utils';
 
 interface Slide {
   image: string;
+  imageAlt: string;
   title: string;
   subtitle: string;
   primaryButton?: { label: string; href: string };
@@ -43,12 +44,12 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
           >
             <Image
               src={slide.image}
-              alt={slide.title.replace(/<[^>]*>/g, '')}
+              alt={slide.imageAlt}
               fill
               className="object-cover"
               priority={index === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/70" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/25" />
             <div className="relative z-10 flex min-h-[600px] items-center lg:min-h-[700px]">
               <div className="mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16">
                 <div className="max-w-2xl">
@@ -58,7 +59,7 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
                   />
                   <p className="mt-6 text-lg text-white/90 md:text-xl">{slide.subtitle}</p>
                 </div>
-                <div className="mt-8 flex gap-4">
+                <div className="mt-8 flex flex-wrap gap-4">
                   {slide.primaryButton && (
                     <Link
                       href={slide.primaryButton.href}

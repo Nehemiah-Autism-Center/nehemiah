@@ -16,12 +16,23 @@ const presetAmounts = [25, 50, 100, 250, 500];
 export function DonationForm() {
   return (
     <div className="space-y-8">
-      <div role="status" className="bg-primary/10 text-heading rounded-md p-4 text-sm md:text-base">
-        Online donations are not available yet. To give today, please{' '}
-        <Link href="/contact" className="text-primary font-semibold underline">
-          contact us
-        </Link>{' '}
-        and our team will help you.
+      <div role="status" className="bg-primary/10 text-heading rounded-md p-4 md:p-6">
+        <p className="font-serif text-lg font-semibold">Online donations are coming soon</p>
+        <p className="mt-1 text-sm md:text-base">
+          While online donations are coming soon, support us by{' '}
+          <Link href="/volunteer" className="text-primary font-semibold underline">
+            volunteering
+          </Link>
+          ,{' '}
+          <Link href="/events" className="text-primary font-semibold underline">
+            attending events
+          </Link>
+          , or{' '}
+          <Link href="/contact" className="text-primary font-semibold underline">
+            contacting our Center
+          </Link>{' '}
+          today.
+        </p>
       </div>
 
       <form onSubmit={(event) => event.preventDefault()}>

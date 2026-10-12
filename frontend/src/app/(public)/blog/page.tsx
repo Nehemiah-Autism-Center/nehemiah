@@ -4,9 +4,8 @@ import BlogList from '@/features/blog/components/BlogList';
 import BlogSidebar from '@/features/blog/components/BlogSidebar';
 
 export const metadata: Metadata = {
-  title: 'Blog - Nehemiah',
-  description:
-    'Stay up to date with the latest stories, updates, and insights from our organization.',
+  title: 'Blog',
+  description: 'News and stories from Nehemiah Autism Center.',
 };
 
 export default function BlogPage() {
@@ -15,7 +14,7 @@ export default function BlogPage() {
       <PageBanner
         title="Our Blog"
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blog' }]}
-        backgroundImage="/images/blog_1.jpg"
+        backgroundImage="/images/nehemiah/blog-celebration.jpg"
       />
       <section className="bg-secondary-bg py-20">
         <div className="mx-auto max-w-7xl px-4">

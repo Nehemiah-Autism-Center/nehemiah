@@ -17,11 +17,11 @@ interface CounterSectionProps {
 
 export default function CounterSection({
   items,
-  backgroundImage = '/images/counter_bg.jpg',
+  backgroundImage = '/images/nehemiah/gallery-audience.jpg',
 }: CounterSectionProps) {
   return (
     <section className="relative">
-      <Image src={backgroundImage} alt="Counter background" fill className="object-cover" />
+      <Image src={backgroundImage} alt="" fill className="object-cover" />
       <div className="absolute inset-0 bg-black/70" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-20">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">

@@ -20,11 +20,11 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
   const event = events.find((e) => e.slug === slug);
 
   if (!event) {
-    return { title: 'Event Not Found - Nehemiah' };
+    return { title: 'Event Not Found' };
   }
 
   return {
-    title: `${event.title} - Nehemiah`,
+    title: event.title,
     description: event.description,
   };
 }

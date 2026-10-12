@@ -1,151 +1,80 @@
-import { Users, Briefcase, HandHeart, Trophy } from 'lucide-react';
-import { createElement } from 'react';
+import { HandCoins, Handshake, Users } from 'lucide-react';
+import type { GetInvolvedItem } from '@/features/home/types';
 
 export const slides = [
   {
-    image: '/images/home_1_slider_1.jpg',
+    image: '/images/nehemiah/hero-awareness-day.jpg',
+    imageAlt:
+      'Families and supporters gathered under the event tent at the Nehemiah Autism Center Autism Awareness Day',
+    title: 'Welcome to <span class="text-primary">Nehemiah</span> Autism Center',
+    subtitle:
+      'Where autistic children are empowered through care, education, and individualized support, families are strengthened with hope and guidance, and communities grow in understanding, inclusion, and the belief that every child deserves to be safe, strong, valued, and empowered.',
+    primaryButton: { label: 'Support Nehemiah', href: '/donate' },
+    secondaryButton: { label: 'Learn More', href: '/about' },
+  },
+  {
+    image: '/images/nehemiah/hero-children-activities.jpg',
+    imageAlt: 'Children and volunteers playing a parachute game on the lawn at the center',
     title:
-      'YOUR <span class="text-primary">SMALL</span><br/>DONATION CAN<br/>BRING <span class="text-primary">HUGE</span> SMILE',
+      'Together, let’s lighten the burden faced by <span class="text-primary">autistic children</span> and their parents!',
     subtitle:
-      "Since 2002, we provide children's legal rights for safe future. We ensure financial supports over 10k orphans and their families.",
-    primaryButton: { label: 'Learn More', href: '/about' },
-    secondaryButton: { label: 'Donate Now', href: '/donate' },
-  },
-  {
-    image: '/images/home_1_slider_2.jpg',
-    title: 'TOGETHER WE CAN<br/>MAKE A <span class="text-primary">DIFFERENCE</span>',
-    subtitle:
-      'Join our community of volunteers and donors making real impact in the lives of children worldwide.',
-    primaryButton: { label: 'Get Involved', href: '/team' },
-    secondaryButton: { label: 'Donate Now', href: '/donate' },
+      'We provide individualized care, education, therapy, family support, and awareness programs that help children develop their abilities and reach their potential.',
+    primaryButton: { label: 'What We Do', href: '/services' },
+    secondaryButton: { label: 'Volunteer With Us', href: '/volunteer' },
   },
 ];
 
-export const counterItems = [
-  { icon: createElement(Users, { className: 'size-10' }), label: 'Volunteers', value: 2019 },
-  { icon: createElement(Briefcase, { className: 'size-10' }), label: 'Projects', value: 5061 },
-  { icon: createElement(HandHeart, { className: 'size-10' }), label: 'Donors', value: 3910 },
-  { icon: createElement(Trophy, { className: 'size-10' }), label: 'Awards', value: 1910 },
-];
+export const introParagraph =
+  'At Nehemiah Autism Center, we work to create a better future for autistic children and their families in Ethiopia. We provide individualized care, education, therapy, family support, and awareness programs that help children develop their abilities and reach their potential. Founded by families who understand these challenges firsthand, we are committed to building a more inclusive and supportive society where every autistic child is safe, strong, and valued. Join us in making a difference—support Nehemiah Autism Center and help us continue providing hope, care, and opportunities to children living with autism across Ethiopia.';
 
-export const events = [
+// The "main buttons" from the content document that are not already in the hero.
+export const getInvolved: GetInvolvedItem[] = [
   {
-    image: '/images/event_1.jpg',
-    title: 'Fundraising Dinner Gala',
+    title: 'Volunteer With Us',
     description:
-      'Join us for an elegant evening of dining, entertainment, and giving to support children in need across the globe.',
-    date: 'March 25, 2026',
-    slug: 'fundraising-dinner-gala',
+      'Volunteers contribute their time and skills while gaining a deeper understanding of autism and making a positive difference in the lives of the children we serve.',
+    href: '/volunteer',
+    icon: Users,
   },
   {
-    image: '/images/event_2.jpg',
-    title: 'Community Outreach Day',
+    title: 'Support Nehemiah',
     description:
-      'A day of service and community building where volunteers come together to make a direct impact in local neighborhoods.',
-    date: 'April 10, 2026',
-    slug: 'community-outreach-day',
+      'Your support can help us reach more autistic children and bring hope and opportunity within their reach.',
+    href: '/donate',
+    icon: HandCoins,
   },
   {
-    image: '/images/event_3.jpg',
-    title: 'Charity Marathon Run',
+    title: 'Partner With Us',
     description:
-      'Lace up your running shoes and join thousands of runners raising funds for education and healthcare programs.',
-    date: 'May 15, 2026',
-    slug: 'charity-marathon-run',
-  },
-];
-
-export const teamMembers = [
-  {
-    image: '/images/team_6.jpg',
-    name: 'Melissa Munoz',
-    role: 'Volunteer',
-    slug: 'melissa-munoz',
-    social: { facebook: '#', twitter: '#', linkedin: '#' },
-  },
-  {
-    image: '/images/team_7.jpg',
-    name: 'David Chen',
-    role: 'Volunteer',
-    slug: 'david-chen',
-    social: { facebook: '#', twitter: '#', linkedin: '#' },
-  },
-  {
-    image: '/images/team_8.jpg',
-    name: 'Sarah Johnson',
-    role: 'Volunteer',
-    slug: 'sarah-johnson',
-    social: { facebook: '#', twitter: '#', linkedin: '#' },
-  },
-  {
-    image: '/images/team_9.jpg',
-    name: 'James Wilson',
-    role: 'Volunteer',
-    slug: 'james-wilson',
-    social: { facebook: '#', twitter: '#', linkedin: '#' },
+      'We work alongside organizations, professionals, and communities to strengthen our services, share knowledge, and create greater opportunities for our children.',
+    href: '/contact',
+    icon: Handshake,
   },
 ];
 
 export const testimonials = [
   {
-    text: 'Volunteering with Nehemiah has been one of the most rewarding experiences of my life. Seeing the direct impact we make on children and families is truly humbling.',
-    name: 'Robert Williams',
-    role: 'Volunteer since 2018',
+    text: 'Before coming here, I honestly didn’t know much about autism. But after spending time with the children, I realized how much they have to teach us. Volunteering here has changed the way I see people.',
+    name: 'A Nehemiah Volunteer',
   },
   {
-    text: 'The transparency and dedication of this organization is remarkable. Every dollar donated goes directly to helping those in need. I am proud to be a long-time supporter.',
-    name: 'Amanda Foster',
-    role: 'Monthly Donor',
+    text: 'The first time I saw my child make progress, I became emotional. It may seem like a small step to others, but for us, it meant everything. Nehemiah gave us hope when we really needed it.',
+    name: 'A Grateful Parent',
   },
   {
-    text: 'Thanks to Nehemiah, my children now have access to quality education and healthcare. They have given our family hope for a brighter future.',
-    name: 'Maria Garcia',
-    role: 'Program Beneficiary',
+    text: 'I came here thinking I was going to help the children, but in many ways, they changed me more than I changed them. Every smile, every small achievement, and every moment of connection stays with me.',
+    name: 'Volunteer',
+  },
+  {
+    text: 'There were times when I felt alone and worried about my child’s future. Here, I met people who understand what we are going through. For the first time, I felt that we were not alone.',
+    name: 'Parent of a Child at the Center',
+  },
+  {
+    text: 'Volunteering at Nehemiah is more than giving your time. You build relationships, you learn patience, and you begin to understand that even a small act of kindness can mean so much to someone.',
+    name: 'Former Volunteer',
+  },
+  {
+    text: 'Seeing my child grow in confidence and learn new things gives me hope for the future. I am grateful for every teacher, therapist, volunteer, and person who has been part of our journey.',
+    name: 'A Grateful Parent',
   },
 ];
-
-export const blogPosts = [
-  {
-    image: '/images/blog_1.jpg',
-    title: 'How Your Donations Change Lives Every Day',
-    excerpt:
-      'Discover the real stories behind the numbers and see how every contribution creates lasting change in communities worldwide.',
-    date: 'Feb 20, 2026',
-    author: 'Admin',
-    slug: 'how-your-donations-change-lives',
-  },
-  {
-    image: '/images/blog_2.jpg',
-    title: 'Volunteering Abroad: A Life-Changing Experience',
-    excerpt:
-      'Read about the transformative journey of our volunteers who traveled overseas to help build schools and community centers.',
-    date: 'Feb 15, 2026',
-    author: 'Admin',
-    slug: 'volunteering-abroad',
-  },
-  {
-    image: '/images/blog_3.jpg',
-    title: 'The Impact of Clean Water on Rural Communities',
-    excerpt:
-      'Clean water access changes everything. Learn about our latest water purification projects and their incredible outcomes.',
-    date: 'Feb 10, 2026',
-    author: 'Admin',
-    slug: 'impact-of-clean-water',
-  },
-];
-
-export const sponsorLogos = [
-  { src: '/images/logo_1.svg', alt: 'Global Foundation' },
-  { src: '/images/logo_2.svg', alt: 'EcoTrust Partners' },
-  { src: '/images/logo_3.svg', alt: 'Evergreen Capital' },
-  { src: '/images/logo_4.svg', alt: 'HopeWell Group' },
-  { src: '/images/logo_5.svg', alt: 'United Aid Corp' },
-  { src: '/images/logo_6.svg', alt: 'Beacon Impact' },
-  { src: '/images/logo_7.svg', alt: 'Horizon Charity' },
-  { src: '/images/logo_8.svg', alt: 'Uplift Ventures' },
-];
-
-export const galleryImages = Array.from({ length: 8 }, (_, i) => ({
-  src: `/images/gallery_${i + 1}.jpg`,
-  alt: `Gallery image ${i + 1}`,
-}));

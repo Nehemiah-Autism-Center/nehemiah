@@ -3,6 +3,7 @@ import { Open_Sans, Trirong } from 'next/font/google';
 import './globals.css';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
+import { SITE_CONFIG } from '@/shared/lib/constants';
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -19,9 +20,11 @@ const trirong = Trirong({
 });
 
 export const metadata: Metadata = {
-  title: 'Nehemiah - Charity & Fundraising',
-  description:
-    'Nehemiah is a charity and fundraising platform dedicated to making a difference in communities.',
+  title: { default: SITE_CONFIG.name, template: `%s | ${SITE_CONFIG.name}` },
+  description: SITE_CONFIG.description,
+  // Served from public/ rather than as src/app/icon.png: Next's file-based icon loader embeds
+  // the absolute path in a single-quoted string and breaks on paths containing an apostrophe.
+  icons: { icon: '/images/nehemiah/favicon.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

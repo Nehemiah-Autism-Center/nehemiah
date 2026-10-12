@@ -1,57 +1,41 @@
-import { Users, Briefcase, HandHeart, Trophy } from 'lucide-react';
+import { CalendarHeart, GraduationCap, HeartHandshake, Users } from 'lucide-react';
 import { createElement } from 'react';
 
-export const counterItems = [
-  { icon: createElement(Users, { className: 'size-10' }), label: 'Volunteers', value: 2019 },
-  { icon: createElement(Briefcase, { className: 'size-10' }), label: 'Projects', value: 5061 },
-  { icon: createElement(HandHeart, { className: 'size-10' }), label: 'Donors', value: 3910 },
-  { icon: createElement(Trophy, { className: 'size-10' }), label: 'Awards', value: 1910 },
+export const aboutIntro = [
+  'Nehemiah Autism Center is an indigenous nonprofit organization established 15 years ago to support children and young people with autism and related developmental disorders, as well as their families, and to help protect them from the various social, psychological, and economic challenges they face.',
+  'The Center was founded by parents who struggled to find schools that could provide appropriate education, training, and support for their children with autism. It operates with a vision of contributing its part to ensuring that children facing similar challenges do not experience severe health and social difficulties due to a lack of appropriate educational opportunities.',
+  'Today, the Center provides comprehensive services to 90 children with autism and their parents, making a significant contribution toward easing the challenges they face. In addition, the Center works to address misconceptions about autism within the community through various awareness-raising initiatives and educational activities.',
 ];
 
-export const sponsorLogos = Array.from({ length: 8 }, (_, i) => ({
-  src: `/images/logo_${i + 1}.png`,
-  alt: `Sponsor ${i + 1}`,
-}));
+export const aboutServicesSummary =
+  'Currently, the Center provides three main therapy services tailored to the individual needs and abilities of children on the autism spectrum: Applied Behavior Analysis (ABA), Speech and Language Therapy, and Occupational Therapy. These services help children develop their communication, behavioral, daily living, and other essential life skills. To date, the Center has successfully graduated more than 65 children, supporting them in transitioning to the next stage of their educational and life journey.';
 
-export const faqs = [
+export const mission = [
+  'To provide early diagnosis and screening services, standard education and training, life skills and vocational skills that enable children with autism to live in the community without difficulties.',
+  'To provide counseling service for families who are suffering from stressful life and discrimination as a result of being a parent of autistic child/children.',
+];
+
+// Figures from the About text of the content document.
+export const impactStats = [
   {
-    question: 'How can I make a donation?',
-    answer:
-      'You can donate through our website by visiting the Donate page. We accept credit cards, debit cards, and bank transfers. You can choose a one-time donation or set up a recurring monthly contribution. All transactions are processed securely through our encrypted payment system.',
+    icon: createElement(CalendarHeart, { className: 'size-10' }),
+    label: 'Years serving families',
+    value: 15,
   },
   {
-    question: 'How are the funds used?',
-    answer:
-      'Every dollar donated goes directly to our programs and initiatives. Our funds are allocated across education, healthcare, community development, and emergency relief. We maintain full transparency with annual financial reports available on our website, and over 85% of all donations go directly to program services.',
+    icon: createElement(Users, { className: 'size-10' }),
+    label: 'Children supported today',
+    value: 90,
   },
   {
-    question: 'How can I volunteer with Nehemiah?',
-    answer:
-      'We welcome volunteers from all backgrounds and skill sets. You can apply through our Team page or contact us directly. We offer both local and international volunteer opportunities, ranging from short-term events to long-term placements. All volunteers receive training and ongoing support throughout their service.',
+    icon: createElement(GraduationCap, { className: 'size-10' }),
+    label: 'Children graduated',
+    value: 65,
+    suffix: '+',
   },
   {
-    question: 'Are my donations tax-deductible?',
-    answer:
-      'Yes, Nehemiah is a registered 501(c)(3) nonprofit organization, and all donations are tax-deductible to the fullest extent allowed by law. You will receive a tax receipt via email after each donation, which you can use for your annual tax filing.',
-  },
-  {
-    question: 'Can I set up recurring donations?',
-    answer:
-      'Absolutely! Monthly recurring donations are one of the most effective ways to support our work. You can set up automatic monthly donations through our Donate page. You can modify or cancel your recurring donation at any time through your account dashboard or by contacting our support team.',
-  },
-  {
-    question: 'Where does Nehemiah operate?',
-    answer:
-      'We currently operate in over 30 countries across Africa, Asia, South America, and the Middle East. Our programs are tailored to the specific needs of each community, and we work closely with local partners to ensure sustainable impact.',
-  },
-  {
-    question: 'How does Nehemiah ensure transparency?',
-    answer:
-      'Transparency is at the core of everything we do. We publish annual reports, financial statements, and program impact assessments on our website. We are independently audited each year and maintain the highest standards of nonprofit governance.',
-  },
-  {
-    question: 'How can my organization become a partner?',
-    answer:
-      'We actively seek partnerships with businesses, foundations, and other nonprofits that share our vision. Partnership opportunities include corporate sponsorship, cause marketing, employee engagement programs, and co-funded initiatives. Please reach out through our Contact page to discuss partnership opportunities.',
+    icon: createElement(HeartHandshake, { className: 'size-10' }),
+    label: 'Core therapy services',
+    value: 3,
   },
 ];

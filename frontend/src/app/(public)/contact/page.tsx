@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ContactPage } from '@/features/contact';
 
 export const metadata: Metadata = {
-  title: 'Contact | Nehemiah',
+  title: 'Contact',
 };
 
 export default function Page() {

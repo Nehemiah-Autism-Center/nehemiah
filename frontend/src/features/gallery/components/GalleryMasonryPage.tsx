@@ -1,16 +1,6 @@
 import Image from 'next/image';
 import PageBanner from '@/shared/components/common/PageBanner';
-
-const masonryImages = [
-  { src: '/images/gallery_1.jpg', alt: 'Gallery image 1', aspect: 'aspect-[3/4]' },
-  { src: '/images/gallery_2.jpg', alt: 'Gallery image 2', aspect: 'aspect-square' },
-  { src: '/images/gallery_3.jpg', alt: 'Gallery image 3', aspect: 'aspect-[4/5]' },
-  { src: '/images/gallery_4.jpg', alt: 'Gallery image 4', aspect: 'aspect-[3/2]' },
-  { src: '/images/gallery_5.jpg', alt: 'Gallery image 5', aspect: 'aspect-[2/3]' },
-  { src: '/images/gallery_6.jpg', alt: 'Gallery image 6', aspect: 'aspect-square' },
-  { src: '/images/gallery_7.jpg', alt: 'Gallery image 7', aspect: 'aspect-[4/3]' },
-  { src: '/images/gallery_8.jpg', alt: 'Gallery image 8', aspect: 'aspect-[3/4]' },
-];
+import { galleryPhotos } from '@/features/gallery/data';
 
 export default function GalleryMasonryPage() {
   return (
@@ -22,21 +12,22 @@ export default function GalleryMasonryPage() {
           { label: 'Gallery', href: '/gallery' },
           { label: 'Masonry' },
         ]}
+        backgroundImage="/images/nehemiah/gallery-children-dance.jpg"
       />
 
-      <section className="py-20">
+      <section className="py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="columns-2 gap-4 [column-fill:_balance] md:columns-3 lg:columns-4">
-            {masonryImages.map((img) => (
-              <div key={img.src} className="mb-4 break-inside-avoid">
-                <div className={`relative ${img.aspect} overflow-hidden rounded-lg`}>
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover transition-transform duration-300 hover:scale-105"
-                  />
-                </div>
+            {galleryPhotos.map((photo) => (
+              <div key={photo.src} className="mb-4 break-inside-avoid">
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  width={1200}
+                  height={800}
+                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                  className="w-full rounded-lg transition-transform duration-300 hover:scale-105"
+                />
               </div>
             ))}
           </div>

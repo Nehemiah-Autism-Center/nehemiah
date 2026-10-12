@@ -3,20 +3,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  Phone,
-  MapPin,
-  Clock,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  ChevronRight,
-  ChevronDown,
-  Menu,
-} from 'lucide-react';
+import { Phone, MapPin, Clock, ChevronRight, ChevronDown, Mail, Menu } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
-import { NAV_ITEMS, type NavItem } from '@/shared/lib/constants';
+import SocialLinks from '@/shared/components/common/SocialLinks';
+import { NAV_ITEMS, SITE_CONFIG, type NavItem } from '@/shared/lib/constants';
 import {
   Sheet,
   SheetContent,
@@ -55,32 +45,23 @@ export function CharityHeader() {
       {/* Tier 1: Top Bar */}
       <div className="bg-topbar-bg hidden text-white md:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2">
-          <div className="flex items-center gap-3">
-            <a href="#" aria-label="Facebook" className="hover:text-primary transition">
-              <Facebook className="size-4" />
-            </a>
-            <a href="#" aria-label="Twitter" className="hover:text-primary transition">
-              <Twitter className="size-4" />
-            </a>
-            <a href="#" aria-label="Instagram" className="hover:text-primary transition">
-              <Instagram className="size-4" />
-            </a>
-            <a href="#" aria-label="Youtube" className="hover:text-primary transition">
-              <Youtube className="size-4" />
-            </a>
-          </div>
+          <SocialLinks />
           <div className="flex items-center gap-3 text-sm">
-            <a href="#" className="hover:text-primary transition">
-              Email
+            <a
+              href={`mailto:${SITE_CONFIG.email}`}
+              className="hover:text-primary flex items-center gap-1 transition"
+            >
+              <Mail className="size-4" aria-hidden="true" />
+              {SITE_CONFIG.email}
             </a>
             <span className="text-white/40">|</span>
-            <a href="#" className="hover:text-primary transition">
-              Community
-            </a>
+            <Link href="/volunteer" className="hover:text-primary transition">
+              Volunteer
+            </Link>
             <span className="text-white/40">|</span>
-            <a href="#" className="hover:text-primary transition">
-              Support
-            </a>
+            <Link href="/faq" className="hover:text-primary transition">
+              FAQ
+            </Link>
           </div>
         </div>
       </div>
@@ -88,24 +69,24 @@ export function CharityHeader() {
       {/* Tier 2: Header Info */}
       <div className="border-b bg-white py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4">
-          <Link href="/">
-            <Image src="/images/logo.png" alt="Nehemiah" width={180} height={50} priority />
-          </Link>
-          <div className="hidden items-center gap-8 md:flex">
+          <Logo priority />
+          <div className="hidden items-center gap-8 xl:flex">
             <InfoBox
               icon={<Phone className="size-5" />}
               heading="Get In Touch"
-              content="support@nehemiah.org"
+              content={SITE_CONFIG.phones[0].display}
+              href={`tel:${SITE_CONFIG.phones[0].tel}`}
             />
             <InfoBox
               icon={<MapPin className="size-5" />}
-              heading="Office Address"
-              content="Sylhet, Bangladesh"
+              heading="Visit Us"
+              content={SITE_CONFIG.shortAddress}
+              href="/contact#visit"
             />
             <InfoBox
               icon={<Clock className="size-5" />}
-              heading="Opening Hour"
-              content="10.00 - 18.00 UTC+06"
+              heading="Opening Hours"
+              content={`Mon – Fri ${SITE_CONFIG.hours[0].time}`}
             />
           </div>
         </div>
@@ -126,7 +107,7 @@ export function CharityHeader() {
             ))}
           </ul>
 
-          {/* Donate Button (desktop) */}
+          {/* Support Button (desktop) */}
           <Link
             href="/donate"
             className={cn(
@@ -134,14 +115,11 @@ export function CharityHeader() {
               'hover:bg-primary-dark text-white transition lg:inline-block',
             )}
           >
-            Donate Now
+            Support Us
           </Link>
 
           {/* Mobile Menu */}
-          <div className="flex w-full items-center justify-between py-3 lg:hidden">
-            <Link href="/">
-              <Image src="/images/logo.png" alt="Nehemiah" width={120} height={34} />
-            </Link>
+          <div className="flex w-full items-center justify-end py-3 lg:hidden">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <button aria-label="Open menu" className="p-2">
@@ -172,7 +150,7 @@ export function CharityHeader() {
                       'hover:bg-primary-dark font-semibold text-white uppercase transition',
                     )}
                   >
-                    Donate Now
+                    Support Us
                   </Link>
                 </div>
               </SheetContent>
@@ -187,14 +165,36 @@ export function CharityHeader() {
   );
 }
 
+function Logo({ priority = false }: { priority?: boolean }) {
+  return (
+    <Link href="/" className="flex items-center gap-3">
+      <Image
+        src="/images/nehemiah/logo-mark.png"
+        alt=""
+        width={54}
+        height={60}
+        priority={priority}
+      />
+      <span className="text-heading font-serif text-lg leading-tight font-semibold sm:text-xl">
+        Nehemiah
+        <span className="text-foreground block text-sm font-normal sm:text-base">
+          Autism Center
+        </span>
+      </span>
+    </Link>
+  );
+}
+
 function InfoBox({
   icon,
   heading,
   content,
+  href,
 }: {
   icon: React.ReactNode;
   heading: string;
   content: string;
+  href?: string;
 }) {
   return (
     <div className="flex items-center gap-3">
@@ -208,7 +208,13 @@ function InfoBox({
       </div>
       <div>
         <p className="text-heading text-sm font-semibold">{heading}</p>
-        <p className="text-foreground text-sm">{content}</p>
+        {href ? (
+          <a href={href} className="text-foreground hover:text-primary text-sm transition">
+            {content}
+          </a>
+        ) : (
+          <p className="text-foreground text-sm">{content}</p>
+        )}
       </div>
     </div>
   );

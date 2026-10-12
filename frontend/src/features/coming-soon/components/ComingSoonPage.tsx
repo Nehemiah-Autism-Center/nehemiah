@@ -46,8 +46,8 @@ export default function ComingSoonPage() {
     <div className="relative flex min-h-screen flex-col items-center justify-center text-center text-white">
       {/* Background */}
       <Image
-        src="/images/home_1_slider_1.jpg"
-        alt="Coming soon background"
+        src="/images/nehemiah/hero-awareness-day.jpg"
+        alt=""
         fill
         className="object-cover"
         priority
@@ -56,9 +56,15 @@ export default function ComingSoonPage() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center px-4">
-        <Image src="/images/logo.png" alt="Nehemiah" width={180} height={50} />
+        <Image
+          src="/images/nehemiah/logo-mark.png"
+          alt="Nehemiah Autism Center"
+          width={109}
+          height={120}
+          className="rounded bg-white p-2"
+        />
 
-        <h1 className="mt-8 font-serif text-5xl font-bold md:text-7xl">Coming Soon</h1>
+        <h1 className="mt-8 font-serif text-5xl font-bold text-white md:text-7xl">Coming Soon</h1>
         <p className="mt-4 max-w-lg text-lg text-white/80">
           We are working hard to bring you something amazing. Stay tuned for updates and be the
           first to know when we launch.

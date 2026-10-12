@@ -1,42 +1,42 @@
-export const faqs = [
+import type { FaqCategory } from '@/features/faq/types';
+
+export const faqIntro =
+  'Find answers to some of the most common questions about Nehemiah Autism Center, our services, visiting the Center, and how we support children with autism and their families.';
+
+export const faqCategories: FaqCategory[] = [
   {
-    question: 'How can I make a donation?',
-    answer:
-      'You can donate through our website by visiting the Donate page. We accept credit cards, debit cards, and bank transfers. You can choose a one-time donation or set up a recurring monthly contribution. All transactions are processed securely through our encrypted payment system.',
+    title: 'General',
+    items: [
+      {
+        question: 'What is Nehemiah Autism Center?',
+        answer:
+          'Nehemiah Autism Center is a nonprofit organization dedicated to supporting children and young people with autism and related developmental challenges, as well as their families. The Center provides educational, therapeutic, and family support services while also raising awareness and promoting understanding of autism in the community.',
+      },
+      {
+        question: 'Who can receive services at Nehemiah Autism Center?',
+        answer:
+          "Our services are designed primarily for children and young people on the autism spectrum and their families. Support is provided based on each child's individual needs and abilities.",
+      },
+    ],
   },
   {
-    question: 'How are the funds used?',
-    answer:
-      'Every dollar donated goes directly to our programs and initiatives. Our funds are allocated across education, healthcare, community development, and emergency relief. We maintain full transparency with annual financial reports available on our website, and over 85% of all donations go directly to program services.',
-  },
-  {
-    question: 'How can I volunteer with Nehemiah?',
-    answer:
-      'We welcome volunteers from all backgrounds and skill sets. You can apply through our Team page or contact us directly. We offer both local and international volunteer opportunities, ranging from short-term events to long-term placements. All volunteers receive training and ongoing support throughout their service.',
-  },
-  {
-    question: 'Are my donations tax-deductible?',
-    answer:
-      'Yes, Nehemiah is a registered 501(c)(3) nonprofit organization, and all donations are tax-deductible to the fullest extent allowed by law. You will receive a tax receipt via email after each donation, which you can use for your annual tax filing.',
-  },
-  {
-    question: 'Can I set up recurring donations?',
-    answer:
-      'Absolutely! Monthly recurring donations are one of the most effective ways to support our work. You can set up automatic monthly donations through our Donate page. You can modify or cancel your recurring donation at any time through your account dashboard or by contacting our support team.',
-  },
-  {
-    question: 'Where does Nehemiah operate?',
-    answer:
-      'We currently operate in over 30 countries across Africa, Asia, South America, and the Middle East. Our programs are tailored to the specific needs of each community, and we work closely with local partners to ensure sustainable impact. Visit our About page to learn more about our global presence.',
-  },
-  {
-    question: 'How does Nehemiah ensure transparency?',
-    answer:
-      'Transparency is at the core of everything we do. We publish annual reports, financial statements, and program impact assessments on our website. We are independently audited each year and maintain the highest standards of nonprofit governance. Donors receive regular updates on how their contributions are making a difference.',
-  },
-  {
-    question: 'How can my organization become a partner?',
-    answer:
-      'We actively seek partnerships with businesses, foundations, and other nonprofits that share our vision. Partnership opportunities include corporate sponsorship, cause marketing, employee engagement programs, and co-funded initiatives. Please reach out through our Contact page to discuss partnership opportunities.',
+    title: 'Services',
+    items: [
+      {
+        question: 'What services does Nehemiah Autism Center provide?',
+        answer:
+          'The Center provides educational and training support, as well as three main therapy services: Applied Behavior Analysis (ABA), Speech and Language Therapy, and Occupational Therapy. We also provide support and counseling services for families.',
+      },
+      {
+        question: 'What is Applied Behavior Analysis (ABA)?',
+        answer:
+          'ABA is an individualized approach that helps children develop important skills, including communication, positive behavior, independence, and daily living skills.',
+      },
+      {
+        question: 'Does the Center provide Speech Therapy?',
+        answer:
+          'Yes. Our Speech and Language Therapy supports children in developing communication, language, and social interaction skills according to their individual needs.',
+      },
+    ],
   },
 ];

@@ -1,13 +1,25 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DonationForm } from '@/features/donation';
 
 describe('DonationForm', () => {
-  it('tells donors that online giving is not available yet and where to go instead', () => {
+  it('tells donors that online giving is coming soon and how to support the center today', () => {
     render(<DonationForm />);
 
-    expect(screen.getByRole('status')).toHaveTextContent(/online donations are not available yet/i);
-    expect(screen.getByRole('link', { name: /contact us/i })).toHaveAttribute('href', '/contact');
+    const notice = screen.getByRole('status');
+    expect(notice).toHaveTextContent('Online donations are coming soon');
+    expect(within(notice).getByRole('link', { name: 'volunteering' })).toHaveAttribute(
+      'href',
+      '/volunteer',
+    );
+    expect(within(notice).getByRole('link', { name: 'attending events' })).toHaveAttribute(
+      'href',
+      '/events',
+    );
+    expect(within(notice).getByRole('link', { name: 'contacting our Center' })).toHaveAttribute(
+      'href',
+      '/contact',
+    );
   });
 
   it('cannot be filled in or submitted, so no donor believes a gift went through', async () => {

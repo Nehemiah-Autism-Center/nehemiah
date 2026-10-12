@@ -20,11 +20,11 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const post = blogPosts.find((p) => p.slug === slug);
 
   if (!post) {
-    return { title: 'Post Not Found - Nehemiah' };
+    return { title: 'Post Not Found' };
   }
 
   return {
-    title: `${post.title} - Nehemiah`,
+    title: post.title,
     description: post.excerpt,
   };
 }

@@ -8,7 +8,7 @@ import SectionHeading from '@/shared/components/common/SectionHeading';
 interface Testimonial {
   text: string;
   name: string;
-  role: string;
+  role?: string;
 }
 
 interface TestimonialCarouselProps {
@@ -45,7 +45,7 @@ export default function TestimonialCarousel({
             <div className="flex">
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="min-w-0 flex-[0_0_100%] px-4 md:flex-[0_0_50%]">
-                  <div className="rounded-lg border bg-white p-8 shadow-sm">
+                  <figure className="h-full rounded-lg border bg-white p-8 shadow-sm">
                     <span className="text-primary/20 font-serif text-6xl leading-none">
                       &ldquo;
                     </span>
@@ -54,8 +54,10 @@ export default function TestimonialCarousel({
                     </p>
                     <div className="bg-primary my-4 h-0.5 w-12" />
                     <p className="text-heading font-serif font-semibold">{testimonial.name}</p>
-                    <p className="text-foreground text-sm">{testimonial.role}</p>
-                  </div>
+                    {testimonial.role && (
+                      <p className="text-foreground text-sm">{testimonial.role}</p>
+                    )}
+                  </figure>
                 </div>
               ))}
             </div>

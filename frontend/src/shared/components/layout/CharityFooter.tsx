@@ -1,162 +1,93 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import {
-  ChevronRight,
-  Facebook,
-  Twitter,
-  Linkedin,
-  MapPinned,
-  Mail,
-  Phone,
-  Share2,
-} from 'lucide-react';
-import { SITE_CONFIG } from '@/shared/lib/constants';
+import { ChevronRight, Clock, Mail, MapPinned, Phone } from 'lucide-react';
+import SocialLinks from '@/shared/components/common/SocialLinks';
+import { FOOTER_LINK_GROUPS, SITE_CONFIG } from '@/shared/lib/constants';
 
 export function CharityFooter() {
   return (
     <footer>
-      {/* Footer Widget Area */}
-      <div className="bg-footer-bg relative">
-        {/* Background Image */}
-        <Image
-          src="/images/footer_bg.jpg"
-          alt=""
-          fill
-          className="object-cover opacity-10"
-          aria-hidden="true"
-        />
-
-        <div className="relative mx-auto max-w-7xl px-4 py-16">
-          {/* Row 1: Link Columns */}
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {/* Organization */}
+      <div className="bg-footer-bg">
+        <div className="mx-auto max-w-7xl px-4 py-16">
+          {/* Row 1: About + link groups */}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <h3 className="mb-4 font-serif text-lg text-white">Organization</h3>
-              <ul className="space-y-1">
-                {SITE_CONFIG.footerLinks.organization.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-footer-text hover:text-primary flex items-center gap-2 py-1 text-sm transition"
-                    >
-                      <ChevronRight className="size-3" />
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Support */}
-            <div>
-              <h3 className="mb-4 font-serif text-lg text-white">Support</h3>
-              <ul className="space-y-1">
-                {SITE_CONFIG.footerLinks.support.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-footer-text hover:text-primary flex items-center gap-2 py-1 text-sm transition"
-                    >
-                      <ChevronRight className="size-3" />
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Discover */}
-            <div>
-              <h3 className="mb-4 font-serif text-lg text-white">Discover</h3>
-              <ul className="space-y-1">
-                {SITE_CONFIG.footerLinks.discover.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-footer-text hover:text-primary flex items-center gap-2 py-1 text-sm transition"
-                    >
-                      <ChevronRight className="size-3" />
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* About */}
-            <div>
-              <h3 className="mb-4 font-serif text-lg text-white">About</h3>
+              <h3 className="mb-4 font-serif text-lg text-white">{SITE_CONFIG.name}</h3>
               <p className="text-footer-text text-sm leading-relaxed">{SITE_CONFIG.footerAbout}</p>
             </div>
+
+            {FOOTER_LINK_GROUPS.map((group) => (
+              <div key={group.title}>
+                <h3 className="mb-4 font-serif text-lg text-white">{group.title}</h3>
+                <ul className="space-y-1">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-footer-text hover:text-primary flex items-center gap-2 py-1 text-sm transition"
+                      >
+                        <ChevronRight className="size-3" aria-hidden="true" />
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                {group.title === 'Connect' && (
+                  <SocialLinks className="mt-4" linkClassName="text-footer-text" />
+                )}
+              </div>
+            ))}
           </div>
 
-          {/* Row 2: Contact Info */}
+          {/* Row 2: Contact details */}
           <div className="mt-12 grid grid-cols-1 gap-6 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Address */}
             <div className="flex items-start gap-3">
-              <MapPinned className="text-primary mt-0.5 size-5 shrink-0" />
+              <MapPinned className="text-primary mt-0.5 size-5 shrink-0" aria-hidden="true" />
               <p className="text-footer-text text-sm">{SITE_CONFIG.address}</p>
             </div>
 
-            {/* Email */}
             <div className="flex items-start gap-3">
-              <Mail className="text-primary mt-0.5 size-5 shrink-0" />
-              <div className="text-footer-text text-sm">
-                <a href={`mailto:${SITE_CONFIG.email}`} className="hover:text-primary transition">
-                  {SITE_CONFIG.email}
-                </a>
+              <Mail className="text-primary mt-0.5 size-5 shrink-0" aria-hidden="true" />
+              <a
+                href={`mailto:${SITE_CONFIG.email}`}
+                className="text-footer-text hover:text-primary text-sm break-all transition"
+              >
+                {SITE_CONFIG.email}
+              </a>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <Phone className="text-primary mt-0.5 size-5 shrink-0" aria-hidden="true" />
+              <div className="text-footer-text flex flex-col text-sm">
+                {SITE_CONFIG.phones.map((phone) => (
+                  <a
+                    key={phone.tel}
+                    href={`tel:${phone.tel}`}
+                    className="hover:text-primary transition"
+                  >
+                    {phone.display}
+                  </a>
+                ))}
               </div>
             </div>
 
-            {/* Phone */}
             <div className="flex items-start gap-3">
-              <Phone className="text-primary mt-0.5 size-5 shrink-0" />
+              <Clock className="text-primary mt-0.5 size-5 shrink-0" aria-hidden="true" />
               <div className="text-footer-text text-sm">
-                <a href={`tel:${SITE_CONFIG.phone}`} className="hover:text-primary transition">
-                  {SITE_CONFIG.phone}
-                </a>
-              </div>
-            </div>
-
-            {/* Social */}
-            <div className="flex items-start gap-3">
-              <Share2 className="text-primary mt-0.5 size-5 shrink-0" />
-              <div>
-                <p className="text-footer-text mb-2 text-sm">Spread The Words</p>
-                <div className="flex items-center gap-3">
-                  <a
-                    href={SITE_CONFIG.social.facebook}
-                    aria-label="Facebook"
-                    className="text-footer-text hover:text-primary transition"
-                  >
-                    <Facebook className="size-4" />
-                  </a>
-                  <a
-                    href={SITE_CONFIG.social.twitter}
-                    aria-label="Twitter"
-                    className="text-footer-text hover:text-primary transition"
-                  >
-                    <Twitter className="size-4" />
-                  </a>
-                  <a
-                    href={SITE_CONFIG.social.linkedin}
-                    aria-label="LinkedIn"
-                    className="text-footer-text hover:text-primary transition"
-                  >
-                    <Linkedin className="size-4" />
-                  </a>
-                </div>
+                {SITE_CONFIG.hours.map((slot) => (
+                  <p key={slot.days}>
+                    {slot.days}: {slot.time}
+                  </p>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Footer Bottom */}
       <div className="bg-footer-bg border-t border-white/10 py-6">
         <div className="mx-auto max-w-7xl px-4 text-center">
           <p className="text-footer-text text-sm">
-            Copyright &copy; 2024, All Right Reserved - Nehemiah
+            &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.
           </p>
         </div>
       </div>

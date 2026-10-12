@@ -1,4 +1,5 @@
 import PageBanner from '@/shared/components/common/PageBanner';
+import LocationSection from '@/shared/components/common/LocationSection';
 import { ContactForm } from '@/features/contact/components/ContactForm';
 import { contactInfo } from '@/features/contact/data';
 
@@ -8,9 +9,10 @@ export default function ContactPage() {
       <PageBanner
         title="Contact Us"
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Contact Us' }]}
+        backgroundImage="/images/nehemiah/visit-welcome.jpg"
       />
 
-      <section className="py-20">
+      <section className="py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
             <div className="lg:col-span-2">
@@ -28,9 +30,23 @@ export default function ContactPage() {
                     <div className="bg-primary/10 text-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-full">
                       {info.icon}
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <h3 className="text-heading font-serif font-semibold">{info.title}</h3>
-                      <p className="text-foreground mt-1 text-sm">{info.text}</p>
+                      {info.lines.map((line) =>
+                        line.href ? (
+                          <a
+                            key={line.text}
+                            href={line.href}
+                            className="text-foreground hover:text-primary mt-1 block text-sm break-words transition"
+                          >
+                            {line.text}
+                          </a>
+                        ) : (
+                          <p key={line.text} className="text-foreground mt-1 text-sm">
+                            {line.text}
+                          </p>
+                        ),
+                      )}
                     </div>
                   </div>
                 ))}
@@ -39,6 +55,10 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <div className="bg-secondary-bg">
+        <LocationSection />
+      </div>
     </>
   );
 }

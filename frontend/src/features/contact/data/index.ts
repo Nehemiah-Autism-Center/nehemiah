@@ -1,20 +1,30 @@
-import { Phone, MapPin, Clock } from 'lucide-react';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { createElement } from 'react';
+import { SITE_CONFIG } from '@/shared/lib/constants';
+import type { ContactInfoItem } from '@/features/contact/types';
 
-export const contactInfo = [
+export const contactInfo: ContactInfoItem[] = [
   {
     icon: createElement(Phone, { className: 'size-6' }),
-    title: 'Phone Number',
-    text: '(+880) 0823 560 433',
+    title: 'Phone',
+    lines: SITE_CONFIG.phones.map((phone) => ({
+      text: phone.display,
+      href: `tel:${phone.tel}`,
+    })),
+  },
+  {
+    icon: createElement(Mail, { className: 'size-6' }),
+    title: 'Email',
+    lines: [{ text: SITE_CONFIG.email, href: `mailto:${SITE_CONFIG.email}` }],
   },
   {
     icon: createElement(MapPin, { className: 'size-6' }),
-    title: 'Office Address',
-    text: 'Road-2, East Shibgonj, House No: M-23, Sylhet',
+    title: 'Address',
+    lines: [{ text: SITE_CONFIG.address, href: '#visit' }],
   },
   {
     icon: createElement(Clock, { className: 'size-6' }),
-    title: 'Working Hours',
-    text: 'Mon - Fri: 10.00 - 18.00',
+    title: 'Opening Hours',
+    lines: SITE_CONFIG.hours.map((slot) => ({ text: `${slot.days}: ${slot.time}` })),
   },
 ];

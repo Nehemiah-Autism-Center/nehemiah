@@ -1,66 +1,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search } from 'lucide-react';
-import { Input } from '@/shared/components/ui/input';
 import { Badge } from '@/shared/components/ui/badge';
 import { blogPosts } from '@/features/blog/data';
 
-const categories = [
-  { name: 'Donations', count: 4 },
-  { name: 'Volunteering', count: 6 },
-  { name: 'Education', count: 5 },
-  { name: 'Health', count: 3 },
-  { name: 'Community', count: 7 },
-];
-
-const tags = [
-  'donations',
-  'volunteering',
-  'education',
-  'health',
-  'community',
-  'clean water',
-  'sustainability',
-  'empowerment',
-  'scholarships',
-  'impact',
-];
+// Derived from the posts themselves so the counts can never drift from the content.
+const categories = Object.entries(
+  blogPosts.reduce<Record<string, number>>((counts, post) => {
+    counts[post.category] = (counts[post.category] ?? 0) + 1;
+    return counts;
+  }, {}),
+);
+const tags = [...new Set(blogPosts.flatMap((post) => post.tags))];
 
 export default function BlogSidebar() {
   return (
     <aside className="space-y-8">
-      {/* Search */}
       <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h4 className="text-heading mb-4 font-serif text-lg font-semibold">Search</h4>
-        <div className="relative">
-          <Input type="text" placeholder="Search posts..." className="pr-10" />
-          <Search className="text-foreground absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2" />
-        </div>
-      </div>
-
-      {/* Categories */}
-      <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h4 className="text-heading mb-4 font-serif text-lg font-semibold">Categories</h4>
-        <ul className="space-y-3">
-          {categories.map((category) => (
-            <li key={category.name}>
-              <Link
-                href={`/blog?category=${category.name.toLowerCase()}`}
-                className="text-foreground hover:text-primary flex items-center justify-between text-sm transition"
-              >
-                <span>{category.name}</span>
-                <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-semibold">
-                  {category.count}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Recent Posts */}
-      <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h4 className="text-heading mb-4 font-serif text-lg font-semibold">Recent Posts</h4>
+        <h2 className="text-heading mb-4 font-serif text-lg font-semibold">Recent Posts</h2>
         <div className="space-y-4">
           {blogPosts.slice(0, 3).map((post) => (
             <Link
@@ -69,12 +25,12 @@ export default function BlogSidebar() {
               className="group flex items-center gap-3"
             >
               <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded">
-                <Image src={post.image} alt={post.title} fill className="object-cover" />
+                <Image src={post.image} alt="" fill className="object-cover" />
               </div>
               <div>
-                <h5 className="text-heading group-hover:text-primary text-sm font-semibold transition">
+                <h3 className="text-heading group-hover:text-primary text-sm font-semibold transition">
                   {post.title}
-                </h5>
+                </h3>
                 <p className="text-foreground text-xs">{post.date}</p>
               </div>
             </Link>
@@ -82,19 +38,25 @@ export default function BlogSidebar() {
         </div>
       </div>
 
-      {/* Tags Cloud */}
       <div className="rounded-lg bg-white p-6 shadow-sm">
-        <h4 className="text-heading mb-4 font-serif text-lg font-semibold">Tags</h4>
+        <h2 className="text-heading mb-4 font-serif text-lg font-semibold">Categories</h2>
+        <ul className="space-y-3">
+          {categories.map(([name, count]) => (
+            <li key={name} className="text-foreground flex items-center justify-between text-sm">
+              <span>{name}</span>
+              <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-semibold">{count}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="rounded-lg bg-white p-6 shadow-sm">
+        <h2 className="text-heading mb-4 font-serif text-lg font-semibold">Tags</h2>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
-            <Link key={tag} href={`/blog?tag=${tag}`}>
-              <Badge
-                variant="secondary"
-                className="hover:bg-primary cursor-pointer transition hover:text-white"
-              >
-                {tag}
-              </Badge>
-            </Link>
+            <Badge key={tag} variant="secondary">
+              {tag}
+            </Badge>
           ))}
         </div>
       </div>

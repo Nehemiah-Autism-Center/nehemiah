@@ -65,8 +65,7 @@ export default function BlogSingle({ post }: BlogSingleProps) {
         <div>
           <h4 className="text-heading font-serif font-semibold">{post.author}</h4>
           <p className="text-foreground text-sm">
-            Content writer and community advocate dedicated to sharing stories of impact and
-            inspiring others to make a difference.
+            News and stories from our children, families, volunteers and community.
           </p>
         </div>
       </div>
