@@ -30,9 +30,7 @@ describe('InternalApiKeyGuard', () => {
   });
 
   it('rejects a key that shares the expected prefix but differs in length', () => {
-    expect(() => guard.canActivate(context(`${expectedKey}-extra`))).toThrow(
-      UnauthorizedException,
-    );
+    expect(() => guard.canActivate(context(`${expectedKey}-extra`))).toThrow(UnauthorizedException);
   });
 
   it('runs the constant-time comparison even when the key length is wrong', () => {
