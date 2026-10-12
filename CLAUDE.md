@@ -25,8 +25,9 @@ pnpm dev              # next dev (port 3000)
 pnpm build            # next build
 pnpm test             # vitest run
 pnpm test:e2e         # playwright test
-pnpm lint             # next lint
+pnpm lint             # eslint . (flat config: eslint.config.mjs)
 pnpm format           # prettier --write .
+pnpm format:check     # prettier --check . (run in CI)
 ```
 
 ### Backend (`cd backend`)
@@ -40,10 +41,11 @@ pnpm format           # prettier --write .
 pnpm test:integration # jest integration suites (requires the Docker test stack)
 pnpm db:generate      # drizzle-kit generate (create migration from schema changes)
 pnpm db:migrate       # drizzle-kit migrate (apply pending migrations)
+pnpm db:check        # drizzle-kit check (migration chain consistency)
 pnpm db:studio        # drizzle-kit studio (visual DB browser)
-pnpm db:seed          # bootstrap settings, navigation, and the SEED_ADMIN_* administrator
-pnpm db:seed:demo     # fictional demonstration content (never in production)
 ```
+
+Seed scripts (`db:seed`, `db:seed:demo`) arrive with the seeds PR.
 
 ## Code Style
 

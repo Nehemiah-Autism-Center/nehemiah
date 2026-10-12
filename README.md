@@ -128,9 +128,8 @@ nehemiah/
 | `pnpm test:e2e`      | Run E2E tests                      |
 | `pnpm db:generate`   | Generate migration from schema diff|
 | `pnpm db:migrate`    | Apply pending migrations           |
-| `pnpm db:push`       | Push schema directly (dev only)    |
+| `pnpm db:check`      | Check the migration chain          |
 | `pnpm db:studio`     | Open Drizzle Studio (visual DB)    |
-| `pnpm db:seed`       | Seed the database                  |
 | `pnpm lint`          | Lint with ESLint                   |
 | `pnpm format`        | Format with Prettier               |
 
