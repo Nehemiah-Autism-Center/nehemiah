@@ -85,7 +85,7 @@ When creating a new module:
 5. Controller injects service — stays thin, no business logic
 6. Wire in module: provide repository with `{ provide: TOKEN, useClass: RepoImpl }`
 
-Example (see `src/modules/admins/` for reference implementation):
+Example (see `src/modules/system/` for a small reference implementation: interface + DI token, Drizzle repository, service tested against a mocked repository, thin controller):
 ```typescript
 // Schema (src/database/schema/user.schema.ts)
 export const users = pgTable('users', { id: uuid('id').defaultRandom().primaryKey(), ... });

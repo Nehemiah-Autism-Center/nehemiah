@@ -69,27 +69,23 @@ nehemiah/
 ├── frontend/          # Next.js app
 │   ├── src/
 │   │   ├── app/       # App Router pages & layouts
-│   │   ├── components/# UI components (shadcn + custom)
-│   │   ├── features/  # Feature modules (auth, users, etc.)
-│   │   ├── hooks/     # Shared React hooks
-│   │   ├── lib/       # Utilities (api-client, cn(), constants)
+│   │   ├── features/  # Feature modules (contact, donation, events, ...)
+│   │   ├── shared/    # components/ (ui, layout, common), hooks/, lib/ (api-client, cn())
 │   │   ├── providers/ # React context providers
 │   │   └── store/     # Zustand stores
-│   └── tests/         # Unit + E2E tests
+│   └── tests/         # unit/ (Vitest) + e2e/ (Playwright)
 │
 ├── backend/           # NestJS app
 │   ├── src/
-│   │   ├── modules/   # Feature modules (users, etc.)
+│   │   ├── modules/   # Feature modules (system, ...)
 │   │   ├── common/    # Guards, filters, interceptors, pipes
 │   │   ├── config/    # App, database, JWT configuration
-│   │   └── database/  # Drizzle schema, migrations, seeds
-│   └── test/          # E2E tests
+│   │   └── database/  # Drizzle schema and migrations
+│   └── test/          # E2E + integration suites
 │
-├── shared/            # Shared TypeScript types
-│   └── types/
-│
-├── .github/workflows/ # CI/CD pipelines
+├── .github/workflows/ # CI
 ├── docker-compose.yml          # Dev environment
+├── docker-compose.test.yml     # Disposable Postgres + Mailpit for e2e/integration tests
 └── docker-compose.prod.yml     # Production (Traefik + GHCR)
 ```
 
@@ -132,14 +128,6 @@ nehemiah/
 | `pnpm lint`          | Lint with ESLint                   |
 | `pnpm format`        | Format with Prettier               |
 
-## Shared Types
-
-Both apps use `@shared/*` path alias to import from `shared/types/`:
-
-```typescript
-import type { ApiResponse, BaseUser, PaginatedResponse } from '@shared/types';
-```
-
 ## Backend Architecture
 
 The backend uses **Drizzle ORM** with the **Repository Pattern**:
@@ -153,27 +141,17 @@ Module
 └── interfaces/     # Repository contracts
 ```
 
-Database schemas are defined in `src/database/schema/` using Drizzle's `pgTable()` builder. Services depend on repository **interfaces**, not implementations. Repositories are injected via NestJS DI using tokens.
+Database schemas are defined in `src/database/schema/` using Drizzle's `pgTable()` builder. Services depend on repository **interfaces**, not implementations. Repositories are injected via NestJS DI using tokens. `src/modules/system/` is a small reference implementation.
 
 ## CI/CD
 
-### PR Flow
-1. Push feature branch → open PR targeting `main`
-2. CI runs lint + tests + build for both apps (checks only, no deploy)
+`.github/workflows/ci.yml` runs on every pull request and on pushes to `main` and `dev`:
 
-### Prod Flow
-1. Merge PR into `main`
-2. Docker images auto-built and pushed to GHCR
-3. Auto-deploys to production VPS via SSH
+- **Frontend**: lint, Prettier check, typecheck, Vitest, `next build`
+- **Backend**: lint, Prettier check, typecheck, unit tests with coverage thresholds, e2e and integration suites against Postgres + Mailpit service containers, `db:check`, a schema/migration parity check, build
+- **Docker**: builds both production images (not pushed)
 
-### Required GitHub Secrets
-
-| Secret            | Description                              |
-|-------------------|------------------------------------------|
-| `PROD_HOST`       | Production VPS IP                        |
-| `PROD_USER`       | SSH user for production                  |
-| `PROD_SSH_KEY`    | SSH private key for production           |
-| `GHCR_TOKEN`      | GitHub PAT with `write:packages` scope   |
+Publishing images to GHCR and deploying are not automated yet.
 
 ## Production Deployment
 
@@ -181,16 +159,16 @@ Database schemas are defined in `src/database/schema/` using Drizzle's `pgTable(
 # On your VPS
 git clone <your-repo>
 cd nehemiah
-cp backend/.env.example backend/.env   # fill prod values
-cp frontend/.env.example frontend/.env # fill prod values
+cp .env.example .env                                         # DOMAIN, ACME_EMAIL, IMAGE_OWNER, OPS_BASIC_AUTH_USERS
+cp backend/.env.production.example backend/.env.production   # replace every REPLACE_* value
+cp frontend/.env.example frontend/.env                       # production values
 
-# Start with Traefik SSL
 docker compose -f docker-compose.prod.yml pull
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-Production uses Traefik for automatic SSL via Let's Encrypt. Update `yourdomain.com` and `your@email.com` in `docker-compose.prod.yml`.
+Traefik provides TLS through Let's Encrypt. A one-shot `migrate` service applies pending database migrations before the API starts. The Traefik dashboard (`traefik.<DOMAIN>`) and Dozzle (`logs.<DOMAIN>`) require the basic-auth credentials in `OPS_BASIC_AUTH_USERS`.
 
 ## Environment Variables
 
-See [backend/.env.example](backend/.env.example) and [frontend/.env.example](frontend/.env.example) for all available config options.
+See [.env.example](.env.example) (Compose), [backend/.env.example](backend/.env.example), [backend/.env.production.example](backend/.env.production.example) and [frontend/.env.example](frontend/.env.example) for all available config options.
