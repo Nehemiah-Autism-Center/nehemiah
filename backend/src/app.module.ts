@@ -13,6 +13,7 @@ import { SecurityHeadersMiddleware } from './common/middleware/security-headers.
 import runtimeConfig from './config/runtime.config';
 import mailConfig from './config/mail.config';
 import cacheConfig from './config/cache.config';
+import { SystemModule } from './modules/system/system.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import cacheConfig from './config/cache.config';
         },
       ],
     }),
+    SystemModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
