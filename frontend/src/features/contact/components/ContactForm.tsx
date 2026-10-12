@@ -2,73 +2,123 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/shared/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/shared/components/ui/form';
 import { Input } from '@/shared/components/ui/input';
 import { Textarea } from '@/shared/components/ui/textarea';
-import { Label } from '@/shared/components/ui/label';
+import { SITE_CONFIG } from '@/shared/lib/constants';
+import { useSubmitContact } from '@/features/contact/api/use-submit-contact';
 import { contactSchema, type ContactFormData } from '@/features/contact/schemas/contact.schema';
 
-export function ContactForm() {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-  });
+const EMPTY_FORM: ContactFormData = { name: '', email: '', subject: '', message: '' };
 
-  const onSubmit = () => {
-    reset();
+export function ContactForm() {
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: EMPTY_FORM,
+  });
+  const submission = useSubmitContact();
+
+  const onSubmit = (values: ContactFormData) => {
+    // Clear the form only once the API has accepted the message; on failure the input is kept.
+    submission.mutate(values, { onSuccess: () => form.reset(EMPTY_FORM) });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div>
-        <Label htmlFor="name">Your Name</Label>
-        <Input id="name" placeholder="Enter your name" {...register('name')} className="mt-1" />
-        {errors.name && <p className="text-destructive mt-1 text-sm">{errors.name.message}</p>}
-      </div>
-
-      <div>
-        <Label htmlFor="email">Email Address</Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="Enter your email"
-          {...register('email')}
-          className="mt-1"
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="space-y-6">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Your Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your name" autoComplete="name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors.email && <p className="text-destructive mt-1 text-sm">{errors.email.message}</p>}
-      </div>
 
-      <div>
-        <Label htmlFor="subject">Subject</Label>
-        <Input id="subject" placeholder="Enter subject" {...register('subject')} className="mt-1" />
-        {errors.subject && (
-          <p className="text-destructive mt-1 text-sm">{errors.subject.message}</p>
-        )}
-      </div>
-
-      <div>
-        <Label htmlFor="message">Message</Label>
-        <Textarea
-          id="message"
-          placeholder="Write your message..."
-          rows={6}
-          {...register('message')}
-          className="mt-1"
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email Address</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  autoComplete="email"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors.message && (
-          <p className="text-destructive mt-1 text-sm">{errors.message.message}</p>
-        )}
-      </div>
 
-      <button
-        type="submit"
-        className="bg-primary hover:bg-primary-hover rounded px-8 py-3 font-semibold text-white uppercase transition"
-      >
-        Send Message
-      </button>
-    </form>
+        <FormField
+          control={form.control}
+          name="subject"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Subject</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter subject (optional)" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Message</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Write your message..." rows={6} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {submission.isSuccess && (
+          <p role="status" className="rounded-md bg-green-50 p-4 text-sm text-green-800">
+            Thank you, your message has been sent. We will get back to you soon.
+          </p>
+        )}
+        {submission.isError && (
+          <p role="alert" className="bg-destructive/10 text-destructive rounded-md p-4 text-sm">
+            We could not send your message. Please try again in a moment, or email us at{' '}
+            <a href={`mailto:${SITE_CONFIG.email}`} className="underline">
+              {SITE_CONFIG.email}
+            </a>
+            .
+          </p>
+        )}
+
+        <Button
+          type="submit"
+          size="lg"
+          disabled={submission.isPending}
+          className="hover:bg-primary-hover w-full rounded px-8 py-3 font-semibold text-white uppercase sm:w-auto"
+        >
+          {submission.isPending ? 'Sending…' : 'Send Message'}
+        </Button>
+      </form>
+    </Form>
   );
 }
