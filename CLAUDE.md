@@ -203,9 +203,11 @@ Always use path aliases, never relative imports like `../../../`.
 
 ## CI/CD
 
-- Single workflow: `.github/workflows/ci.yml`
-- PR to `main` → lint + test + build both apps (checks only)
-- Merge to `main` → lint + test + build → push Docker images to GHCR → auto-deploy to production
+- Single workflow: `.github/workflows/ci.yml`, on every PR and on pushes to `main` and `dev`
+- Frontend: lint, `format:check`, typecheck, Vitest, `next build`
+- Backend (with Postgres + Mailpit service containers): lint, `format:check`, typecheck, unit tests with coverage thresholds, e2e, integration, `db:check`, a schema/migration parity check (`db:generate` must produce no changes), build
+- Both production Docker images are built (not pushed)
+- Publishing images to GHCR and deploying are not automated yet
 
 ## Testing
 
