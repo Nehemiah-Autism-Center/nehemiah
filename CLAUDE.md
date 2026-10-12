@@ -2,11 +2,10 @@
 
 ## Project Overview
 
-Full-stack monorepo: Next.js frontend + NestJS backend + shared TypeScript types.
+Full-stack monorepo: Next.js frontend + NestJS backend.
 
 - **Frontend**: `frontend/` — Next.js 15, React 19, Tailwind CSS v4, shadcn/ui, Zustand, TanStack Query
 - **Backend**: `backend/` — NestJS with Fastify adapter, Drizzle ORM, PostgreSQL, Repository Pattern
-- **Shared**: `shared/types/` — TypeScript interfaces used by both apps via `@shared/*` path alias
 - **Infra**: Docker Compose (dev + prod), GitHub Actions CI/CD
 
 ## Commands
@@ -26,8 +25,9 @@ pnpm dev              # next dev (port 3000)
 pnpm build            # next build
 pnpm test             # vitest run
 pnpm test:e2e         # playwright test
-pnpm lint             # next lint
+pnpm lint             # eslint . (flat config: eslint.config.mjs)
 pnpm format           # prettier --write .
+pnpm format:check     # prettier --check . (run in CI)
 ```
 
 ### Backend (`cd backend`)
@@ -38,19 +38,21 @@ pnpm test             # jest
 pnpm test:e2e         # jest --config test/e2e/jest-e2e.json
 pnpm lint             # eslint "{src,test}/**/*.ts"
 pnpm format           # prettier --write .
+pnpm test:integration # jest integration suites (requires the Docker test stack)
 pnpm db:generate      # drizzle-kit generate (create migration from schema changes)
 pnpm db:migrate       # drizzle-kit migrate (apply pending migrations)
-pnpm db:push          # drizzle-kit push (push schema directly, dev only)
+pnpm db:check        # drizzle-kit check (migration chain consistency)
 pnpm db:studio        # drizzle-kit studio (visual DB browser)
-pnpm db:seed          # ts-node src/database/seeds/seed.ts
 ```
+
+Seed scripts (`db:seed`, `db:seed:demo`) arrive with the seeds PR.
 
 ## Code Style
 
 - **Formatter**: Prettier — single quotes, semicolons, trailing commas, 100 char width, 2-space indent
 - **Frontend linter**: ESLint with `next/core-web-vitals` + `next/typescript`
 - **Backend linter**: ESLint with `@typescript-eslint/recommended`
-- `no-console` is warn-level (only `console.warn` and `console.error` allowed)
+- Backend: `no-console` is warn-level (only `console.warn` and `console.error` allowed)
 - `@typescript-eslint/no-explicit-any` is warn-level — avoid `any`, use proper types
 - Frontend enforces `max-lines: 1000` per file
 - Always format before committing. Both apps have `pnpm format`.
@@ -65,7 +67,7 @@ This project uses **Drizzle ORM**, NOT TypeORM. Do not import from `typeorm` or 
 - **Types** are inferred from schemas: `typeof table.$inferSelect` and `typeof table.$inferInsert`
 - **Drizzle instance** is injected globally via `DrizzleModule` using the `DRIZZLE` DI token
 - **Migrations** are managed with `drizzle-kit` (config: `backend/drizzle.config.ts`)
-- Use `pnpm db:push` for rapid dev iteration, `pnpm db:generate` + `pnpm db:migrate` for production
+- Every schema change goes through `pnpm db:generate` + `pnpm db:migrate`; there is no schema-push workflow
 
 ### Backend — Repository Pattern (MUST follow)
 
@@ -83,7 +85,7 @@ When creating a new module:
 5. Controller injects service — stays thin, no business logic
 6. Wire in module: provide repository with `{ provide: TOKEN, useClass: RepoImpl }`
 
-Example (see `src/modules/users/` for reference implementation):
+Example (see `src/modules/system/` for a small reference implementation: interface + DI token, Drizzle repository, service tested against a mocked repository, thin controller):
 ```typescript
 // Schema (src/database/schema/user.schema.ts)
 export const users = pgTable('users', { id: uuid('id').defaultRandom().primaryKey(), ... });
@@ -138,6 +140,22 @@ All routes are prefixed with `/api/v1` (set in `main.ts`). Controllers should NO
 
 This project uses Fastify, NOT Express. Do not import Express types or middleware. Use `@nestjs/platform-fastify`.
 
+### Frontend — Development Guide (MUST follow)
+
+**All frontend work MUST follow the rules in [`.docs/frontend-development.md`](.docs/frontend-development.md).** Read it before building any frontend feature or component.
+
+Key rules enforced by the guide:
+- **Mobile-first design** — base styles for mobile, layer responsive prefixes up
+- **Max 1000 lines per file** — split if approaching limit
+- **Component placement** — check `ui/` and `shared/` before creating new components; reusable components get their own folder in `ui/<name>/`
+- **Page structure** — `page.tsx` stays thin, renders a feature listing component that handles `isLoading`/`isError`/`data` states; child components receive resolved data as props
+- **Optional chaining** — always use `?.` and `??` for nullable access
+- **Performance** — apply `memo`, `useCallback`, `useMemo` where beneficial (lists 20+ items, callbacks to memoized children, array transformations)
+- **Types in type files** — never inline, always in `types/` folders
+- **TanStack Query** for all server state, **Zustand** for client state
+- **Path aliases only** — `@/`, no relative `../../../`
+- **Forms** — Zod schema + react-hook-form + zodResolver + shadcn Form
+
 ### Frontend — Feature Modules
 
 Organize domain logic in `src/features/<name>/`:
@@ -152,55 +170,16 @@ Organize domain logic in `src/features/<name>/`:
 └── index.ts         # Barrel export
 ```
 
-### Frontend — State Management
-
-- **Server state**: TanStack Query — all API data fetching goes through query hooks
-- **Client state**: Zustand stores in `src/store/`
-  - `auth.store.ts` — user session + JWT (persisted)
-  - `ui.store.ts` — global UI state (modals, sidebar, toasts)
-- Do NOT use React Context for state that changes frequently
-
-### Frontend — Forms
-
-Always use this pattern:
-1. Define Zod schema in `features/<name>/schemas/`
-2. Infer TypeScript type with `z.infer<typeof schema>`
-3. Use `react-hook-form` with `zodResolver`
-4. Render with shadcn Form components
-
-### Frontend — Components
-
-- `src/components/ui/` — shadcn/ui primitives (do not modify these directly)
-- `src/components/layout/` — Navbar, Sidebar, Footer
-- `src/components/shared/` — Reusable non-shadcn components
-- Feature-specific components go in `src/features/<name>/components/`
-
 ### Frontend — App Router
 
 - Route groups: `(auth)` for login/register, `(dashboard)` for authenticated pages
 - Each group has its own `layout.tsx`
 - Global error/loading/not-found pages are in `src/app/`
 
-## Shared Types
-
-Located in `shared/types/`. Both apps import via `@shared/types`:
-```typescript
-import type { ApiResponse, BaseUser, PaginatedResponse } from '@shared/types';
-```
-
-When both apps need the same interface, add it here. Feature-local types stay in their respective app.
-
-Key types:
-- `ApiResponse<T>` — standard API response wrapper
-- `ApiError` — error response shape
-- `BaseUser` / `UserRole` — user entity shape
-- `PaginationQuery` / `PaginatedResponse<T>` — pagination helpers
-
 ## Path Aliases
 
-Both apps use these `tsconfig.json` paths:
+Both apps use this `tsconfig.json` path:
 - `@/*` → `./src/*` (app-local imports)
-- `@shared/*` → `../shared/*` (shared types)
 
 Always use path aliases, never relative imports like `../../../`.
 
@@ -209,21 +188,26 @@ Always use path aliases, never relative imports like `../../../`.
 - Frontend env: `frontend/.env` (copy from `frontend/.env.example`)
 - Backend env: `backend/.env` (copy from `backend/.env.example`)
 - `.env` files are gitignored — NEVER commit them
-- Backend connects to Postgres on `DATABASE_HOST:DATABASE_PORT` (defaults: `postgres:5432`)
+- Backend connects with `DATABASE_URL` when set; the individual `DATABASE_*` variables are a legacy fallback
 - Backend API runs on port `API_PORT` (default: `8000`)
 - Frontend expects backend at `NEXT_PUBLIC_API_URL` (default: `http://localhost:8000/api/v1`)
 
 ## Docker
 
-- `docker compose up` starts: Postgres, pgAdmin, Redis, MinIO, Mailpit, backend, frontend
+- `docker compose up` starts: Postgres, pgAdmin, backend, frontend. Redis, MinIO and Mailpit are commented out until the modules that use them land
+- Compose reads `${...}` values from the root `.env` (copy from `.env.example`); keep `POSTGRES_*` in step with `DATABASE_URL` in `backend/.env`
+- `docker compose -f docker-compose.test.yml up -d` starts the disposable Postgres + Mailpit that e2e/integration suites need (`TEST_DATABASE_URL`, `TEST_MAIL_HOST`)
+- Production (`docker-compose.prod.yml`): a one-shot `migrate` service applies migrations before `backend` starts; operator tools sit behind Traefik basic auth
 - Backend and frontend have volume mounts for hot reload
 - Each app has its own `Dockerfile` inside its directory
 
 ## CI/CD
 
-- Single workflow: `.github/workflows/ci.yml`
-- PR to `main` → lint + test + build both apps (checks only)
-- Merge to `main` → lint + test + build → push Docker images to GHCR → auto-deploy to production
+- Single workflow: `.github/workflows/ci.yml`, on every PR and on pushes to `main` and `dev`
+- Frontend: lint, `format:check`, typecheck, Vitest, `next build`
+- Backend (with Postgres + Mailpit service containers): lint, `format:check`, typecheck, unit tests with coverage thresholds, e2e, integration, `db:check`, a schema/migration parity check (`db:generate` must produce no changes), build
+- Both production Docker images are built (not pushed)
+- Publishing images to GHCR and deploying are not automated yet
 
 ## Testing
 
@@ -239,6 +223,5 @@ Always use path aliases, never relative imports like `../../../`.
 - Don't import Drizzle `db` in services — use the injected repository interface
 - Don't use Express types/middleware — this is a Fastify project
 - Don't skip DTO validation — every endpoint input goes through a validated DTO
-- Don't put shared types in `frontend/` or `backend/` — use `shared/types/`
 - Don't define table schemas inside modules — all schemas go in `src/database/schema/`
-- Don't use `db:push` in production — use `db:generate` + `db:migrate`
+- Don't bypass migrations — every schema change is a generated migration applied with `db:migrate`

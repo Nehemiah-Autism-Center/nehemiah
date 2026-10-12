@@ -3,8 +3,7 @@ node_modules
 out
 coverage
 .env
-.env.local
-.env*.local
+.env.*
 tests/e2e
 *.log
 npm-debug.log*

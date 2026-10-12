@@ -1,0 +1,9 @@
+pnpm-lock.yaml
+public/
+# Build and test output (Prettier reads ignore files from this directory, not the root .gitignore)
+.next/
+out/
+coverage/
+playwright-report/
+test-results/
+next-env.d.ts

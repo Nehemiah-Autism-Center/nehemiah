@@ -1,7 +1,7 @@
-version: '3.9'
+# Deployment settings (DOMAIN, ACME_EMAIL, IMAGE_OWNER, OPS_BASIC_AUTH_USERS, ...) come from the
+# root .env next to this file; see .env.example. Application secrets live in backend/.env.production.
 
 services:
-
   traefik:
     image: traefik:v3
     restart: always
@@ -14,7 +14,7 @@ services:
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
-      - --certificatesresolvers.letsencrypt.acme.email=your@email.com
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:?Set ACME_EMAIL in .env}
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
     ports:
       - "80:80"
@@ -24,49 +24,72 @@ services:
       - letsencrypt:/letsencrypt
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dashboard.rule=Host(`traefik.yourdomain.com`)
+      # Operator tools (Traefik dashboard, Dozzle) sit behind this basic-auth middleware.
+      - traefik.http.middlewares.ops-auth.basicauth.users=${OPS_BASIC_AUTH_USERS:?Set OPS_BASIC_AUTH_USERS in .env}
+      - traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN:?Set DOMAIN in .env}`)
       - traefik.http.routers.dashboard.tls.certresolver=letsencrypt
       - traefik.http.routers.dashboard.service=api@internal
-      
+      - traefik.http.routers.dashboard.middlewares=ops-auth
+
   frontend:
-    image: ghcr.io/yourusername/nehemiah-frontend:latest
+    image: ghcr.io/${IMAGE_OWNER:?Set IMAGE_OWNER in .env}/nehemiah-frontend:${IMAGE_TAG:-latest}
     restart: always
     env_file:
       - ./frontend/.env
     labels:
       - traefik.enable=true
-      - traefik.http.routers.frontend.rule=Host(`yourdomain.com`)
+      - traefik.http.routers.frontend.rule=Host(`${DOMAIN}`)
       - traefik.http.routers.frontend.tls.certresolver=letsencrypt
       - traefik.http.services.frontend.loadbalancer.server.port=3000
     depends_on:
       - backend
 
+  # Applies pending migrations once, then exits. The API only starts after it succeeds, and
+  # migrations never run inside the API process, where its cluster workers would race them.
+  migrate:
+    image: ghcr.io/${IMAGE_OWNER}/nehemiah-backend:${IMAGE_TAG:-latest}
+    restart: "no"
+    command: ["node", "dist/src/database/run-migrations.js"]
+    env_file:
+      - ./backend/.env.production
+    environment:
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   backend:
-    image: ghcr.io/yourusername/nehemiah-backend:latest
+    image: ghcr.io/${IMAGE_OWNER}/nehemiah-backend:${IMAGE_TAG:-latest}
     restart: always
     env_file:
-      - ./backend/.env
+      - ./backend/.env.production
+    environment:
+      NODE_ENV: production
+      TRIAL_MODE: "false"
+      SWAGGER_ENABLED: "false"
+      FRONTEND_URL: https://${DOMAIN}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.backend.rule=Host(`api.yourdomain.com`)
+      - traefik.http.routers.backend.rule=Host(`api.${DOMAIN}`)
       - traefik.http.routers.backend.tls.certresolver=letsencrypt
       - traefik.http.services.backend.loadbalancer.server.port=8000
     depends_on:
+      migrate:
+        condition: service_completed_successfully
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
 
-  
   postgres:
     image: postgres:16-alpine
     restart: always
     env_file:
-      - ./backend/.env
+      - ./backend/.env.production
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -83,8 +106,6 @@ services:
       timeout: 5s
       retries: 5
 
-  
-
   uptime-kuma:
     image: louislam/uptime-kuma:latest
     restart: always
@@ -92,7 +113,7 @@ services:
       - uptime_kuma_data:/app/data
     labels:
       - traefik.enable=true
-      - traefik.http.routers.uptime.rule=Host(`status.yourdomain.com`)
+      - traefik.http.routers.uptime.rule=Host(`status.${DOMAIN}`)
       - traefik.http.routers.uptime.tls.certresolver=letsencrypt
       - traefik.http.services.uptime.loadbalancer.server.port=3001
 
@@ -103,8 +124,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dozzle.rule=Host(`logs.yourdomain.com`)
+      - traefik.http.routers.dozzle.rule=Host(`logs.${DOMAIN}`)
       - traefik.http.routers.dozzle.tls.certresolver=letsencrypt
+      - traefik.http.routers.dozzle.middlewares=ops-auth
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
 
 volumes:

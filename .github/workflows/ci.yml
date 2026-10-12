@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, dev]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Format
+        run: pnpm format:check
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+      - name: Unit tests
+        run: pnpm test
+      - name: Build
+        run: pnpm build
+
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    # Same disposable services as docker-compose.test.yml, which the test helpers expect.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: nehemiah_test
+          POSTGRES_PASSWORD: nehemiah_test
+          POSTGRES_DB: nehemiah_test
+        ports:
+          - 5434:5432
+        options: >-
+          --health-cmd "pg_isready -U nehemiah_test -d nehemiah_test"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 15
+      mailpit:
+        image: axllent/mailpit:latest
+        ports:
+          - 1026:1025
+          - 8026:8025
+    env:
+      TEST_DATABASE_URL: postgresql://nehemiah_test:nehemiah_test@localhost:5434/nehemiah_test
+      TEST_MAIL_HOST: localhost
+      TEST_MAIL_PORT: '1026'
+      TEST_MAILPIT_API_URL: http://localhost:8026
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: backend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Format
+        run: pnpm format:check
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+      - name: Unit tests with coverage thresholds
+        run: pnpm test:coverage --runInBand
+      - name: E2E tests
+        run: pnpm test:e2e --runInBand
+      - name: Integration tests
+        run: pnpm test:integration
+      - name: Migration chain is consistent
+        run: pnpm db:check
+      # An empty or stale schema makes drizzle-kit generate a migration that drops tables.
+      # Fail if the schema and the committed migrations disagree in either direction.
+      - name: Schema matches the committed migrations
+        run: |
+          pnpm db:generate
+          if [ -n "$(git status --porcelain -- src/database/migrations)" ]; then
+            echo "::error::src/database/schema/ and src/database/migrations/ are out of sync."
+            echo "Run 'pnpm db:generate' locally and commit the result, or fix the schema."
+            git status --porcelain -- src/database/migrations
+            exit 1
+          fi
+      - name: Build
+        run: pnpm build
+
+  docker:
+    name: Docker images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Builds the production images so Dockerfile breakage (including the backend's
+      # packaged-migrations assertion) fails the PR. Images are not pushed.
+      - name: Build backend image
+        run: docker build --target runner -t nehemiah-backend:ci backend
+      - name: Build frontend image
+        run: docker build --target runner -t nehemiah-frontend:ci frontend
