@@ -1,0 +1,47 @@
+# NAC Issues and Bugs
+
+Severity: **CRITICAL** (harm or false information published) · **HIGH** (broken or misleading) · **MEDIUM** · **LOW**.
+Status: **Fixed** (verified — evidence in `NAC-TEST-RESULTS.md`), **Open** (needs input), **Mitigated** (safe interim handling), **Accepted** (deliberately left).
+"Decision" cross-references `NAC-CONTENT-APPROVAL-REGISTER.md`.
+
+## Open items first
+
+| ID | Sev | Title | Status | Decision / action needed |
+|---|---|---|---|---|
+| NAC-003 | HIGH | No backend for contact, volunteer or donations | Mitigated | **Backend dependency.** A delivery endpoint for the contact form (and volunteer sign-up, if wanted). Contract to preserve: none exists on any branch. Payment is out of scope by instruction |
+| NAC-011 | MEDIUM | Address spelled two ways in Amharic (AM-05) | Open | Founder: which is correct |
+| NAC-010 | HIGH | English and Amharic event dates conflict (EV-01) | Mitigated | Founder: the date and its calendar |
+| NAC-012 | MEDIUM | Testimonials awaiting approval (TS-01) | Mitigated | Founder: written approval; one switch withholds them |
+| NAC-026 | MEDIUM | No native Amharic speaker has reviewed any Amharic text or layout | Open | Reviewer: AM-01…AM-08, `NAC-LOCALIZATION-REPORT.md` §5 |
+| NAC-013 | LOW | Probable typos in supplied Amharic (AM-03, AM-04, AM-07) | Mitigated | Kept verbatim; founder to confirm |
+| NAC-027 | LOW | LinkedIn and X could not be visually confirmed (bot walls) | Open | Click both once (CT-02) |
+| NAC-028 | LOW | Google Maps iframe loads a third-party page | Open | Decide on a privacy notice / click-to-load (OR-02) |
+| NAC-029 | LOW | `/login`, `/register`, `/dashboard` are placeholders | Accepted | Backend auth is out of scope; they are `noindex` and unlinked |
+| NAC-030 | LOW | Docker image and the standalone build were **not** built here (Windows, no symlink right) | Open | Run `docker build` / `next build` on Linux CI once |
+| NAC-025 | LOW | Five dependencies now unused (`framer-motion`, `embla-carousel-*`, `react-countup`, `react-countdown`, `react-intersection-observer`); all deps still `latest` | Accepted | Remove in a follow-up PR; not done silently |
+| NAC-014 | LOW | Legacy source was not Prettier-formatted: 71 of 127 source files at the baseline (measured on committed LF content; the "129" from `prettier --check .` also counted CRLF checkouts and non-source files) | Fixed | Files I wrote or changed were formatted in their own commits; the 22 untouched legacy files that really differed are in one separate `style:` commit (skippable, formatting only). `.prettierignore` added so `pnpm format:check` ignores the lockfile and build output |
+
+## Fixed
+
+| ID | Sev | Title · affected files | Description / reproduction | Root cause → action | Evidence |
+|---|---|---|---|---|---|
+| NAC-001 | HIGH | Production build failed · `HomePage.tsx`, `CharityHeader/Footer.tsx`, `constants.ts` | `pnpm build` → "Type error … `value: string` not assignable to `number`"; `tiktok` undefined ×2 | untyped counter data and a missing social key → pages rewritten from one typed source | `tsc` 3 errors → 0; build passes (33 pages) |
+| NAC-002 | HIGH | Lint could not run · `.eslintrc.json`, `package.json` | `pnpm lint` → "Invalid Options: Unknown options: useEslintrc…" | ESLint 10 (from `latest`) + Next 15 `next lint`; then `eslint-plugin-react` crashes on `context.getFilename` | flat config; React version pinned (removal note in config); `eslint .` exit 0 |
+| NAC-004 | MEDIUM | Unit tests crashed · `vitest.config.ts` | `vitest run` → "Cannot find dependency 'jsdom'" and Vitest runs the Playwright spec | undeclared dependency, no include/exclude | jsdom added; 144 tests run |
+| NAC-005 | LOW | E2E could not start · `playwright.config.ts` | webServer waits on :3000, dev serves :3001 | mismatch | aligned; `PLAYWRIGHT_BASE_URL` override added |
+| NAC-006 | **CRITICAL** | **Named children's clinical histories published** · `features/success-stories`, home, `images/gallery_*` | /success-stories and the homepage showed three children by name with diagnoses, behaviours and school results; no consent record; not in the document | content from outside the source of truth | removed; `/success-stories*` redirect to `/#impact`; RM-03 — **do not restore without written guardian consent** |
+| NAC-007 | HIGH | Forms faked success or discarded input · volunteer, donation, contact forms | Volunteer: fill → submit → green "Application Submitted!" (`// TODO` + 800 ms delay). Donation: pick $50 → "Donate Now" → form resets. Contact: submit → fields silently clear | no backend; UI implied otherwise | volunteer → contact CTA; donations → "coming soon" page; contact → email app + "nothing sent" notice. Unit + e2e assert no success wording and no inputs on volunteer/donate |
+| NAC-008 | HIGH | Occupational Therapy shown as a principal service · About, FAQ, services data | The document contradicts itself; the work order resolves it to Food Therapy | — | one `SERVICES` list; unit test fails on "occupational"/"የሙያ ሕክምና" anywhere; mutation-checked |
+| NAC-009 | HIGH | Unsupported claims published · home, About, FAQ, events, blog, team | Fundraiser "$6,000 of $10,000", 300+/500+, founder and staff names, donors/ministries, a "CBE account", invented events and venues | not in the document | removed (RM-01…RM-10); tests forbid each pattern |
+| NAC-015 | HIGH | Google Translate as language switcher · `CharityHeader.tsx`, `globals.css` | Every visitor loaded `translate.google.com/translate_a/element.js` and cookies; Amharic was machine translation | — | removed; approved Amharic + real `/am` routes; no third-party script (the only remaining third-party frame is the map, NAC-028) |
+| NAC-016 | HIGH | Accessibility defects · header, hero, gallery, forms | no skip link; hover-only menus; autoplay hero (2.2.2); double `<h1>`; space `alt`; lightbox not a dialog; hidden-until-scrolled content | — | rebuilt; **axe: 0 WCAG A/AA violations** on 12 pages × 2 languages × 2 viewports + open menu, lightbox, FAQ, form errors, empty gallery |
+| NAC-017 | MEDIUM | Colour contrast below AA · `globals.css`, `ImpactStats` | `text-medium` 4.11:1 and 3.84:1 (need 4.5); input border 1.33:1 (need 3:1). Found later by axe: impact tiles (white on a lightened teal) 4.3:1 and a count badge at 80 % opacity | token values; translucent overlays | tokens darkened (5.9:1, 3.5:1); darker tiles; axe clean |
+| NAC-018 | MEDIUM | Heading colour overrides Tailwind · `globals.css` | `text-white` on a heading rendered dark | un-layered `h1…h6 { color }` beats layered utilities | base rules moved into `@layer base`; headings white on dark verified in screenshots |
+| NAC-019 | HIGH | `public/` 174 MB; raw originals with metadata; stock photos; Linux 404 | `gallery_19.jpg` requested, `gallery_19.JPG` stored → 404 on case-sensitive filesystems | — | 3.6 MB, metadata stripped, a test asserts files exist, ≤ 500 KB, match declared size, carry no EXIF |
+| NAC-020 | MEDIUM | Lightbox did not return focus · `GalleryBrowser.tsx` | open photo with Enter, press Escape → focus lost to `<body>` | dialog opened from state, no Radix trigger | `onCloseAutoFocus` refocuses opener; unit + e2e tests |
+| NAC-021 | LOW | Blog list skipped a heading level (h1 → h3) · `BlogCard.tsx` | axe `heading-order` on /blog | fixed card level | `headingLevel` prop; outline unit test |
+| NAC-022 | LOW | Tap-to-call/email links 20 px tall · `ContactDetails.tsx` | 44 px wrapper around a small inline link | — | links are `min-h-11`; e2e checks every header control ≥ 44 px at six widths |
+| NAC-023 | LOW | Footer email broke as "…yahoo.co / m" and one social icon wrapped · `SiteFooter.tsx` | seen in screenshots at 1440 px | `break-all` in a narrow column | column widened, break only when needed |
+| NAC-031 | HIGH | **Remembered language flipped by link prefetch** · `src/middleware.ts`, `LanguageSwitcher.tsx` | Open `/am`, wait ~2 s (production), open `/services` → lands on **`/en/services`**. Intermittent: depended on timing | The middleware refreshed the `NEXT_LOCALE` cookie on *every* request carrying a locale, including Next's background prefetch of the visible "English" switcher link | Cookie is refreshed only for real page requests (not `rsc`/`next-router-prefetch`); the switcher records an explicit click itself (`cookie.ts`) and no longer prefetches | Found by the e2e suite; 7 middleware unit tests (2 fail if the fix is removed — mutation-checked), 2 browser tests |
+| NAC-032 | MEDIUM | Primary action below the fold on common screens · `HeroSection.tsx` | First build: "Support Nehemiah" at y≈885 even on 1440×900. After one round of tightening, measured bottom edge (English): 781 on a 720-tall screen, 936 on 768, 926 on 844 — all below the fold; Amharic also below on 1024×768 | the approved hero text (≈14 lines) sat above the buttons | invitation sentence now sits with its buttons and the descriptive paragraph follows (order only; no words changed); smaller type on phones | `home page hero` e2e: button bottom ≤ viewport height for 12 locale × screen combinations (1440×900 … 320×700) |
+| NAC-024 | LOW | Environment: apostrophe path and Windows symlinks · local only | `next build` fails in `…/Nehemiah's Website/…`; `output: 'standalone'` → `EPERM symlink` | Next's metadata-route loader quoting; no Developer Mode | work done in `C:\Users\naods\Documents\nac-frontend-wt`; `NEXT_STANDALONE=0` opt-out (default unchanged) |
