@@ -1,57 +1,93 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import type { Locale } from '@/shared/i18n/config';
+import { text, type Localized } from '@/shared/i18n/localized';
+import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
+import { t } from '@/shared/i18n/ui';
+import { ROUTES } from '@/shared/i18n/routing';
+import type { MediaAsset } from '@/shared/content/media';
+import { Container } from './Container';
+import { LocalizedLink } from './ButtonLink';
 
-interface PageBannerProps {
-  title: string;
-  breadcrumbs: { label: string; href?: string }[];
-  backgroundImage?: string;
+export interface Crumb {
+  label: Localized<string>;
+  /** Locale-less path; omit for the current page. */
+  href?: string;
 }
 
-export default function PageBanner({ title, breadcrumbs, backgroundImage }: PageBannerProps) {
+interface PageBannerProps {
+  locale: Locale;
+  title: Localized<string>;
+  /** Trail after "Home". The last item is the current page. */
+  trail?: Crumb[];
+  image?: MediaAsset;
+}
+
+/** The page's <h1> with a breadcrumb trail. The photograph, when given, is decorative. */
+export function PageBanner({ locale, title, trail = [], image }: PageBannerProps) {
   return (
-    <section className="relative flex min-h-[300px] items-center justify-center py-24">
-      {backgroundImage && (
-        <div className="absolute inset-0">
+    <section className="on-dark bg-primary-dark relative isolate overflow-hidden text-white">
+      {image && (
+        <>
           <Image
-            src={backgroundImage}
-            alt={title}
+            src={image.src}
+            alt=""
             fill
-            className="object-cover"
             priority
+            sizes="100vw"
+            className="-z-20 object-cover"
           />
-        </div>
+          <div aria-hidden="true" className="bg-primary-dark/85 absolute inset-0 -z-10" />
+        </>
       )}
-      <div className="absolute inset-0 bg-black/60" />
-
-      <div className="relative z-10 flex flex-col items-center text-center">
-        <Link href="/">
-          <Image
-            src="/images/logo.png"
-            alt="Nehemiah Logo"
-            width={60}
-            height={60}
-            className="mb-6 object-contain"
-            priority
-          />
-        </Link>
-        <h1 className="font-serif text-4xl font-medium text-white md:text-5xl">{title}</h1>
-
-        <nav className="mt-4 flex flex-wrap items-center justify-center gap-1">
-          {breadcrumbs.map((crumb, index) => (
-            <span key={index} className="flex items-center gap-1">
-              {index > 0 && <ChevronRight className="h-4 w-4 text-white/60" />}
-              {crumb.href ? (
-                <Link href={crumb.href} className="text-white/80 transition hover:text-white">
-                  {crumb.label}
-                </Link>
-              ) : (
-                <span className="text-white">{crumb.label}</span>
-              )}
-            </span>
-          ))}
+      <Container className="py-12 md:py-16">
+        <nav aria-label={t('common.breadcrumb', locale)}>
+          <ol className="flex flex-wrap items-center gap-x-1 gap-y-1 text-sm text-white/90">
+            <li>
+              <LocalizedLink
+                href={ROUTES.home}
+                locale={locale}
+                className="underline-offset-4 hover:underline"
+              >
+                <UiText k="nav.home" locale={locale} />
+              </LocalizedLink>
+            </li>
+            {trail.map((crumb, index) => {
+              const isLast = index === trail.length - 1;
+              return (
+                <li key={text(crumb.label, 'en')} className="flex items-center gap-1">
+                  <ChevronRight
+                    aria-hidden="true"
+                    className="size-4 shrink-0 text-white/70 rtl:rotate-180"
+                  />
+                  {crumb.href && !isLast ? (
+                    <LocalizedLink
+                      href={crumb.href}
+                      locale={locale}
+                      className="underline-offset-4 hover:underline"
+                    >
+                      <LocalizedText value={crumb.label} locale={locale} />
+                    </LocalizedLink>
+                  ) : (
+                    <LocalizedText
+                      value={crumb.label}
+                      locale={locale}
+                      aria-current={isLast ? 'page' : undefined}
+                      className="font-semibold"
+                    />
+                  )}
+                </li>
+              );
+            })}
+          </ol>
         </nav>
-      </div>
+        <LocalizedText
+          as="h1"
+          value={title}
+          locale={locale}
+          className="mt-4 max-w-4xl font-serif text-3xl leading-tight text-white sm:text-4xl md:text-5xl"
+        />
+      </Container>
     </section>
   );
 }
