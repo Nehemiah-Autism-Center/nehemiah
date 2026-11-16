@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Dialog as DialogPrimitive } from 'radix-ui';
@@ -34,6 +34,8 @@ export function GalleryBrowser() {
   const locale = useLocale();
   const [filter, setFilter] = useState<Filter>('all');
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  // The lightbox is opened from state (not a Radix trigger), so remember the tile to refocus on close.
+  const openerRef = useRef<HTMLElement | null>(null);
 
   const photos =
     filter === 'all' ? GALLERY_PHOTOS : GALLERY_PHOTOS.filter((p) => p.categories.includes(filter));
@@ -110,7 +112,7 @@ export function GalleryBrowser() {
                     value={category ? category.title : GALLERY_COPY.all}
                     locale={locale}
                   />
-                  <span aria-hidden="true" className="text-sm opacity-80">
+                  <span aria-hidden="true" className="text-sm">
                     {countFor(id)}
                   </span>
                 </button>
@@ -146,7 +148,10 @@ export function GalleryBrowser() {
             <li key={photo.id}>
               <button
                 type="button"
-                onClick={() => setOpenIndex(index)}
+                onClick={(e) => {
+                  openerRef.current = e.currentTarget;
+                  setOpenIndex(index);
+                }}
                 aria-label={`${text(GALLERY_COPY.openPhoto, locale)}: ${text(photo.alt, locale)}`}
                 className="group bg-secondary-bg relative block aspect-[4/3] w-full overflow-hidden rounded-xl"
               >
@@ -171,6 +176,10 @@ export function GalleryBrowser() {
           <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/90" />
           <DialogPrimitive.Content
             className="on-dark fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 p-3 outline-none sm:p-6"
+            onCloseAutoFocus={(e) => {
+              e.preventDefault();
+              openerRef.current?.focus();
+            }}
             onKeyDown={(e) => {
               if (e.key === 'ArrowRight') step(1);
               if (e.key === 'ArrowLeft') step(-1);

@@ -81,7 +81,7 @@
   --accent-foreground: 215 40% 16%;
 
   /* Destructive */
-  --destructive: 0 55% 45%; /* 5.9:1 on white — used for error text */
+  --destructive: 0 55% 45%; /* 6.1:1 on white (was 4.7:1) — used for error text */
   --destructive-foreground: 0 0% 100%;
 
   /* Border (decorative dividers) and Input (form control edge, needs 3:1 — WCAG 1.4.11) */

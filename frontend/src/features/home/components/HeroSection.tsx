@@ -9,8 +9,8 @@ import { ButtonLink } from '@/shared/components/common/ButtonLink';
 import { HERO } from '@/features/home/data';
 
 /**
- * Hero: the approved heading is shown in two sizes (the words are unchanged), followed by the two
- * approved paragraphs, one primary action ("Support Nehemiah") and one secondary ("Learn More").
+ * Hero: the approved heading in two sizes, then the invitation with one primary action
+ * ("Support Nehemiah") and one secondary ("Learn More"), then the descriptive paragraph. Words unchanged.
  * It is a single static composition — no slider, no auto-play — so nothing moves unexpectedly.
  */
 export function HeroSection({ locale }: { locale: Locale }) {
@@ -26,27 +26,23 @@ export function HeroSection({ locale }: { locale: Locale }) {
             id="hero-heading"
             value={HERO.headline}
             locale={locale}
-            className="text-heading font-serif text-4xl leading-tight font-bold sm:text-5xl"
+            className="text-heading font-serif text-3xl leading-tight font-bold sm:text-5xl"
           />
           <LocalizedText
             as="p"
             value={HERO.continuation}
             locale={locale}
-            className="text-heading/85 mt-3 text-lg leading-snug first-letter:uppercase md:text-xl"
+            className="text-heading/85 mt-3 text-base leading-snug first-letter:uppercase sm:text-lg md:text-xl"
           />
-          <LocalizedText
-            as="p"
-            value={HERO.intro}
-            locale={locale}
-            className="mt-4 max-w-prose text-base"
-          />
+          {/* The invitation sits directly with its buttons so the primary action stays near the top;
+              the longer descriptive paragraph follows. Order only — no words are changed. */}
           <LocalizedText
             as="p"
             value={HERO.invitation}
             locale={locale}
-            className="text-heading mt-3 max-w-prose text-base font-semibold"
+            className="text-heading mt-4 max-w-prose text-base font-semibold"
           />
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <ButtonLink href={ROUTES.donate} locale={locale} className="sm:min-w-52">
               <UiText k="cta.support" locale={locale} />
             </ButtonLink>
@@ -59,6 +55,12 @@ export function HeroSection({ locale }: { locale: Locale }) {
               <UiText k="cta.learnMore" locale={locale} />
             </ButtonLink>
           </div>
+          <LocalizedText
+            as="p"
+            value={HERO.intro}
+            locale={locale}
+            className="mt-6 max-w-prose text-base"
+          />
         </div>
 
         <div className="relative min-w-0 pb-10 sm:pb-14">

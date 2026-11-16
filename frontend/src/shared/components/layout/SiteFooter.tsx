@@ -23,7 +23,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
   return (
     <footer className="on-dark bg-footer-bg text-footer-text">
       <Container className="py-12 md:py-16">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1.4fr]">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr_1.7fr]">
           {/* Brand */}
           <div className="min-w-0">
             <LocalizedLink

@@ -3,7 +3,9 @@ import { LocalizedText } from '@/shared/i18n/LocalizedText';
 import { ORGANIZATION } from '@/shared/content/organization';
 import { cn } from '@/shared/lib/utils';
 
-const LINK = 'underline-offset-4 hover:underline break-all';
+// min-h-11 (44px): tap-to-call and email links must be comfortable touch targets, not 20px text lines.
+const LINK =
+  'inline-flex min-h-11 items-center underline-offset-4 hover:underline [overflow-wrap:anywhere]';
 
 export function EmailLink({ className }: { className?: string }) {
   return (

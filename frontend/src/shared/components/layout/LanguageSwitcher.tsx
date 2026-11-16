@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LOCALES, LOCALE_HTML_LANG, LOCALE_NATIVE_NAMES } from '@/shared/i18n/config';
+import { rememberLocale } from '@/shared/i18n/cookie';
 import { useLocale } from '@/shared/i18n/LocaleProvider';
 import { switchLocalePath } from '@/shared/i18n/routing';
 import { t } from '@/shared/i18n/ui';
@@ -26,6 +27,9 @@ export function LanguageSwitcher({ tone = 'light' }: { tone?: 'light' | 'dark' }
             <li key={target}>
               <Link
                 href={switchLocalePath(pathname, target)}
+                // No background prefetch of the other language, and an explicit click records the choice.
+                prefetch={false}
+                onClick={() => rememberLocale(target)}
                 lang={LOCALE_HTML_LANG[target]}
                 hrefLang={LOCALE_HTML_LANG[target]}
                 aria-current={active ? 'true' : undefined}

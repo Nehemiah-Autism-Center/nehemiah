@@ -22,7 +22,7 @@ export function BlogPage({ locale }: { locale: Locale }) {
           <ul className="grid max-w-3xl gap-6">
             {BLOG_POSTS.map((post) => (
               <li key={post.slug}>
-                <BlogCard post={post} locale={locale} />
+                <BlogCard post={post} locale={locale} headingLevel="h2" />
               </li>
             ))}
           </ul>

@@ -18,7 +18,8 @@ export function ImpactStats({
           key={stat.id}
           className={cn(
             'flex min-w-0 flex-col-reverse gap-1 rounded-xl p-6 text-center',
-            tone === 'onDark' ? 'bg-white/10' : 'border bg-white shadow-sm',
+            // A white overlay would lighten the teal band and push white text below 4.5:1.
+            tone === 'onDark' ? 'bg-primary-dark/55' : 'border bg-white shadow-sm',
           )}
         >
           <LocalizedText

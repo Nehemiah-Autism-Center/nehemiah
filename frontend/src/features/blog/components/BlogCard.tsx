@@ -25,7 +25,16 @@ export function CoverPlaceholder({ className }: { className?: string }) {
   );
 }
 
-export function BlogCard({ post, locale }: { post: BlogPost; locale: Locale }) {
+export function BlogCard({
+  post,
+  locale,
+  headingLevel: Heading = 'h3',
+}: {
+  post: BlogPost;
+  locale: Locale;
+  /** h2 on the blog page (directly under the page title), h3 where a section heading comes first. */
+  headingLevel?: 'h2' | 'h3';
+}) {
   const href = blogPostPath(post.slug);
   return (
     <article className="flex h-full min-w-0 flex-col overflow-hidden rounded-xl border bg-white shadow-sm">
@@ -38,11 +47,11 @@ export function BlogCard({ post, locale }: { post: BlogPost; locale: Locale }) {
             <LocalizedText value={BLOG_COPY.notDated} locale={locale} />
           )}
         </p>
-        <h3 className="text-heading font-serif text-xl font-semibold">
+        <Heading className="text-heading font-serif text-xl font-semibold">
           <LocalizedLink href={href} locale={locale} className="hover:text-primary">
             <LocalizedText value={post.title} locale={locale} />
           </LocalizedLink>
-        </h3>
+        </Heading>
         <LocalizedText as="p" value={post.summary} locale={locale} className="mt-3 flex-1" />
         <LocalizedLink
           href={href}
