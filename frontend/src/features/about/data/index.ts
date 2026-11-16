@@ -1,125 +1,55 @@
-import { Users, Briefcase, HandHeart, Trophy } from 'lucide-react';
-import { createElement } from 'react';
-import type { TimelineEvent } from '@/shared/components/common/HistoryTimeline';
+import { loc } from '@/shared/i18n/localized';
 
-export const counterItems = [
-  { icon: createElement(Users, { className: 'size-10' }), label: 'Children Currently Served', value: 90 },
-  { icon: createElement(Briefcase, { className: 'size-10' }), label: 'Dedicated Staff', value: 30 },
-  { icon: createElement(HandHeart, { className: 'size-10' }), label: 'Families Supported', value: 500 },
-  { icon: createElement(Trophy, { className: 'size-10' }), label: 'Years of Care', value: 15 },
-];
+/**
+ * About page copy, verbatim from "website content.docx" (About page) except for the single
+ * third-therapy correction noted below.
+ *
+ * Edit note (English): in the third paragraph "Occupational Therapy" became "Food Therapy".
+ * Edit note (Amharic): "የሙያ ሕክምና (Occupational Therapy)" became the document's own Food Therapy
+ * term "የምግብ አመጋገብ ቴራፒ (Food Therapy)". A space was inserted after "።" in paragraph 2
+ * where the source ran two sentences together. Source spelling such as "ሁለተንናዊ" is left as supplied
+ * (see NAC-CONTENT-APPROVAL-REGISTER.md).
+ */
+export const ABOUT_INTRO = loc<string[]>(
+  [
+    'Nehemiah Autism Center is an indigenous nonprofit organization established 15 years ago to support children and young people with autism and related developmental disorders, as well as their families, and to help protect them from the various social, psychological, and economic challenges they face. The Center was founded by parents who struggled to find schools that could provide appropriate education, training, and support for their children with autism. It operates with a vision of contributing its part to ensuring that children facing similar challenges do not experience severe health and social difficulties due to a lack of appropriate educational opportunities.',
+    'Today, the Center provides comprehensive services to 90 children with autism and their parents, making a significant contribution toward easing the challenges they face. In addition, the Center works to address misconceptions about autism within the community through various awareness-raising initiatives and educational activities.',
+    'Currently, the Center provides three main therapy services tailored to the individual needs and abilities of children on the autism spectrum: Applied Behavior Analysis (ABA), Speech and Language Therapy, and Food Therapy. These services help children develop their communication, behavioral, daily living, and other essential life skills. To date, the Center has successfully graduated more than 65 children, supporting them in transitioning to the next stage of their educational and life journey.',
+  ],
+  [
+    'ነህምያ ኦቲዝም ማዕከል በኦቲዝምና ተዛማጅ ችግሮች የዐዕምሮ ዕድገት ስርዓት መዛባት የገጠማቸውን ህጻናትና ወጣቶች እንዲሁም ቤተሰቦቻቸውን ከተጋረጠባቸው ዘርፈብዙ ማህበራዊ፣ ስነልቦናዊና ኢኮኖሚያዊ ጉዳቶች ለመታደግ ከ15 ዓመታት በፊት የተቋቋመ ሃገር በቀል ምግባረሰናይ ድርጅት ነው። ይህ ማዕከል በኦቲዝም ጥላ ስር ላሉ ልጆቻቸው ስልጠና እና እገዛ የሚሰጥ ትምህርት ቤት ማግኘት ባልቻሉ ወላጆች የተቋቋመ ሲሆን በመሰል ችግር ውስጥ የሚገኙ ህጻናት በመማሪያ እጥረት ለከፋ የጤናና ማህበራዊ ቀውስ እንዳይጋለጡ የበኩሉን ድርሻ የማበርከት ራዕይ አንግቦ ይንቀሳቀሳል።',
+    'ማዕከሉ በአሁኑ ወቅትም 90 በኦቲዝም ጥላ ስር ለሚገኙ ህጻናትና ለወላጆቻቸው ሁለተንናዊ አገልግሎቶችን በመስጠት የተጋረጠባቸውን ፈተና ለማቅለል ጉልህ አስተዋጽዖ እያበረከተ ነው። ከዚህ በተጨማሪም ኦቲዝምን በተመለከተ በህብረተሰቡ ውስጥ የሰፈነውን የተሳሳተ አረዳድ በልዩ ልዩ የግንዛቤ ማዳበሪያ መንገዶች ለመለወጥ ጥረት እያደረገ ይገኛል።',
+    'በአሁኑ ወቅት ማዕከሉ በኦቲዝም ስፔክትረም ላይ ላሉ ህጻናት እንደየግል ፍላጎታቸውና አቅማቸው የተዘጋጁ ሦስት ዋና ዋና የቴራፒ አገልግሎቶችን—Applied Behavior Analysis (ABA)፣ የንግግርና የቋንቋ ቴራፒ (Speech Therapy) እና የምግብ አመጋገብ ቴራፒ (Food Therapy)—በመስጠት የልጆችን የመግባባት፣ የባህሪ፣ የዕለት ተዕለት ኑሮ እና ሌሎች አስፈላጊ ክህሎቶች እንዲዳብሩ ያግዛል። እስካሁንም ከ65 በላይ ህጻናትን በማስመረቅ ወደ ቀጣዩ የትምህርትና የሕይወት ጉዞአቸው እንዲሸጋገሩ ማገዝ ችሏል።',
+  ],
+);
 
-export const sponsorLogos = Array.from({ length: 8 }, (_, i) => ({
-  src: `/images/logo_${i + 1}.png`,
-  alt: `Sponsor ${i + 1}`,
-}));
+/** Mission: two statements, split at the sentence boundary of the source text. */
+export const ABOUT_MISSION = loc<string[]>(
+  [
+    'To provide early diagnosis and screening services, standard education and training, life skills and vocational skills that enable children with autism to live in the community without difficulties.',
+    'To provide counseling service for families who are suffering from stressful life and discrimination as a result of being a parent of autistic child/children.',
+  ],
+  [
+    'ኦቲዝም ላለባቸው ልጆች በማህበረሰቡ ውስጥ ያለ ከባድ ችግር ሳይገጥማቸው እንዲኖሩ የሚያስችሉ የቅድመ ምርመራና የማጣሪያ አገልግሎቶችን፣ ደረጃቸውን የጠበቁ የትምህርትና የሥልጠና አገልግሎቶችን፣ የሕይወት ክህሎትና የሙያ ክህሎት ሥልጠናዎችን መስጠት።',
+    'እንዲሁም የኦቲዝም ልጅ/ልጆች ወላጅ በመሆናቸው ምክንያት ለሚያጋጥማቸው የሕይወት ጫና፣ ውጥረትና መድልዎ ለተጋለጡ ቤተሰቦች የምክርና የድጋፍ አገልግሎት መስጠት።',
+  ],
+);
 
-export const timelineEvents: TimelineEvent[] = [
-  {
-    year: '2011',
-    title: 'Nehemiah Is Born',
-    description:
-      'On June 16, 2011, Nehemiah Autism Center opened its doors with just six children in the Welo Sefer area of Addis Ababa. Founded by Rahel Abayneh — a mother determined to find support for her son who was placed 463rd on the only existing center\'s waiting list — the center launched with a founding team of seven dedicated staff members.',
-    image: '/images/history_2010.JPG',
-  },
-  {
-    year: '2012',
-    title: 'Early Mentorship & Critical Support',
-    description:
-      'Six months after opening, funds were nearly exhausted and the center was at risk of losing its facility. A timely donation from Oak International covered six months of rent, ensuring continuity. Dr. Conning joined the center, providing critical technical guidance that established foundational therapy principles still shaping the center\'s approach today.',
-    image: '/images/history_2012.JPG',
-  },
-  {
-    year: '2013',
-    title: 'Moving to Megenagna',
-    description:
-      'After nine months in Welo Sefer, the center relocated to Megenagna — a phase of significant stability and growth lasting six years. The center expanded to serve 40 children supported by 20 teachers. Parent training programs were formally launched, equipping families with practical skills to support their children at home.',
-    image: '/images/history_2013.JPG',
-  },
-  {
-    year: '2016',
-    title: 'National Visibility & Media',
-    description:
-      'A landmark partnership with Ambo Mineral Water and a televised interview on EBS TV brought widespread national attention to autism and Nehemiah\'s work. These moments introduced autism awareness to a far broader Ethiopian audience and firmly positioned the center as a leading voice in the field.',
-  },
-  {
-    year: '2018',
-    title: 'Awareness Campaigns Expand',
-    description:
-      'Large-scale national awareness campaigns were launched during World Autism Awareness Month — featuring public walks, dance and fitness events, and one-day national campaigns. Outreach programs expanded to elementary schools, high schools, and universities across Addis Ababa, challenging misconceptions and reducing stigma.',
-  },
-  {
-    year: '2019',
-    title: 'Gotera Phase: Growing Capacity',
-    description:
-      'Nehemiah relocated to Gotera Condominium, entering a new phase of expanded services. The center grew to serve 60 children supported by 30 teachers. Through local partnerships, daily meal support for 38 children was introduced — ensuring that nutrition was never a barrier to therapy and development.',
-  },
-  {
-    year: '2021',
-    title: 'International Partnerships Formed',
-    description:
-      'The center formalized international partnerships with Nilo Azul Asociacion para el Desarrollo en Ethiopia, Finado Ethiopia, and the Embassy of Finland in Ethiopia. Government collaboration with the Ministry of Health, Ministry of Education, and Ministry of Women, Children and Social Affairs was also strengthened during this period.',
-  },
-  {
-    year: '2022',
-    title: 'Development Bank of Ethiopia Donation',
-    description:
-      'The Development Bank of Ethiopia provided a 5 million birr donation — a transformational contribution that significantly strengthened the center\'s operational capacity and enabled further expansion of programs, staff, and services for children and families.',
-  },
-  {
-    year: '2023',
-    title: 'Women of Excellence Award',
-    description:
-      'Founder Rahel Abayneh was honored at the Women of Excellence Awards 2023, recognizing her exceptional leadership and over a decade of dedication to autism care in Ethiopia. A collaborative recognition was also received from Compassion International Ethiopia and World Vision at the "Love Harvest" event.',
-  },
-  {
-    year: '2024',
-    title: 'Kera — Our Current Home',
-    description:
-      'After two years in Gotera, Nehemiah moved to Kera — the center\'s current home now entering its sixth year. Today, 90 children receive structured therapy supported by 30 dedicated staff members. Free annual medical check-ups and financial aid continue to be provided to families in need.',
-  },
-  {
-    year: '2026',
-    title: '15 Years & Looking Forward',
-    description:
-      'Celebrating over 15 years of uninterrupted service, Nehemiah Autism Center looks ahead with bold ambition: constructing a permanent, purpose-built therapy facility, expanding capacity to serve 250 children, and introducing vocational therapy programs — building a lifelong support system where every child can grow, learn, and thrive.',
-  },
-];
+/**
+ * History: the only founding fact the document supports. The document left the English History
+ * text blank, so the matching English sentence from its Introduction is used (NAC-CONTENT-APPROVAL-REGISTER.md, HI-01).
+ * No dates, names, funders or milestones are stated because none were supplied.
+ */
+export const ABOUT_HISTORY = loc(
+  'The Center was founded by parents who struggled to find schools that could provide appropriate education, training, and support for their children with autism.',
+  'ይህ ማዕከል በኦቲዝም ጥላ ስር ላሉ ልጆቻቸው ስልጠና እና እገዛ የሚሰጥ ትምህርት ቤት ማግኘት ባልቻሉ ወላጆች የተቋቋመ',
+);
 
-export const faqs = [
-  {
-    question: 'How can I make a donation?',
-    answer:
-      'You can donate directly to Nehemiah Autism Center through our accounts at Commercial Bank of Ethiopia (CBE) or through other partner channels listed on our Donate page. Every contribution — large or small — directly supports therapy, daily meals, healthcare, and essential supplies for children in need.',
-  },
-  {
-    question: 'How are funds used?',
-    answer:
-      'Funds are used to cover therapy services (approximately 18,000 birr per child per month), staff salaries, facility rent, daily meals for 38 children, annual medical check-ups, parent training programs, financial aid for families, and community awareness campaigns. We are committed to full transparency and responsible stewardship of every donation.',
-  },
-  {
-    question: 'How can I volunteer with Nehemiah?',
-    answer:
-      'We warmly welcome volunteers from all backgrounds. Whether you have expertise in therapy, education, or administration — or simply a heart to help — contact us through our Contact page or visit our center in Kera, Addis Ababa. Past volunteers include Yodit, Zinash, Mr. Daniel, Dr. Hadiya, Liya, Meseret Haile, Nesriya, and supporters from the Seattle community.',
-  },
-  {
-    question: 'What services does the center provide?',
-    answer:
-      'We offer Applied Behavior Therapy, Speech Therapy, and Food Therapy tailored to each child\'s needs. Beyond clinical therapy, we provide Parent Training Programs, income-generating empowerment initiatives for parents, financial aid, clothing and essential supplies, holiday meal support, sponsorship programs, and free annual medical check-ups for children and their families.',
-  },
-  {
-    question: 'What is the admission process for children?',
-    answer:
-      'Admission is based on the child\'s individual needs and available capacity, following an initial assessment by our staff. Due to high demand — Nehemiah is one of the very few autism centers in Ethiopia — there may be a waiting list. We encourage families to contact our office directly as early as possible to begin the assessment process.',
-  },
-  {
-    question: 'What is Nehemiah\'s vision for the future?',
-    answer:
-      'Within the next five years, we aim to construct a permanent, purpose-built therapy facility on our own land, expanding capacity to serve 250 children and introducing vocational therapy programs. Our long-term vision is to become a lifelong support system — a home where every individual with autism is understood, celebrated, and empowered to reach their full potential.',
-  },
-  {
-    question: 'How can my organization partner with Nehemiah?',
-    answer:
-      'We actively seek partnerships with local businesses, government bodies, international foundations, and NGOs. Current partners include the Ministry of Health, Ministry of Education, Commercial Bank of Ethiopia, Yotek Construction, Nib Insurance, Niyala Insurance, Ethiopian Medhin Company, and international organizations such as Nilo Azul Asociacion and the Embassy of Finland in Ethiopia. Please reach out to our Director to explore partnership opportunities.',
-  },
-];
+/** Section headings. Amharic equivalents are provisional interface text. */
+export const ABOUT_HEADINGS = {
+  intro: { en: 'Introduction', am: 'መግቢያ', amProvisional: true },
+  mission: { en: 'Our Mission', am: 'ተልዕኳችን', amProvisional: true },
+  history: { en: 'Our History', am: 'ታሪካችን', amProvisional: true },
+  services: loc('Services We Provide', 'የምንሰጣቸው አገልግሎቶች'),
+  impact: loc('Our Impact', 'ያስመዘገብነው ውጤት'),
+} as const;

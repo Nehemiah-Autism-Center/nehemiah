@@ -1,57 +1,114 @@
-import PageBanner from '@/shared/components/common/PageBanner';
-import { ContactForm } from '@/features/contact/components/ContactForm';
-import { contactInfo } from '@/features/contact/data';
+import { Clock, Mail, MapPin, Phone, type LucideIcon } from 'lucide-react';
+import type { Locale } from '@/shared/i18n/config';
+import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
+import type { UiKey } from '@/shared/i18n/ui';
+import { ui } from '@/shared/i18n/ui';
+import { Section } from '@/shared/components/common/Section';
+import { PageBanner } from '@/shared/components/common/PageBanner';
+import { SectionHeading } from '@/shared/components/common/SectionHeading';
+import { SocialLinks } from '@/shared/components/common/SocialLinks';
+import {
+  AddressText,
+  EmailLink,
+  HoursList,
+  PhoneLinks,
+} from '@/shared/components/common/ContactDetails';
+import { CONTACT_COPY } from '@/features/contact/data';
+import { ContactFormWithTopic } from './ContactFormWithTopic';
+import { LocationSection } from './LocationSection';
 
-export default function ContactPage() {
+function InfoCard({
+  icon: Icon,
+  label,
+  locale,
+  children,
+}: {
+  icon: LucideIcon;
+  label: UiKey;
+  locale: Locale;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="flex min-w-0 gap-4 rounded-xl border bg-white p-5 shadow-sm">
+      <div className="bg-primary/10 text-primary flex size-12 shrink-0 items-center justify-center rounded-full">
+        <Icon aria-hidden="true" className="size-6" />
+      </div>
+      <div className="min-w-0">
+        <UiText
+          as="h3"
+          k={label}
+          locale={locale}
+          className="text-heading font-serif text-lg font-semibold"
+        />
+        <div className="mt-1 text-base">{children}</div>
+      </div>
+    </li>
+  );
+}
+
+export function ContactPage({ locale }: { locale: Locale }) {
   return (
     <>
       <PageBanner
-        title="Contact Us"
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Contact Us' }]}
+        locale={locale}
+        title={ui['nav.contact']}
+        trail={[{ label: ui['nav.contact'] }]}
       />
 
-      <section className="pt-20">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-              <h2 className="mb-6 font-serif text-3xl font-medium text-heading">Get In Touch</h2>
-              <ContactForm />
-            </div>
+      <Section labelledBy="contact-details-heading">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
+          <div className="min-w-0">
+            <SectionHeading
+              locale={locale}
+              id="contact-details-heading"
+              title={ui['common.contactDetails']}
+              className="mb-6"
+            />
+            <LocalizedText
+              as="p"
+              value={CONTACT_COPY.intro}
+              locale={locale}
+              className="mb-6 text-lg"
+            />
+            <ul className="space-y-4">
+              <InfoCard icon={Mail} label="contact.email" locale={locale}>
+                <EmailLink />
+              </InfoCard>
+              <InfoCard icon={Phone} label="contact.phone" locale={locale}>
+                <PhoneLinks className="space-y-1" />
+              </InfoCard>
+              <InfoCard icon={MapPin} label="contact.address" locale={locale}>
+                <AddressText locale={locale} />
+              </InfoCard>
+              <InfoCard icon={Clock} label="contact.hours" locale={locale}>
+                <HoursList locale={locale} />
+              </InfoCard>
+            </ul>
 
-            <div className="lg:col-span-1">
-              <div className="space-y-6">
-                {contactInfo.map((info) => (
-                  <div
-                    key={info.title}
-                    className="flex gap-4 rounded-lg border bg-white p-6 shadow-sm"
-                  >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      {info.icon}
-                    </div>
-                    <div>
-                      <h3 className="font-serif font-semibold text-heading">{info.title}</h3>
-                      <p className="mt-1 text-sm text-foreground">{info.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div id="social" className="mt-8 scroll-mt-6">
+              <UiText
+                as="h3"
+                k="footer.social"
+                locale={locale}
+                className="text-heading font-serif text-lg font-semibold"
+              />
+              <SocialLinks locale={locale} tone="onLight" className="mt-1 -ml-3" />
             </div>
           </div>
-        </div>
-        <div className="mt-12 w-full mx-auto h-[450px] rounded-lg overflow-hidden shadow-lg border border-gray-200">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.74303275938243!3d8.980465798528387!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b8444e6192915%3A0x8fe79cdb01ddd566!2sNehemiah%20Autism%20Center!5e0!3m2!1sen!2set!4v1775026060632!5m2!1sen!2set"
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Nehemiah Autism Center Location"
-          />
-        </div>
 
-      </section>
+          <div className="min-w-0 rounded-xl border bg-white p-6 shadow-sm sm:p-8">
+            <LocalizedText
+              as="h2"
+              value={CONTACT_COPY.formHeading}
+              locale={locale}
+              className="text-heading mb-5 font-serif text-2xl"
+            />
+            <ContactFormWithTopic />
+          </div>
+        </div>
+      </Section>
+
+      <LocationSection locale={locale} id="location" tone="muted" showDetails={false} />
     </>
   );
 }

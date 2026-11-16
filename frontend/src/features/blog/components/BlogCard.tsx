@@ -1,51 +1,58 @@
 import Image from 'next/image';
-import Link from 'next/link';
-import { Calendar, User } from 'lucide-react';
+import type { Locale } from '@/shared/i18n/config';
+import { text } from '@/shared/i18n/localized';
+import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
+import { blogPostPath } from '@/shared/i18n/routing';
+import { MEDIA } from '@/shared/content/media';
+import { LocalizedLink } from '@/shared/components/common/ButtonLink';
+import { BLOG_COPY, type BlogPost } from '@/features/blog/data';
 
-interface BlogCardProps {
-  image: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  author: string;
-  slug: string;
+/** Brand-colour stand-in used until the organisation supplies the post's cover photograph. */
+export function CoverPlaceholder({ className }: { className?: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`bg-secondary-bg flex items-center justify-center ${className ?? ''}`}
+    >
+      <Image
+        src={MEDIA.logo.src}
+        alt=""
+        width={120}
+        height={120}
+        className="size-24 object-contain opacity-90"
+      />
+    </div>
+  );
 }
 
-export default function BlogCard({
-  image,
-  title,
-  excerpt,
-  date,
-  author,
-  slug,
-}: BlogCardProps) {
+export function BlogCard({ post, locale }: { post: BlogPost; locale: Locale }) {
+  const href = blogPostPath(post.slug);
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-sm transition hover:shadow-md">
-      <div className="relative aspect-[16/10] overflow-hidden">
-        <Image src={image} alt={title} fill className="object-cover" />
-      </div>
-      <div className="p-6">
-        <div className="mb-3 flex items-center gap-4 text-xs text-foreground">
-          <span className="flex items-center gap-1">
-            <Calendar size={12} />
-            {date}
-          </span>
-          <span className="flex items-center gap-1">
-            <User size={12} />
-            {author}
-          </span>
-        </div>
-        <h5 className="font-serif text-lg font-semibold text-heading transition hover:text-primary">
-          <Link href={`/blog/${slug}`}>{title}</Link>
-        </h5>
-        <p className="mt-2 line-clamp-2 text-sm text-foreground">{excerpt}</p>
-        <Link
-          href={`/blog/${slug}`}
-          className="mt-4 inline-block text-sm font-semibold text-primary transition hover:text-primary-dark"
+    <article className="flex h-full min-w-0 flex-col overflow-hidden rounded-xl border bg-white shadow-sm">
+      <CoverPlaceholder className="aspect-[3/2] w-full" />
+      <div className="flex flex-1 flex-col p-6">
+        <p className="text-text-medium mb-3 text-sm">
+          {post.publishedOn ? (
+            <time dateTime={post.publishedOn}>{post.publishedOn}</time>
+          ) : (
+            <LocalizedText value={BLOG_COPY.notDated} locale={locale} />
+          )}
+        </p>
+        <h3 className="text-heading font-serif text-xl font-semibold">
+          <LocalizedLink href={href} locale={locale} className="hover:text-primary">
+            <LocalizedText value={post.title} locale={locale} />
+          </LocalizedLink>
+        </h3>
+        <LocalizedText as="p" value={post.summary} locale={locale} className="mt-3 flex-1" />
+        <LocalizedLink
+          href={href}
+          locale={locale}
+          className="text-primary mt-5 inline-flex min-h-11 items-center font-semibold underline-offset-4 hover:underline"
         >
-          Read More &raquo;
-        </Link>
+          <UiText k="common.readMore" locale={locale} />
+          <span className="sr-only">: {text(post.title, locale)}</span>
+        </LocalizedLink>
       </div>
-    </div>
+    </article>
   );
 }

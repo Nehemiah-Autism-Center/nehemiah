@@ -1,19 +1,20 @@
-import PageBanner from '@/shared/components/common/PageBanner';
-import GalleryGrid from '@/shared/components/common/GalleryGrid';
+import type { Locale } from '@/shared/i18n/config';
+import { ui } from '@/shared/i18n/ui';
+import { PageBanner } from '@/shared/components/common/PageBanner';
+import { Section } from '@/shared/components/common/Section';
+import { GalleryBrowser } from './GalleryBrowser';
 
-export default function GalleryPage() {
+export function GalleryPage({ locale }: { locale: Locale }) {
   return (
     <>
       <PageBanner
-        title="Photo Gallery"
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Gallery' }]}
+        locale={locale}
+        title={ui['nav.gallery']}
+        trail={[{ label: ui['nav.gallery'] }]}
       />
-
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-4">
-          <GalleryGrid />
-        </div>
-      </section>
+      <Section>
+        <GalleryBrowser />
+      </Section>
     </>
   );
 }

@@ -1,2 +1,1 @@
-export { DonationForm } from './components/DonationForm';
-export { donationSchema, type DonationFormData } from './schemas/donation.schema';
+export { DonatePage } from './components/DonatePage';
