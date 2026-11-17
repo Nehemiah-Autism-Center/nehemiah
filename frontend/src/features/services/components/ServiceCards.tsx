@@ -18,29 +18,29 @@ export function ServiceCards({
   headingLevel?: 'h2' | 'h3';
 }) {
   return (
-    <ul className="grid gap-6 md:grid-cols-3">
+    <ul className="grid gap-8 md:grid-cols-3">
       {SERVICES.map((service) => {
         const Icon = ICONS[service.id];
         return (
           <li key={service.id} className="flex">
             <article
               data-service={service.id}
-              className="flex w-full min-w-0 flex-col rounded-xl border bg-white p-6 shadow-sm"
+              className="border-t-primary flex w-full min-w-0 flex-col rounded-[5px] border border-t-4 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md"
             >
-              <div className="bg-primary/10 text-primary mb-4 flex size-14 items-center justify-center rounded-full">
-                <Icon aria-hidden="true" className="size-7" />
+              <div className="bg-primary text-primary-foreground mx-auto mb-5 flex size-16 items-center justify-center rounded-full">
+                <Icon aria-hidden="true" className="size-8" />
               </div>
               <LocalizedText
                 as={headingLevel}
                 value={service.name}
                 locale={locale}
-                className="text-heading font-serif text-xl font-semibold"
+                className="text-heading font-serif text-[22px] leading-tight font-semibold md:flex md:min-h-[3.25rem] md:items-center md:justify-center"
               />
               <LocalizedText
                 as="p"
                 value={service.description}
                 locale={locale}
-                className="mt-3 text-base"
+                className="mt-4 text-base"
               />
             </article>
           </li>

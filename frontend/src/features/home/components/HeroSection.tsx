@@ -1,90 +1,81 @@
 import Image from 'next/image';
 import type { Locale } from '@/shared/i18n/config';
-import { text } from '@/shared/i18n/localized';
+import { resolve } from '@/shared/i18n/localized';
 import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
 import { ROUTES } from '@/shared/i18n/routing';
+import { ORGANIZATION } from '@/shared/content/organization';
 import { MEDIA } from '@/shared/content/media';
 import { Container } from '@/shared/components/common/Container';
 import { ButtonLink } from '@/shared/components/common/ButtonLink';
 import { HERO } from '@/features/home/data';
 
+/** Splits `full` around the first occurrence of `needle`; null when it does not occur. */
+function splitAround(full: string, needle: string): [string, string, string] | null {
+  const index = needle ? full.indexOf(needle) : -1;
+  if (index < 0) return null;
+  return [full.slice(0, index), needle, full.slice(index + needle.length)];
+}
+
 /**
- * Hero: the approved heading in two sizes, then the invitation with one primary action
- * ("Support Nehemiah") and one secondary ("Learn More"), then the descriptive paragraph. Words unchanged.
- * It is a single static composition — no slider, no auto-play — so nothing moves unexpectedly.
+ * Full-width photographic hero: dark overlay, left-aligned oversized heading with the
+ * organisation's name picked out in green, one short supporting paragraph and two rectangular
+ * buttons. Static by design: no slider, auto-play, parallax or flashing.
+ *
+ * The heading is the approved homepage heading, unchanged; the green highlight is found by
+ * locating the organisation name inside it, so it works in both languages. The rest of the
+ * approved hero text continues in the introduction section directly below.
  */
 export function HeroSection({ locale }: { locale: Locale }) {
+  const heading = resolve(HERO.headline, locale);
+  const name = resolve(ORGANIZATION.name, heading.isFallback ? 'en' : locale);
+  const parts = splitAround(heading.value, name.value);
+
   return (
     <section
       aria-labelledby="hero-heading"
-      className="from-primary/10 via-background to-background bg-gradient-to-b py-10 md:py-12 lg:py-14"
+      className="on-dark bg-charcoal-dark relative isolate overflow-hidden text-white"
     >
-      <Container className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
-        <div className="min-w-0">
-          <LocalizedText
-            as="h1"
-            id="hero-heading"
-            value={HERO.headline}
-            locale={locale}
-            className="text-heading font-serif text-3xl leading-tight font-bold sm:text-5xl"
-          />
-          <LocalizedText
-            as="p"
-            value={HERO.continuation}
-            locale={locale}
-            className="text-heading/85 mt-3 text-base leading-snug first-letter:uppercase sm:text-lg md:text-xl"
-          />
-          {/* The invitation sits directly with its buttons so the primary action stays near the top;
-              the longer descriptive paragraph follows. Order only — no words are changed. */}
-          <LocalizedText
-            as="p"
-            value={HERO.invitation}
-            locale={locale}
-            className="text-heading mt-4 max-w-prose text-base font-semibold"
-          />
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <ButtonLink href={ROUTES.donate} locale={locale} className="sm:min-w-52">
-              <UiText k="cta.support" locale={locale} />
-            </ButtonLink>
-            <ButtonLink
-              href={ROUTES.about}
-              locale={locale}
-              variant="secondary"
-              className="sm:min-w-52"
-            >
-              <UiText k="cta.learnMore" locale={locale} />
-            </ButtonLink>
-          </div>
-          <LocalizedText
-            as="p"
-            value={HERO.intro}
-            locale={locale}
-            className="mt-6 max-w-prose text-base"
-          />
-        </div>
+      <Image
+        src={MEDIA.heroPrimary.src}
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="-z-20 object-cover"
+      />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-black/70" />
 
-        <div className="relative min-w-0 pb-10 sm:pb-14">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-lg">
-            <Image
-              src={MEDIA.heroPrimary.src}
-              alt={text(MEDIA.heroPrimary.alt, locale)}
-              fill
-              priority
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="border-background absolute -bottom-0 -left-0 w-1/2 overflow-hidden rounded-2xl border-4 shadow-lg sm:left-6">
-            <div className="relative aspect-[3/2]">
-              <Image
-                src={MEDIA.heroSecondary.src}
-                alt={text(MEDIA.heroSecondary.alt, locale)}
-                fill
-                sizes="(min-width: 1024px) 22vw, 50vw"
-                className="object-cover"
-              />
-            </div>
-          </div>
+      <Container className="min-h-[520px] pt-12 pb-16 sm:min-h-[600px] md:pt-16 lg:min-h-[640px] lg:pt-20">
+        <h1
+          id="hero-heading"
+          lang={heading.isFallback ? heading.lang : undefined}
+          className="max-w-4xl font-sans text-[clamp(2.125rem,1.4rem+3.2vw,3.75rem)] leading-[1.1] font-extrabold tracking-normal text-white uppercase [:lang(am)_&]:leading-[1.4]"
+        >
+          {parts ? (
+            <>
+              {parts[0]}
+              <span className="text-primary">{parts[1]}</span>
+              {parts[2]}
+            </>
+          ) : (
+            heading.value
+          )}
+        </h1>
+
+        <LocalizedText
+          as="p"
+          value={HERO.invitation}
+          locale={locale}
+          className="mt-6 max-w-2xl text-lg leading-relaxed text-white sm:text-xl md:text-2xl"
+        />
+
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <ButtonLink href={ROUTES.donate} locale={locale} className="sm:min-w-52">
+            <UiText k="cta.support" locale={locale} />
+          </ButtonLink>
+          <ButtonLink href={ROUTES.about} locale={locale} variant="light" className="sm:min-w-52">
+            <UiText k="cta.learnMore" locale={locale} />
+          </ButtonLink>
         </div>
       </Container>
     </section>

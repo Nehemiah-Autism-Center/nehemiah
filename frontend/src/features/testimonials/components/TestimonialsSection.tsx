@@ -23,23 +23,25 @@ export function TestimonialsSection({ locale }: { locale: Locale }) {
         align="center"
         className="mx-auto"
       />
-      <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <li key={item.id} className="flex">
             <figure
               data-testimonial={item.id}
-              className="flex w-full min-w-0 flex-col rounded-xl border bg-white p-6 shadow-sm"
+              className="flex w-full min-w-0 flex-col rounded-[5px] border bg-white p-8 shadow-sm"
             >
-              <Quote aria-hidden="true" className="text-primary/60 mb-3 size-8" />
+              <span className="bg-primary text-primary-foreground mb-5 flex size-12 items-center justify-center">
+                <Quote aria-hidden="true" className="size-6" />
+              </span>
               <blockquote className="flex-1">
                 <LocalizedText
                   as="p"
                   value={item.quote}
                   locale={locale}
-                  className="text-heading text-lg italic"
+                  className="text-text-dark text-lg italic"
                 />
               </blockquote>
-              <figcaption className="text-primary mt-5 border-t pt-4 font-semibold">
+              <figcaption className="text-green-ink mt-6 border-t pt-4 font-semibold">
                 <span aria-hidden="true">— </span>
                 <LocalizedText value={item.attribution} locale={locale} />
               </figcaption>
