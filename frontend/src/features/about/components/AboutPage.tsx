@@ -3,8 +3,9 @@ import type { Locale } from '@/shared/i18n/config';
 import { resolve, text } from '@/shared/i18n/localized';
 import { LocalizedParagraphs, LocalizedText } from '@/shared/i18n/LocalizedText';
 import { ui } from '@/shared/i18n/ui';
-import { MEDIA } from '@/shared/content/media';
+import { MEDIA, PAGE_BANNERS } from '@/shared/content/media';
 import { PageBanner } from '@/shared/components/common/PageBanner';
+import { PhotoSection } from '@/shared/components/common/PhotoSection';
 import { Section } from '@/shared/components/common/Section';
 import { SectionHeading } from '@/shared/components/common/SectionHeading';
 import { ServiceCards } from '@/features/services/components/ServiceCards';
@@ -21,7 +22,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
         locale={locale}
         title={ui['nav.about']}
         trail={[{ label: ui['nav.about'] }]}
-        image={MEDIA.aboutBanner}
+        image={PAGE_BANNERS.about}
       />
 
       {/* Introduction */}
@@ -38,14 +39,20 @@ export function AboutPage({ locale }: { locale: Locale }) {
               <LocalizedParagraphs value={ABOUT_INTRO} locale={locale} />
             </div>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-lg lg:sticky lg:top-6">
-            <Image
-              src={MEDIA.aboutSide.src}
-              alt={text(MEDIA.aboutSide.alt, locale)}
-              fill
-              sizes="(min-width: 1024px) 38vw, 100vw"
-              className="object-cover"
+          <div className="relative lg:sticky lg:top-6">
+            <div
+              aria-hidden="true"
+              className="bg-primary absolute -right-3 -bottom-3 hidden size-full sm:block"
             />
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image
+                src={MEDIA.aboutSide.src}
+                alt={text(MEDIA.aboutSide.alt, locale)}
+                fill
+                sizes="(min-width: 1024px) 38vw, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
       </Section>
@@ -55,10 +62,13 @@ export function AboutPage({ locale }: { locale: Locale }) {
         <SectionHeading locale={locale} id="about-mission-heading" title={ABOUT_HEADINGS.mission} />
         <ol className="grid gap-6 md:grid-cols-2">
           {mission.value.map((statement, index) => (
-            <li key={index} className="flex min-w-0 gap-4 rounded-xl border bg-white p-6 shadow-sm">
+            <li
+              key={index}
+              className="flex min-w-0 gap-4 rounded-[5px] border bg-white p-6 shadow-sm"
+            >
               <span
                 aria-hidden="true"
-                className="bg-primary flex size-10 shrink-0 items-center justify-center rounded-full font-serif text-lg font-bold text-white"
+                className="bg-primary text-primary-foreground flex size-10 shrink-0 items-center justify-center font-serif text-lg font-bold"
               >
                 {index + 1}
               </span>
@@ -77,7 +87,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
           as="p"
           value={ABOUT_HISTORY}
           locale={locale}
-          className="border-secondary text-heading max-w-3xl border-l-4 pl-5 font-serif text-2xl leading-snug"
+          className="border-primary text-heading max-w-3xl border-l-4 pl-5 font-serif text-2xl leading-snug"
         />
       </Section>
 
@@ -92,7 +102,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
       </Section>
 
       {/* Impact */}
-      <Section labelledBy="about-impact-heading" tone="brand">
+      <PhotoSection labelledBy="about-impact-heading" image={PAGE_BANNERS.impact}>
         <SectionHeading
           locale={locale}
           id="about-impact-heading"
@@ -102,7 +112,7 @@ export function AboutPage({ locale }: { locale: Locale }) {
           className="mx-auto"
         />
         <ImpactStats locale={locale} />
-      </Section>
+      </PhotoSection>
 
       <ClosingCtaSection locale={locale} />
     </>

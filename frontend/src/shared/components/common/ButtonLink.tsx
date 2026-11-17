@@ -36,15 +36,17 @@ export function LocalizedLink({ href, locale, children, ...rest }: LocalizedLink
 
 export type ButtonVariant = 'primary' | 'secondary' | 'light' | 'outlineLight';
 
+// Rectangular, 5px corners, uppercase English labels (Ethiopic has no case, so Amharic is unaffected).
 const BASE =
-  'inline-flex min-h-11 max-w-full items-center justify-center gap-2 rounded-md px-6 py-2.5 text-center text-base font-semibold leading-snug transition-colors';
+  'inline-flex min-h-11 max-w-full items-center justify-center gap-2 rounded-[5px] px-7 py-2.5 text-center text-sm font-semibold uppercase leading-snug tracking-wide transition-colors';
 
 const VARIANTS: Record<ButtonVariant, string> = {
+  // Bright template green with near-black text (7.1:1). White on this green would be 2.4:1.
   primary: 'bg-primary text-primary-foreground hover:bg-primary-hover',
-  secondary:
-    'border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-white',
-  light: 'bg-white text-primary hover:bg-secondary-bg',
-  outlineLight: 'border-2 border-white bg-transparent text-white hover:bg-white hover:text-primary',
+  secondary: 'border-2 border-charcoal bg-white text-charcoal hover:bg-charcoal hover:text-white',
+  light: 'bg-white text-charcoal hover:bg-secondary-bg',
+  outlineLight:
+    'border-2 border-white bg-transparent text-white hover:bg-white hover:text-charcoal',
 };
 
 interface ButtonLinkProps extends LocalizedLinkProps {

@@ -1,95 +1,71 @@
 @import 'tailwindcss';
 
+/*
+ * Design tokens — Generosity charity-template palette, adapted for Nehemiah Autism Center.
+ *
+ * All colours are defined once, here, as exact hex values. Components use the token names
+ * (bg-primary, text-green-ink, bg-footer-bg …) and never hard-code colours.
+ *
+ * Accessibility rules baked into the palette (ratios measured, see
+ * docs/frontend-review/NAC-GENEROSITY-IMPLEMENTATION.md):
+ *  - The original bright green #80B53F is a SURFACE colour. Text on it is near-black
+ *    (#1A1A1A = 7.1:1); white on it would be 2.4:1, so it is never used.
+ *  - Green TEXT on light backgrounds uses a darker related green: --color-green-ink for
+ *    body-size text (5.3:1) and --color-green-display for large headings only (>= 3.1:1).
+ *  - On the dark surfaces (nav, footer, statistics) the bright green is used directly
+ *    (5.2:1 on #333333, 7.1:1 on #1A1A1A).
+ *  - The original muted grey #777777 is 4.48:1 on white; #6B6B6B (5.3:1) is used instead.
+ */
 @theme {
-  /* Font variables are provided by next/font (see src/app/fonts.ts) and set on <html>. */
+  /* Font variables are provided by next/font (src/shared/lib/fonts.ts) and set on <html>. */
   --font-sans: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-trirong), ui-serif, Georgia, serif;
 
-  --color-primary: hsl(var(--primary));
-  --color-primary-hover: hsl(var(--primary-hover));
-  --color-primary-dark: hsl(var(--primary-dark));
-  --color-primary-light: hsl(var(--primary-light));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-heading: hsl(var(--heading));
-  --color-text-dark: hsl(var(--text-dark));
-  --color-text-medium: hsl(var(--text-medium));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-footer-bg: hsl(var(--footer-bg));
-  --color-topbar-bg: hsl(var(--topbar-bg));
-  --color-footer-text: hsl(var(--footer-text));
-  --color-footer-accent: hsl(var(--footer-accent));
-  --color-secondary-bg: hsl(var(--secondary-bg));
-}
+  /* Brand green */
+  --color-primary: #80b53f;
+  --color-primary-hover: #74a936;
+  --color-primary-foreground: #1a1a1a; /* text on green */
+  --color-primary-dark: #4a771d;
+  --color-primary-light: #a6cf72;
+  --color-green-ink: #4a771d; /* green text on light surfaces, 5.3:1 */
+  --color-green-display: #6e9b36; /* large green headings and icons on light surfaces, >= 3.1:1 */
+  --color-secondary: #80b53f;
+  --color-secondary-foreground: #1a1a1a;
+  --color-accent: #80b53f;
+  --color-accent-foreground: #1a1a1a;
 
-:root {
-  /* Primary - Deep Teal #1A7A6D — calming, trustworthy, ideal for autism care */
-  --primary: 170 65% 29%;
-  --primary-hover: 170 65% 24%;
-  --primary-dark: 170 65% 19%;
-  --primary-light: 170 45% 45%;
-  --primary-foreground: 0 0% 100%;
+  /* Surfaces */
+  --color-background: #ffffff;
+  --color-secondary-bg: #f8f9fa; /* alternating light-grey sections */
+  --color-muted: #fafafa; /* cards on grey */
+  --color-card: #ffffff;
+  --color-popover: #ffffff;
+  --color-charcoal: #333333; /* utility bar, navigation */
+  --color-charcoal-dark: #2c2c2c; /* dark content sections */
+  --color-topbar-bg: #333333;
+  --color-nav-bg: #333333;
+  --color-footer-bg: #1a1a1a;
 
-  /* Backgrounds */
-  --background: 40 20% 99%;
-  --secondary-bg: 40 15% 96%;
-  --footer-bg: 215 50% 12%; /* #0F1B2D - Deep Navy */
-  --topbar-bg: 215 50% 12%; /* #0F1B2D - Deep Navy */
+  /* Text */
+  --color-foreground: #555555; /* body copy */
+  --color-heading: #333333;
+  --color-text-dark: #333333;
+  --color-text-medium: #6b6b6b; /* supporting text, 5.3:1 (the original #777 is 4.5:1) */
+  --color-muted-foreground: #6b6b6b;
+  --color-card-foreground: #333333;
+  --color-popover-foreground: #333333;
+  --color-footer-text: #c2c2c2; /* 9.8:1 on the footer */
+  --color-footer-accent: #80b53f; /* links and accents on dark, 7.1:1 */
 
-  /* Text. Every text/background pair below meets WCAG AA (4.5:1); measured values are in
-     docs/frontend-review/NAC-IMPLEMENTATION-REPORT.md. */
-  --foreground: 215 20% 35%; /* 7.3:1 on background */
-  --heading: 215 40% 16%; /* 15:1 */
-  --text-dark: 215 40% 16%;
-  --text-medium: 215 14% 40%; /* 5.9:1 (was 4.1:1) */
-  --footer-text: 215 15% 88%; /* 12.9:1 on footer */
-  --footer-accent: 170 45% 62%; /* 8.9:1 on footer — links, icons, hover */
+  /* Lines and controls */
+  --color-border: #eeeeee;
+  --color-input: #8a8a8a; /* form-control edge, needs 3:1 (WCAG 1.4.11): 3.45:1 */
+  --color-ring: #4a771d;
+  --color-destructive: #b23434; /* error text, 6.1:1 on white */
+  --color-destructive-foreground: #ffffff;
 
-  /* Card */
-  --card: 0 0% 100%;
-  --card-foreground: 215 40% 16%;
-
-  /* Popover */
-  --popover: 0 0% 100%;
-  --popover-foreground: 215 40% 16%;
-
-  /* Secondary - Warm Gold #D4A03C — highlights only; use dark text on it, never gold text on white */
-  --secondary: 40 62% 53%;
-  --secondary-foreground: 215 40% 16%;
-
-  /* Muted */
-  --muted: 40 10% 95%;
-  --muted-foreground: 215 14% 40%; /* 5.9:1 (was 4.1:1) */
-
-  /* Accent — Warm Gold to complement teal */
-  --accent: 40 62% 53%;
-  --accent-foreground: 215 40% 16%;
-
-  /* Destructive */
-  --destructive: 0 55% 45%; /* 6.1:1 on white (was 4.7:1) — used for error text */
-  --destructive-foreground: 0 0% 100%;
-
-  /* Border (decorative dividers) and Input (form control edge, needs 3:1 — WCAG 1.4.11) */
-  --border: 215 15% 88%;
-  --input: 215 12% 55%; /* 3.5:1 on white (was 1.3:1) */
-  --ring: 170 65% 29%;
-
-  --radius: 0.5rem;
+  /* Traditional, nearly square geometry (buttons 5px, cards 0-6px) */
+  --radius: 0.3125rem;
 }
 
 /* Amharic: Noto Sans Ethiopic first, Latin fonts as fallback for embedded English words. */
@@ -102,7 +78,7 @@
    on a heading) regardless of specificity. */
 @layer base {
   * {
-    border-color: hsl(var(--border));
+    border-color: var(--color-border);
   }
 
   html {
@@ -117,8 +93,8 @@
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: var(--color-background);
+    color: var(--color-foreground);
     font-family: var(--font-sans);
     font-size: 1rem;
     line-height: 1.75;
@@ -126,6 +102,7 @@
     overflow-wrap: break-word;
   }
 
+  /* Traditional serif headings (Trirong); the hero uses Open Sans via utility classes. */
   h1,
   h2,
   h3,
@@ -133,9 +110,9 @@
   h5,
   h6 {
     font-family: var(--font-serif);
-    font-weight: 500;
-    color: hsl(var(--heading));
-    line-height: 1.25;
+    font-weight: 600;
+    color: var(--color-heading);
+    line-height: 1.2;
     text-wrap: balance;
   }
 
@@ -153,12 +130,16 @@
 
   /* Visible keyboard focus everywhere; white ring on dark surfaces. */
   :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-    outline: 3px solid hsl(var(--ring));
+    outline: 3px solid var(--color-ring);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 2px;
   }
   .on-dark :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
     outline-color: #fff;
+  }
+  /* Bright-green surfaces: a near-black ring (7.1:1) is visible where white (2.4:1) would not be. */
+  .on-green :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline-color: #1a1a1a;
   }
 }
 

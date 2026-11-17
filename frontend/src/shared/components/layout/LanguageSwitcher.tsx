@@ -13,6 +13,9 @@ import { cn } from '@/shared/lib/utils';
  * Language choice as real links to the same page in the other language: works with the
  * keyboard, touch and screen readers, needs no JavaScript to navigate, and each language is
  * named in its own language (and tagged with it) so visitors can find theirs.
+ *
+ * tone="dark" sits on the charcoal utility bar or footer (active language = green tab);
+ * tone="light" sits on white surfaces (active language = charcoal tab).
  */
 export function LanguageSwitcher({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
   const locale = useLocale();
@@ -34,13 +37,15 @@ export function LanguageSwitcher({ tone = 'light' }: { tone?: 'light' | 'dark' }
                 hrefLang={LOCALE_HTML_LANG[target]}
                 aria-current={active ? 'true' : undefined}
                 className={cn(
-                  'inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-3 text-sm transition-colors',
+                  'inline-flex min-h-11 min-w-11 items-center justify-center rounded-[3px] px-3 text-sm transition-colors',
+                  // The dense desktop utility bar is 40px tall; phones keep the full 44px target.
+                  tone === 'dark' && 'md:min-h-10',
                   tone === 'dark'
                     ? active
-                      ? 'text-text-dark bg-white font-semibold'
-                      : 'text-white hover:bg-white/15'
+                      ? 'bg-primary text-primary-foreground font-semibold'
+                      : 'hover:text-primary text-white'
                     : active
-                      ? 'bg-primary font-semibold text-white'
+                      ? 'bg-charcoal font-semibold text-white'
                       : 'text-text-dark hover:bg-secondary-bg',
                 )}
               >
