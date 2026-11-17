@@ -58,7 +58,7 @@ The mobile sheet keeps the Radix focus trap, Escape and focus return. Its naviga
 
 **Feature strip.** Three cards, centre green, overlapping the hero by 64px from 1024px: Volunteer With Us · Support Our Mission · Partner With Us. They reuse approved button labels and existing routes; no new copy.
 
-**Homepage order.** Hero → feature strip → introduction (name, the hero continuation, intro, description, tagline; offset-green photo) → services (the three approved therapies) → impact (dark photographic band, bright-green cards for the three existing figures) → events → testimonials → blog → gallery (square grid) → location → closing CTA (dark photographic).
+**Homepage order.** Hero → feature strip → introduction (name, the hero continuation, intro, description, tagline; offset-green photo) → services (the three approved therapies) → impact (dark photographic band, bright-green cards for the three existing figures) → events → testimonials → blog → gallery (centred category filter and a four-column grid of eight photographs: the gallery browser in `preview` mode) → location → closing CTA (dark photographic).
 
 **Footer.** Four columns (brand, mission sentence, tagline and social; Discover; Support + Connect; contact details), green dividers under headings, separate darker copyright bar.
 
@@ -84,6 +84,9 @@ The mobile sheet keeps the Radix focus trap, Escape and focus return. Its naviga
 | `SectionHeading` gained `highlight` (default on); `eyebrow` kept | Last-word highlight |
 | `EventCard` / `BlogCard` gained a `horizontal` prop | A single card in a 1140px section |
 | `GalleryBrowser` thumbnails get a green hover overlay with a plus icon | Template detail; the lightbox, filter and focus return are untouched |
+| `GalleryBrowser` gained a `preview` prop; the homepage uses it instead of a hand-built link grid (second pass) | Spec §15 asks for category controls and about four images per row on the homepage. Preview mode shows only categories that really have photographs (3 of 13; the empty ones stay on `/gallery`), no counts, a centred filter, at most 8 tiles in 4 columns, and keeps the lightbox. The full-page behaviour is unchanged (the existing gallery tests still pass untouched) |
+| `GALLERY_PREVIEW_IDS` 6 → 8 photographs (`mascot-cones`, `walk-crowd` added) | Two full rows of four. Existing demonstration photographs only |
+| FAQ: green divider under each category heading, green top rule on the panel, green chevrons, open question in dark green (second pass) | Spec §20 asks for green accents. Done with `className` on the existing accordion, so the shadcn primitive is untouched. Contrast: chevron 3.3 : 1 (graphics need 3), open text 5.3 : 1 |
 | New: `PhotoSection`, `FeatureStrip`, `PAGE_BANNERS` | Shared dark photographic band; feature strip; banner photographs |
 | Footer tagline retained | A unit test caught that the first rewrite dropped it; restored, not the test |
 
@@ -92,11 +95,18 @@ The mobile sheet keeps the Radix focus trap, Escape and focus return. Its naviga
 New: `PhotoSection.tsx`, `FeatureStrip.tsx`.
 Rewritten: `globals.css`, `Container`, `Section`, `ButtonLink`, `SectionHeading`, `SocialLinks`, `LanguageSwitcher`, `SiteHeader`, `SiteFooter`, `PageBanner`, `HeroSection`, `ImpactStats`, `ClosingCtaSection`, `HomePage`, `ServiceCards`, `EventCard`, `BlogCard`, `TestimonialsSection`.
 Edited: `fonts.ts`, `media.ts`, `ContactDetails`, About / Services / Volunteer / FAQ / Contact / Donate / Events / Event detail / Blog / Blog post / Gallery pages, `GalleryBrowser`, `ContactForm`, `LocationSection`, `BackToTop`, `error.tsx`, `not-found.tsx`, public `layout.tsx`.
+Second pass edited: `HomePage.tsx`, `GalleryBrowser.tsx`, `gallery/data/index.ts`, `FaqPage.tsx`.
 Tests edited: `tests/e2e/responsive.spec.ts`, `tests/e2e/site.spec.ts`, `tests/e2e/links-and-interactions.spec.ts` (each change explained in `NAC-GENEROSITY-TEST-RESULTS.md`).
+Tests added (second pass): five unit tests for the gallery preview in `tests/unit/gallery/gallery.test.tsx`. No existing test was edited in the second pass.
 
 ## 8. Not done / limits
 
 - The template's source was unavailable, so exact spacing, icon shapes and hover behaviour are interpretations of the written spec.
 - The hero and banner photographs are the existing demonstration images (register MD-01 still applies; they include identifiable children).
 - Amharic outside the document's own text is still English fallback or provisional, as in PR #3.
-- The homepage gallery is a link grid; the filter and lightbox are on `/gallery`.
+- The homepage now ships the interactive gallery (filter and lightbox), so its first-load JavaScript grew from 111 kB to 139 kB (+28 kB, mostly the dialog library). It could be lazy-loaded below the fold if page weight matters more than simplicity.
+- The footer keeps the link groups from the approved content document (Discover / Support / Connect); it does not follow the spec's suggested grouping (see the design-gap report, §6).
+
+## 9. Second pass: re-verification and gap closure
+
+A first pass produced everything above. A second session did not trust that record: it re-ran type-check, lint, format, unit tests, a fresh production build and the full browser suite on the inherited code (all green, same numbers as reported), then reviewed the pages in a real browser against the written spec. That review found three spec gaps, closed in this pass: the homepage gallery (no category controls, three columns, six photographs), the FAQ (no green accent), and documentation of the remaining deliberate differences. Things looked at and left alone on purpose are listed in the design-gap report, §6.

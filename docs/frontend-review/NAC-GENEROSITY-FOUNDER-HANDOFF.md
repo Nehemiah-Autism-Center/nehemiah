@@ -12,7 +12,7 @@ An **experiment**: the same Nehemiah website, content and behaviour, dressed in 
 
 - A **three-level top**: a dark strip (social icons and Email / Contact / FAQ links, plus the language switch), a white row with the logo, address, phone, email and opening hours, and a dark menu bar with the current page in solid green and a green "Support Nehemiah" button.
 - A **big photograph at the top of the home page** with the welcome heading in large white capitals and "Nehemiah Autism Center" in green, and two buttons.
-- Three **get-involved cards** under it (Volunteer With Us, Support Our Mission, Partner With Us), then the services (still exactly ABA, Speech and Language Therapy, Food Therapy), the three real figures (90, 65+, 15) on green cards, the event, the testimonials, the blog post, the gallery, the map and a closing "Help Us Reach More Children" panel.
+- Three **get-involved cards** under it (Volunteer With Us, Support Our Mission, Partner With Us), then the services (still exactly ABA, Speech and Language Therapy, Food Therapy), the three real figures (90, 65+, 15) on green cards, the event, the testimonials, the blog post, the gallery (eight photographs, four to a row, with a small category filter and a click-to-enlarge viewer), the map and a closing "Help Us Reach More Children" panel.
 - A **dark, four-column footer**, and **photo banners** at the top of every other page.
 - Everything still works in English and Amharic, on phones and desktops. The language switch, the honest email-based contact form, the "donations coming soon" page, the FAQ, and the gallery filter and photo viewer all behave as before.
 
@@ -37,19 +37,24 @@ Everything else uses the colours in the brief.
 3. **Top-bar links.** The brief suggested "Email / Contact / Support". "Support" is already the big green button, so I used **FAQ** for the third link. Say if you prefer something else.
 4. **The "get involved" cards** use only existing button names and pages. If you want a short sentence under each, send the approved text.
 5. **Amharic** wording for the small labels is still the proposed (provisional) set from PR #3 and has not been checked by a native speaker.
+6. **Footer link groups.** The brief suggested a different grouping than the one in your approved content document (for example Events under "Discover"). I kept the approved grouping, and an automated test checks it. Say if you want the brief's grouping instead.
 
 ## How to look at it on your computer
 
-The preview was left running at **http://localhost:3002**. If it is not running (for example after a restart), open PowerShell and run:
+**Use http://localhost:3004.** It serves the final build and was left running. Port 3001 (your existing site) is untouched.
+
+Two older preview servers from earlier work are still running on **3002** and **3003**. They hold an earlier version of the homepage in memory (before the gallery filter), so **do not use them**. They can be stopped with Ctrl+C in the window that started them, or from PowerShell with `Get-NetTCPConnection -LocalPort 3002,3003 -State Listen | ForEach-Object { Stop-Process -Id $_.OwningProcess }`.
+
+If 3004 is not running (for example after a restart), open PowerShell and run:
 
 ```powershell
 cd C:\Users\naods\Documents\nac-generosity-wt\frontend
 $env:NEXT_STANDALONE = "0"
 pnpm build
-pnpm exec next start -p 3002
+pnpm exec next start -p 3004
 ```
 
-Then open http://localhost:3002 in a browser. Stop it with Ctrl+C. Pictures of the result are in `docs/frontend-review/evidence-generosity/` (compare with the old look in `docs/frontend-review/evidence/`).
+Then open http://localhost:3004 in a browser (add `/am` for Amharic). Stop it with Ctrl+C. **Stop the server before running `pnpm build` again**: a server that is still running keeps showing the old pages. Any free port works instead of 3004 (3002 once the old server is stopped). Pictures of the result are in `docs/frontend-review/evidence-generosity/` (compare with the old look in `docs/frontend-review/evidence/`).
 
 ## Known limits
 

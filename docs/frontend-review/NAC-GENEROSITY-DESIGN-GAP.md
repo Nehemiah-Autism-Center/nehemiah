@@ -70,4 +70,19 @@ All other spec colours are used as specified.
 - **Utility links**: Email · Contact · FAQ. The spec says "Email / Contact / Support", but Support is already the green call-to-action button, so FAQ takes its place in the dark bar.
 - **Feature strip content**: Volunteer With Us · Support Our Mission · Partner With Us, using existing labels and routes.
 - **Hero photograph**: the existing demonstration photograph, darkened. Replacing demo media remains an open item from PR #3 (register MD-01).
-- **Homepage gallery**: stays a link grid to the gallery page; the filter and lightbox live on the gallery page.
+- **Homepage gallery**: the spec describes a "Photo Archives" section with category controls and about four images per row. It is built by reusing the gallery browser in `preview` mode: a centred filter limited to the three categories that actually have photographs, a four-column grid of eight existing photographs, and the same lightbox. The ten empty categories are not shown on the homepage (an empty chip would lead to an empty grid) and remain on `/gallery`. (The first pass had kept a plain link grid; the second pass closed this gap.)
+
+## 6. Where the build still differs from the written spec
+
+Checked in a real browser in the second pass. None of these is a defect; each is a choice, a limit of the available content, or an open observation.
+
+| # | Spec says | Build does | Why |
+|---|---|---|---|
+| 1 | Footer columns: Organization (About, Services, Contact), Support (Volunteer, Donate, FAQ), Discover (Events, Blog, Gallery), About/Contact | Four columns: brand and mission; Discover (About Us, Our Services, Gallery, Blog); Support (Volunteer, Donate, FAQ, Events) with a Connect group beneath; contact details | The link groups come from the approved content document, and a content-integrity test asserts them ("uses the document footer groups"). Regrouping would change approved structure, so it is left for the founder |
+| 2 | Section headings with a green-highlighted word, including testimonials, blog and gallery | "Testimonials", "Blog" and "Gallery" are single words, so they carry the green divider but no green word; FAQ category headings likewise | Highlighting needs a second word, and the headings' wording is approved content |
+| 3 | Closing CTA: "Green button" | One green primary ("Support Our Mission") on its own row, and two outlined secondaries ("Volunteer With Us", "Partner With Us") on a second row | Keeps the two existing approved secondary actions without making three equal green buttons. Deliberate and documented in the component |
+| 4 | Utility links "Email / Contact / Support" | Email · Contact · FAQ | "Support" is already the green nav button |
+| 5 | Hero photograph: prefer a group or community picture | `heroPrimary` (children playing a game with adults watching), the photograph already designated for the hero | Existing demonstration media only; replacement is register item MD-01. Photographs of children are now more prominent: see the founder handoff |
+| 6 | Header white row shows the three information blocks | Three blocks from 1280px, two (contact, address) at 1024px, logo only at 768px | The spec says not to force the desktop rows into small widths. Between 768 and 1023px the row has empty space on the right |
+| 7 | Event, blog and testimonial content | Unchanged from PR #3 (event date "to be confirmed", blog date "to be confirmed", logo as blog placeholder image) | Honest placeholders; nothing was invented to fill the layout |
+| 8 | Contact and homepage location map | A Google Maps iframe (unchanged from PR #3) | Not a difference, but a capture trap: the iframe is `loading="lazy"`, so a quick screenshot shows an empty white frame. With an 8-second wait it renders fully (pin on Nehemiah Autism Center, Kera), and `contact-form-errors-1440.jpg` also shows it rendered. Needs internet access to load |

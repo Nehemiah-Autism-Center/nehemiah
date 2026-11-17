@@ -1,6 +1,6 @@
 # Generosity-inspired redesign — test results
 
-Branch `experiment/generosity-visual-redesign`. Windows 11, Node 22, pnpm 10.32, Playwright 1.58 with Chromium. Browser tests ran against the **production build** (`NEXT_STANDALONE=0 pnpm build`, then `next start -p 3002`), not the dev server. The final numbers below are from the final code; the last source change (a shadow on the feature strip) was followed by a full re-run of every check.
+Branch `experiment/generosity-visual-redesign`. Windows 11, Node 22, pnpm 10.30, Playwright 1.58 with Chromium. Browser tests ran against the **production build** (`NEXT_STANDALONE=0 pnpm build`, then `next start`), not the dev server. The numbers below are from the **final code of the second pass**: its last source change (homepage gallery preview and FAQ accents) was followed by a rebuild and a full re-run of every check. Nothing in `frontend/` changed after that run (only documentation and screenshots).
 
 ## 1. Final results
 
@@ -9,9 +9,9 @@ Branch `experiment/generosity-visual-redesign`. Windows 11, Node 22, pnpm 10.32,
 | `tsc --noEmit` | **0 errors** |
 | `eslint .` | **0 problems** |
 | `prettier --check src tests` | **pass** |
-| Unit and component tests (`vitest run`) | **144 passed, 0 failed** (9 files). No unit test file was edited |
-| Production build (`NEXT_STANDALONE=0`) | **passed**, 33 static pages |
-| Playwright (Chromium) on the production build | **274 passed, 0 failed**, 29 skipped |
+| Unit and component tests (`vitest run`) | **149 passed, 0 failed** (9 files): the 144 from the first pass plus 5 new gallery-preview tests. No existing test was edited |
+| Production build (`NEXT_STANDALONE=0`) | **passed**, 33 static pages. Homepage first-load JS 139 kB (was 111 kB before the interactive gallery) |
+| Playwright (Chromium) on the production build | **274 passed, 0 failed**, 29 skipped, no retries |
 
 The 29 skipped are the evidence-capture specs, which run only when `CAPTURE_EVIDENCE=1`. They were skipped on purpose: they write into `docs/frontend-review/evidence/` (PR #3's "before" images), which this experiment must not overwrite. The new screenshots were taken with a separate script into `evidence-generosity/`.
 
@@ -23,7 +23,9 @@ What the 274 browser tests cover (unchanged suite, run against the redesign): ev
 |---|---|---|
 | 1 (first full run on the redesign) | 266 passed, **8 failed** | see below |
 | 2 (after fixes) | 274 passed, 0 failed | |
-| Final (after the last visual tweak) | 274 passed, 0 failed | |
+| 3 (first pass, after the last visual tweak) | 274 passed, 0 failed | |
+| 4 (second pass: fresh build of the inherited code, before any change) | 274 passed, 0 failed | Independent re-verification of the first pass. tsc, eslint, prettier and vitest (144) were also re-run and passed |
+| 5 (second pass, final code) | 274 passed, 0 failed | After the gallery preview and FAQ changes, on a rebuilt app. Also 149 unit tests passing |
 
 The 8 failures in run 1:
 
@@ -35,7 +37,7 @@ The 8 failures in run 1:
 
 ## 3. Test changes (all three are in `tests/e2e/`)
 
-No assertion was removed, and no unit or content-integrity test was touched. The three changes:
+No assertion was removed, and no existing unit or content-integrity test was touched. (The second pass added five new unit tests for the gallery preview in `tests/unit/gallery/gallery.test.tsx` and changed no existing test.) The three changes made in the first pass:
 
 1. **`responsive.spec.ts` — header tap targets.** Before: every `a, button` in the header ≥ 44 × 44 px. Now: on phones (< 768px) every header control is still ≥ 44px; on larger screens the main navigation, the Support button and the menu button are still ≥ 44px; only the dense desktop utility bar (28px social squares, 24px inline contact links, 40px utility and language links) is held to **24px**, the WCAG 2.5.8 AA minimum, because that bar is specified at that size. **This is a deliberate relaxation, limited to those controls.**
 2. **`links-and-interactions.spec.ts` — contact links.** `a[href="tel:…"]` became `a[href="tel:…"]:visible`. The intent (a visitor can see a dial link) is unchanged; a redesigned header legitimately contains a hidden duplicate first.
@@ -70,6 +72,8 @@ pnpm exec eslint .
 pnpm exec prettier --check src tests
 pnpm exec vitest run
 $env:NEXT_STANDALONE = "0"; pnpm build
-pnpm exec next start -p 3002          # leave running, open a second terminal:
-$env:PLAYWRIGHT_BASE_URL = "http://localhost:3002"; pnpm exec playwright test
+pnpm exec next start -p 3004          # leave running, open a second terminal:
+$env:PLAYWRIGHT_BASE_URL = "http://localhost:3004"; pnpm exec playwright test
 ```
+
+Stop any running server before `pnpm build`: a server left running keeps serving the previous pages from memory (observed in the second pass, where older servers on ports 3002 and 3003 kept showing the pre-change homepage after a rebuild). Use a free port, and never 3001, which is the existing site.

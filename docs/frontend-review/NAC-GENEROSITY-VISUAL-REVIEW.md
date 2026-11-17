@@ -47,7 +47,7 @@ The template's files were not supplied, so this review checks the build against 
 - Single-word section headings ("Testimonials", "Volunteer") have no green last word, because there is no second word to highlight.
 - Between 768 and 1023px the white brand row shows only the logo and name, leaving empty space on the right; the info blocks appear from 1024px.
 - Below 420px the green Support button is not in the nav bar (it is the first button in the hero and in the menu), to keep the bar from overflowing at 320px.
-- The Contact page's Google Maps iframe can appear blank in a full-page screenshot (third-party embed and capture timing); it renders in the form-errors capture and in the browser.
+- The Google Maps iframe (Contact page and homepage location section) is lazy-loaded, so a quick screenshot shows an empty frame. Verified in the second pass: with an 8-second wait it renders fully, and `contact-form-errors-1440.jpg` shows it rendered.
 - Alt text, Amharic wording and photographs are unchanged from PR #3: demonstration photographs, provisional Amharic labels, no native-speaker review.
 - Looks were judged by me on screen, not by a designer or in a usability session.
 
@@ -61,3 +61,30 @@ The template's files were not supplied, so this review checks the build against 
 - Amharic: `about-am-1440-full.jpg`, `contact-am-1440-full.jpg`
 - Phones: `contact-en-375-full.jpg`, `gallery-en-375-full.jpg`, `mobile-menu-en-375.jpg`, `mobile-menu-am-375.jpg`
 - States: `gallery-lightbox-1440.jpg`, `contact-form-errors-1440.jpg`, `not-found-en-1440.jpg`
+- Second pass (regenerated or new): `home-{en,am}-1440-full.jpg`, `home-{en,am}-390-full.jpg`, `faq-en-1440-full.jpg`, `home-gallery-{en,am}-1440.jpg`, `home-gallery-en-375.jpg`
+
+## 7. Second review pass
+
+A later session re-reviewed the build in a real browser against the written spec instead of relying on the first pass's notes. What it looked at, and what it did not:
+
+**Looked at with my own eyes (production build, Chromium):**
+
+- English homepage at 1440, all ten screens from header to copyright bar, plus the new gallery section afterwards.
+- English homepage first screen at 320, 375, 390, 768 and 1024; Amharic first screen at 1440, 375 and 320.
+- English pages at 1440: About, Services, Events, Gallery, Contact, Donate, FAQ (before and after the accent change) and Volunteer; the mobile menu; the homepage gallery at 1440 (English and Amharic), 768 and 375.
+
+**Covered only by the automated checks in this pass** (every page in both languages at 320, 375, 390, 768, 1024 and 1440: no horizontal overflow, no broken images, no console errors, axe WCAG A/AA, plus the tap-target, keyboard and focus tests): Blog and the detail pages, Amharic secondary pages, and phone-width secondary pages. The first pass's screenshots exist for several of these but were not re-viewed.
+
+**What the review found**
+
+| # | Finding | Action |
+|---|---|---|
+| 1 | Homepage gallery was a three-column link grid of six photographs with no category controls; the spec (§15) asks for category controls and about four images per row | Fixed: the gallery browser in `preview` mode (centred filter limited to categories that have photographs, four columns, eight photographs, same lightbox) |
+| 2 | FAQ accordion had no green accent (spec §20) | Fixed: green divider, top rule and chevrons, open question in dark green |
+| 3 | Footer link grouping differs from the spec's suggestion | Left: it follows the approved content document and a test asserts it. Documented (design-gap §6) |
+| 4 | Closing CTA wraps its three buttons 1 + 2 | Left: deliberate hierarchy (one green primary, two outlined). Documented |
+| 5 | Map frame looked empty in screenshots | Not a defect: lazy-loaded, renders after a wait. Documented |
+
+What matched the spec on sight: the three-level header with 40px charcoal bar, square social icons, white information row and 60px charcoal nav with a full-height green active tab and green Support button; the 640px photographic hero with 70% overlay, uppercase white headline with green words and two rectangular buttons; the feature strip overlapping the hero; Trirong headings with green word and divider; the dark photographic impact band with three symmetric green cards (no invented fourth); the event card showing "Date to be confirmed"; the dark four-column footer with separate copyright bar; the consistent banner on every page; Amharic with Ethiopic type, no forced capitals and sensible wrapping; phone layouts with no overflow.
+
+Limits: still one reviewer, by eye, with no designer, no real visitors, no Firefox or Safari, and no pixel comparison against the real template (not available).
