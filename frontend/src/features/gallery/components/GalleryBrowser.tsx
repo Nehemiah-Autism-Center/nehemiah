@@ -12,7 +12,9 @@ import {
   GALLERY_CATEGORIES,
   GALLERY_COPY,
   GALLERY_PHOTOS,
+  GALLERY_PREVIEW_IDS,
   type GalleryCategoryId,
+  type GalleryPhoto,
 } from '@/features/gallery/data';
 
 type Filter = 'all' | GalleryCategoryId;
@@ -23,23 +25,43 @@ function countFor(filter: Filter): number {
     : GALLERY_PHOTOS.filter((p) => p.categories.includes(filter)).length;
 }
 
+/** Homepage preview: only categories that really have photographs, so no chip leads to an empty grid. */
+const PREVIEW_CATEGORIES = GALLERY_CATEGORIES.filter((c) => countFor(c.id) > 0);
+
+/** Homepage preview, "all photos": the curated set, in order. */
+const PREVIEW_PHOTOS = GALLERY_PREVIEW_IDS.map((id) =>
+  GALLERY_PHOTOS.find((p) => p.id === id),
+).filter((p): p is GalleryPhoto => Boolean(p));
+
+/** At most this many tiles in the preview: two full rows of four. */
+const PREVIEW_LIMIT = 8;
+
 const ICON_BUTTON =
   'inline-flex size-12 items-center justify-center rounded-full bg-white/15 text-white transition-colors hover:bg-white/30';
 
 /**
  * Category filter (13 categories) and photo grid with a keyboard-accessible lightbox.
  * Categories with no photographs say so instead of showing unrelated pictures.
+ *
+ * `preview` is the compact homepage version: centred filter without empty categories or counts,
+ * at most eight tiles in a four-column grid. The full gallery page keeps every category.
  */
-export function GalleryBrowser() {
+export function GalleryBrowser({ preview = false }: { preview?: boolean }) {
   const locale = useLocale();
   const [filter, setFilter] = useState<Filter>('all');
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   // The lightbox is opened from state (not a Radix trigger), so remember the tile to refocus on close.
   const openerRef = useRef<HTMLElement | null>(null);
 
-  const photos =
-    filter === 'all' ? GALLERY_PHOTOS : GALLERY_PHOTOS.filter((p) => p.categories.includes(filter));
-  const activeCategory = GALLERY_CATEGORIES.find((c) => c.id === filter);
+  const categories = preview ? PREVIEW_CATEGORIES : GALLERY_CATEGORIES;
+  const matching: readonly GalleryPhoto[] =
+    filter === 'all'
+      ? preview
+        ? PREVIEW_PHOTOS
+        : GALLERY_PHOTOS
+      : GALLERY_PHOTOS.filter((p) => p.categories.includes(filter));
+  const photos = preview ? matching.slice(0, PREVIEW_LIMIT) : matching;
+  const activeCategory = preview ? undefined : GALLERY_CATEGORIES.find((c) => c.id === filter);
   const current = openIndex !== null ? photos[openIndex] : undefined;
 
   const choose = (next: Filter) => {
@@ -68,9 +90,10 @@ export function GalleryBrowser() {
           className="border-input text-heading h-12 w-full rounded-[3px] border bg-white px-3 text-base"
         >
           <option value="all" lang={allLabel.isFallback ? 'en' : undefined}>
-            {allLabel.value} ({countFor('all')})
+            {allLabel.value}
+            {!preview && ` (${countFor('all')})`}
           </option>
-          {GALLERY_CATEGORIES.map((category) => {
+          {categories.map((category) => {
             const title = resolve(category.title, locale);
             return (
               <option
@@ -78,7 +101,8 @@ export function GalleryBrowser() {
                 value={category.id}
                 lang={title.isFallback ? 'en' : undefined}
               >
-                {title.value} ({countFor(category.id)})
+                {title.value}
+                {!preview && ` (${countFor(category.id)})`}
               </option>
             );
           })}
@@ -91,8 +115,8 @@ export function GalleryBrowser() {
         aria-label={text(GALLERY_COPY.filterLabel, locale)}
         className="hidden md:block"
       >
-        <ul className="flex flex-wrap gap-2">
-          {(['all', ...GALLERY_CATEGORIES.map((c) => c.id)] as Filter[]).map((id) => {
+        <ul className={cn('flex flex-wrap gap-2', preview && 'justify-center')}>
+          {(['all', ...categories.map((c) => c.id)] as Filter[]).map((id) => {
             const category = GALLERY_CATEGORIES.find((c) => c.id === id);
             const active = filter === id;
             return (
@@ -112,9 +136,11 @@ export function GalleryBrowser() {
                     value={category ? category.title : GALLERY_COPY.all}
                     locale={locale}
                   />
-                  <span aria-hidden="true" className="text-sm">
-                    {countFor(id)}
-                  </span>
+                  {!preview && (
+                    <span aria-hidden="true" className="text-sm">
+                      {countFor(id)}
+                    </span>
+                  )}
                 </button>
               </li>
             );
@@ -143,7 +169,12 @@ export function GalleryBrowser() {
       </div>
 
       {photos.length > 0 && (
-        <ul className="mt-2 grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 lg:grid-cols-4">
+        <ul
+          className={cn(
+            'mt-2 grid grid-cols-2 gap-2 sm:gap-3',
+            preview ? 'md:grid-cols-4' : 'md:grid-cols-3 lg:grid-cols-4',
+          )}
+        >
           {photos.map((photo, index) => (
             <li key={photo.id}>
               <button
@@ -159,7 +190,11 @@ export function GalleryBrowser() {
                   src={photo.src}
                   alt=""
                   fill
-                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                  sizes={
+                    preview
+                      ? '(min-width: 768px) 25vw, 50vw'
+                      : '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw'
+                  }
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <span

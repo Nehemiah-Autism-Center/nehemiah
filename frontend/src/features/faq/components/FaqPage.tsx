@@ -47,16 +47,17 @@ export function FaqPage({ locale }: { locale: Locale }) {
                     id={headingId}
                     value={category.title}
                     locale={locale}
-                    className="text-heading mb-4 font-serif text-2xl"
+                    className="text-heading font-serif text-2xl"
                   />
+                  <div aria-hidden="true" className="bg-primary mt-3 mb-5 h-[3px] w-10" />
                   <Accordion
                     type="single"
                     collapsible
-                    className="rounded-[5px] border bg-white px-5 shadow-sm"
+                    className="border-t-primary rounded-[5px] border border-t-[3px] bg-white px-5 shadow-sm"
                   >
                     {category.items.map((item) => (
                       <AccordionItem key={item.id} value={item.id}>
-                        <AccordionTrigger className="text-heading min-h-12 text-lg font-semibold">
+                        <AccordionTrigger className="text-heading data-[state=open]:text-green-ink [&>svg]:text-green-display min-h-12 text-lg font-semibold">
                           <LocalizedText value={item.question} locale={locale} />
                         </AccordionTrigger>
                         <AccordionContent className="text-base">

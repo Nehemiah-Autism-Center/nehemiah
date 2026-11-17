@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { Plus } from 'lucide-react';
 import type { Locale } from '@/shared/i18n/config';
 import { text } from '@/shared/i18n/localized';
 import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
@@ -10,7 +9,7 @@ import { MEDIA, PAGE_BANNERS } from '@/shared/content/media';
 import { Section } from '@/shared/components/common/Section';
 import { PhotoSection } from '@/shared/components/common/PhotoSection';
 import { SectionHeading } from '@/shared/components/common/SectionHeading';
-import { ButtonLink, LocalizedLink } from '@/shared/components/common/ButtonLink';
+import { ButtonLink } from '@/shared/components/common/ButtonLink';
 import { cn } from '@/shared/lib/utils';
 import { ServiceCards } from '@/features/services/components/ServiceCards';
 import { SERVICES_HEADING } from '@/features/services/data';
@@ -19,7 +18,8 @@ import { EVENTS, UPCOMING_EVENTS_HEADING, UPCOMING_EVENTS_INTRO } from '@/featur
 import { TestimonialsSection } from '@/features/testimonials/components/TestimonialsSection';
 import { BlogCard } from '@/features/blog/components/BlogCard';
 import { BLOG_POSTS } from '@/features/blog/data';
-import { GALLERY_PHOTOS, GALLERY_PREVIEW_IDS, GALLERY_COPY } from '@/features/gallery/data';
+import { GalleryBrowser } from '@/features/gallery/components/GalleryBrowser';
+import { GALLERY_COPY } from '@/features/gallery/data';
 import { LocationSection } from '@/features/contact/components/LocationSection';
 import { HeroSection } from './HeroSection';
 import { FeatureStrip } from './FeatureStrip';
@@ -31,10 +31,6 @@ import { HERO, HOME_COPY } from '@/features/home/data';
 const cardList = (count: number) => cn('grid gap-8', count > 1 && 'md:grid-cols-2 lg:grid-cols-3');
 
 export function HomePage({ locale }: { locale: Locale }) {
-  const previewPhotos = GALLERY_PREVIEW_IDS.map((id) =>
-    GALLERY_PHOTOS.find((p) => p.id === id),
-  ).filter((p): p is (typeof GALLERY_PHOTOS)[number] => Boolean(p));
-
   return (
     <>
       <HeroSection locale={locale} />
@@ -176,7 +172,8 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </Section>
 
-      {/* Gallery preview: rectangular grid; the full gallery has the filter and lightbox */}
+      {/* Gallery ("photo archives"): centred category filter and a four-column rectangular grid.
+          The same browser as the gallery page, so filtering and the lightbox behave identically. */}
       <Section id="gallery" labelledBy="gallery-heading" tone="muted">
         <SectionHeading
           locale={locale}
@@ -185,31 +182,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           align="center"
           className="mx-auto"
         />
-        <ul className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3">
-          {previewPhotos.map((photo) => (
-            <li key={photo.id}>
-              <LocalizedLink
-                href={ROUTES.gallery}
-                locale={locale}
-                className="group relative block aspect-[4/3] overflow-hidden"
-              >
-                <Image
-                  src={photo.src}
-                  alt={text(photo.alt, locale)}
-                  fill
-                  sizes="(min-width: 768px) 33vw, 50vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <span
-                  aria-hidden="true"
-                  className="bg-primary/85 text-primary-foreground absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
-                >
-                  <Plus className="size-10" />
-                </span>
-              </LocalizedLink>
-            </li>
-          ))}
-        </ul>
+        <GalleryBrowser preview />
         <div className="mt-10 text-center">
           <ButtonLink href={ROUTES.gallery} locale={locale} variant="secondary">
             <LocalizedText value={GALLERY_COPY.viewGallery} locale={locale} />

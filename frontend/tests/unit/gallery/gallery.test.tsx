@@ -99,3 +99,55 @@ describe('GalleryBrowser', () => {
     expect(select.options[0]).not.toHaveAttribute('lang');
   });
 });
+
+describe('GalleryBrowser preview (homepage)', () => {
+  const withPhotos = GALLERY_CATEGORIES.filter((c) =>
+    GALLERY_PHOTOS.some((p) => p.categories.includes(c.id)),
+  );
+  const filterSelect = () =>
+    screen.getByRole('combobox', { name: 'Show photos from' }) as HTMLSelectElement;
+
+  it('offers "All photos" and only the categories that really have photographs, without counts', () => {
+    renderIn('en', <GalleryBrowser preview />);
+    expect([...filterSelect().options].map((o) => o.textContent)).toEqual([
+      'All photos',
+      ...withPhotos.map((c) => c.title.en),
+    ]);
+    // the empty categories stay on the full gallery page, so no chip can lead to an empty grid
+    expect(withPhotos.length).toBeGreaterThan(0);
+    expect(withPhotos.length).toBeLessThan(GALLERY_CATEGORIES.length);
+  });
+
+  it('shows the curated set, at most eight tiles (two full rows of four)', () => {
+    renderIn('en', <GalleryBrowser preview />);
+    expect(photoButtons()).toHaveLength(8);
+    expect(photoButtons().length).toBeLessThan(GALLERY_PHOTOS.length);
+  });
+
+  it('filters to a category and shows no empty-state message', () => {
+    renderIn('en', <GalleryBrowser preview />);
+    const target = withPhotos[withPhotos.length - 1];
+    fireEvent.change(filterSelect(), { target: { value: target.id } });
+    expect(photoButtons()).toHaveLength(
+      GALLERY_PHOTOS.filter((p) => p.categories.includes(target.id)).length,
+    );
+    expect(screen.getByRole('status')).toBeEmptyDOMElement();
+  });
+
+  it('keeps the keyboard-accessible lightbox, scoped to the tiles on screen', async () => {
+    renderIn('en', <GalleryBrowser preview />);
+    fireEvent.click(photoButtons()[0]);
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toHaveAccessibleDescription('1 / 8');
+    fireEvent.keyDown(dialog, { key: 'ArrowLeft' });
+    expect(dialog).toHaveAccessibleDescription('8 / 8');
+    fireEvent.keyDown(dialog, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('labels the controls in Amharic', () => {
+    renderIn('am', <GalleryBrowser preview />);
+    const select = screen.getByRole('combobox', { name: 'ፎቶዎችን አሳይ' }) as HTMLSelectElement;
+    expect(select.options[0].textContent).toBe('ሁሉም ፎቶዎች');
+  });
+});
