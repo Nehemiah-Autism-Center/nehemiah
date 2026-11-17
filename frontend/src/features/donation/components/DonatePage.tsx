@@ -1,10 +1,12 @@
 import { CalendarDays, HandHeart, Mail, type LucideIcon } from 'lucide-react';
 import type { Locale } from '@/shared/i18n/config';
-import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
+import { UiText } from '@/shared/i18n/LocalizedText';
 import { ROUTES } from '@/shared/i18n/routing';
 import { ui, type UiKey } from '@/shared/i18n/ui';
+import { PAGE_BANNERS } from '@/shared/content/media';
 import { PageBanner } from '@/shared/components/common/PageBanner';
 import { Section } from '@/shared/components/common/Section';
+import { SectionHeading } from '@/shared/components/common/SectionHeading';
 import { ButtonLink } from '@/shared/components/common/ButtonLink';
 import { EmailLink, PhoneLinks } from '@/shared/components/common/ContactDetails';
 import { DONATION_MESSAGE } from '@/features/donation/data';
@@ -30,30 +32,28 @@ const WAYS: readonly Way[] = [
 export function DonatePage({ locale }: { locale: Locale }) {
   return (
     <>
-      <PageBanner locale={locale} title={ui['nav.donate']} trail={[{ label: ui['nav.donate'] }]} />
+      <PageBanner
+        locale={locale}
+        title={ui['nav.donate']}
+        trail={[{ label: ui['nav.donate'] }]}
+        image={PAGE_BANNERS.donate}
+      />
 
       <Section labelledBy="donate-heading">
-        <div className="mx-auto max-w-3xl text-center">
-          <LocalizedText
-            as="h2"
-            id="donate-heading"
-            value={DONATION_MESSAGE.heading}
-            locale={locale}
-            className="text-heading font-serif text-3xl md:text-4xl"
-          />
-          <LocalizedText
-            as="p"
-            value={DONATION_MESSAGE.body}
-            locale={locale}
-            className="mt-4 text-lg"
-          />
-        </div>
+        <SectionHeading
+          locale={locale}
+          id="donate-heading"
+          title={DONATION_MESSAGE.heading}
+          subtitle={DONATION_MESSAGE.body}
+          align="center"
+          className="mx-auto"
+        />
 
-        <ul className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-3">
+        <ul className="mx-auto grid max-w-4xl gap-6 md:grid-cols-3">
           {WAYS.map(({ icon: Icon, title, href }) => (
             <li key={title} className="flex">
-              <div className="flex w-full flex-col items-center rounded-xl border bg-white p-6 text-center shadow-sm">
-                <div className="bg-primary/10 text-primary mb-4 flex size-14 items-center justify-center rounded-full">
+              <div className="flex w-full flex-col items-center rounded-[5px] border bg-white p-6 text-center shadow-sm">
+                <div className="bg-primary text-primary-foreground mb-4 flex size-14 items-center justify-center rounded-full">
                   <Icon aria-hidden="true" className="size-7" />
                 </div>
                 <ButtonLink href={href} locale={locale} variant="secondary" className="w-full">

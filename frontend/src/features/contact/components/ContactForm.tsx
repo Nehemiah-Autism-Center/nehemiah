@@ -76,7 +76,7 @@ export function ContactForm({ defaultSubject = '' }: { defaultSubject?: string }
         as="p"
         value={CONTACT_COPY.honestyNote}
         locale={locale}
-        className="bg-secondary-bg rounded-md p-4 text-base"
+        className="bg-secondary-bg rounded-[5px] p-4 text-base"
       />
 
       {fields.map(({ name, label, type, autoComplete }) => (
@@ -117,7 +117,7 @@ export function ContactForm({ defaultSubject = '' }: { defaultSubject?: string }
 
       <button
         type="submit"
-        className="bg-primary text-primary-foreground hover:bg-primary-hover inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-6 py-2.5 text-base font-semibold transition-colors"
+        className="bg-primary text-primary-foreground hover:bg-primary-hover inline-flex min-h-11 items-center justify-center gap-2 rounded-[5px] px-7 py-2.5 text-sm font-semibold tracking-wide uppercase transition-colors"
       >
         <Mail aria-hidden="true" className="size-5" />
         <span>{t('form.send', locale)}</span>
@@ -129,7 +129,7 @@ export function ContactForm({ defaultSubject = '' }: { defaultSubject?: string }
             as="p"
             value={CONTACT_COPY.preparedStatus}
             locale={locale}
-            className="border-primary/40 bg-primary/5 text-heading rounded-md border p-4 text-base"
+            className="border-green-ink/40 bg-primary/10 text-heading rounded-[5px] border p-4 text-base"
           />
         )}
         {status === 'too-long' && (
@@ -137,7 +137,7 @@ export function ContactForm({ defaultSubject = '' }: { defaultSubject?: string }
             as="p"
             value={CONTACT_COPY.tooLong}
             locale={locale}
-            className="border-destructive/40 bg-destructive/5 text-heading rounded-md border p-4 text-base"
+            className="border-destructive/40 bg-destructive/5 text-heading rounded-[5px] border p-4 text-base"
           />
         )}
       </div>

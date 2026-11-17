@@ -46,14 +46,14 @@ export function LocationSection({
           {showDetails && (
             <ul className="mt-6 space-y-4 text-base">
               <li className="flex items-start gap-3">
-                <MapPin aria-hidden="true" className="text-primary mt-1 size-5 shrink-0" />
+                <MapPin aria-hidden="true" className="text-green-display mt-1 size-5 shrink-0" />
                 <span>
                   <span className="sr-only">{t('contact.address', locale)}: </span>
                   <AddressText locale={locale} />
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <Clock aria-hidden="true" className="text-primary mt-1 size-5 shrink-0" />
+                <Clock aria-hidden="true" className="text-green-display mt-1 size-5 shrink-0" />
                 <div>
                   <p className="sr-only">{t('contact.hours', locale)}</p>
                   <HoursList locale={locale} />
@@ -74,7 +74,7 @@ export function LocationSection({
           </ButtonLink>
         </div>
 
-        <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
+        <div className="overflow-hidden rounded-[5px] border bg-white shadow-sm">
           <iframe
             title={text(ORGANIZATION.mapTitle, locale)}
             src={ORGANIZATION.mapsEmbedUrl}

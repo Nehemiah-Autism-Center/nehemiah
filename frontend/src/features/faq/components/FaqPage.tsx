@@ -1,6 +1,7 @@
 import type { Locale } from '@/shared/i18n/config';
 import { LocalizedText } from '@/shared/i18n/LocalizedText';
 import { ui } from '@/shared/i18n/ui';
+import { PAGE_BANNERS } from '@/shared/content/media';
 import { PageBanner } from '@/shared/components/common/PageBanner';
 import { Section } from '@/shared/components/common/Section';
 import {
@@ -19,7 +20,12 @@ import { FAQ_CATEGORIES, FAQ_INTRO } from '@/features/faq/data';
 export function FaqPage({ locale }: { locale: Locale }) {
   return (
     <>
-      <PageBanner locale={locale} title={ui['nav.faq']} trail={[{ label: ui['nav.faq'] }]} />
+      <PageBanner
+        locale={locale}
+        title={ui['nav.faq']}
+        trail={[{ label: ui['nav.faq'] }]}
+        image={PAGE_BANNERS.faq}
+      />
 
       <Section labelledBy="faq-intro">
         <div className="mx-auto max-w-3xl">
@@ -46,7 +52,7 @@ export function FaqPage({ locale }: { locale: Locale }) {
                   <Accordion
                     type="single"
                     collapsible
-                    className="rounded-xl border bg-white px-5 shadow-sm"
+                    className="rounded-[5px] border bg-white px-5 shadow-sm"
                   >
                     {category.items.map((item) => (
                       <AccordionItem key={item.id} value={item.id}>

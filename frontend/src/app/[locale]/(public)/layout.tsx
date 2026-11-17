@@ -19,7 +19,7 @@ export default async function PublicLayout({
     <>
       <a
         href="#main-content"
-        className="focus:text-primary sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-3 focus:font-semibold focus:shadow-lg"
+        className="focus:text-green-ink sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-3 focus:font-semibold focus:shadow-lg"
       >
         {t('common.skipToContent', locale)}
       </a>

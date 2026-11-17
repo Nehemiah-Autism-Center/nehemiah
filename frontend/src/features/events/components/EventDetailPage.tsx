@@ -5,6 +5,7 @@ import { text } from '@/shared/i18n/localized';
 import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
 import { ROUTES } from '@/shared/i18n/routing';
 import { ui } from '@/shared/i18n/ui';
+import { PAGE_BANNERS } from '@/shared/content/media';
 import { PageBanner } from '@/shared/components/common/PageBanner';
 import { Section } from '@/shared/components/common/Section';
 import { ButtonLink } from '@/shared/components/common/ButtonLink';
@@ -25,7 +26,7 @@ function Detail({
         as="dt"
         value={label}
         locale={locale}
-        className="text-primary text-sm font-semibold tracking-wider uppercase"
+        className="text-green-ink text-sm font-semibold tracking-wider uppercase"
       />
       <dd className="text-heading mt-1 space-y-1 text-lg">{children}</dd>
     </div>
@@ -44,11 +45,12 @@ export function EventDetailPage({ event, locale }: { event: SiteEvent; locale: L
         locale={locale}
         title={event.title}
         trail={[{ label: ui['nav.events'], href: ROUTES.events }, { label: event.title }]}
+        image={PAGE_BANNERS.events}
       />
       <Section>
         <div className="grid items-start gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14">
           <div className="min-w-0">
-            <div className="relative aspect-[3/2] overflow-hidden rounded-2xl shadow-lg">
+            <div className="relative aspect-[3/2] overflow-hidden">
               <Image
                 src={event.image.src}
                 alt={text(event.image.alt, locale)}
@@ -68,7 +70,7 @@ export function EventDetailPage({ event, locale }: { event: SiteEvent; locale: L
 
           <aside
             aria-labelledby="event-details-heading"
-            className="min-w-0 rounded-xl border bg-white p-6 shadow-sm"
+            className="min-w-0 rounded-[5px] border bg-white p-6 shadow-sm"
           >
             <LocalizedText
               as="h2"
@@ -78,7 +80,7 @@ export function EventDetailPage({ event, locale }: { event: SiteEvent; locale: L
               className="text-heading mb-5 font-serif text-2xl"
             />
             {unconfirmed && (
-              <p className="bg-secondary text-secondary-foreground mb-5 inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold">
+              <p className="bg-primary text-primary-foreground mb-5 inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold tracking-wider uppercase">
                 <CalendarDays aria-hidden="true" className="size-4" />
                 <LocalizedText value={EVENT_STATUS.dateToBeConfirmed} locale={locale} />
               </p>

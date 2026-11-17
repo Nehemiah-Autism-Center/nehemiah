@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, X } from 'lucide-react';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 import { useLocale } from '@/shared/i18n/LocaleProvider';
 import { resolve, text } from '@/shared/i18n/localized';
@@ -65,7 +65,7 @@ export function GalleryBrowser() {
           id="gallery-filter"
           value={filter}
           onChange={(e) => choose(e.target.value as Filter)}
-          className="border-input text-heading h-12 w-full rounded-md border bg-white px-3 text-base"
+          className="border-input text-heading h-12 w-full rounded-[3px] border bg-white px-3 text-base"
         >
           <option value="all" lang={allLabel.isFallback ? 'en' : undefined}>
             {allLabel.value} ({countFor('all')})
@@ -102,10 +102,10 @@ export function GalleryBrowser() {
                   aria-pressed={active}
                   onClick={() => choose(id)}
                   className={cn(
-                    'inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-1.5 text-base transition-colors',
+                    'inline-flex min-h-11 items-center gap-2 rounded-[3px] border px-4 py-1.5 text-base transition-colors',
                     active
-                      ? 'border-primary bg-primary font-semibold text-white'
-                      : 'border-input text-heading hover:border-primary hover:text-primary bg-white',
+                      ? 'border-primary bg-primary text-primary-foreground font-semibold'
+                      : 'border-input text-heading hover:border-primary hover:text-green-ink bg-white',
                   )}
                 >
                   <LocalizedText
@@ -127,7 +127,7 @@ export function GalleryBrowser() {
           as="p"
           value={activeCategory.description}
           locale={locale}
-          className="border-secondary mt-6 max-w-3xl border-l-4 pl-4 text-lg"
+          className="border-primary mt-6 max-w-3xl border-l-4 pl-4 text-lg"
         />
       )}
 
@@ -137,13 +137,13 @@ export function GalleryBrowser() {
             as="p"
             value={GALLERY_COPY.empty}
             locale={locale}
-            className="border-input rounded-xl border border-dashed bg-white p-8 text-center text-lg"
+            className="border-input rounded-[5px] border border-dashed bg-white p-8 text-center text-lg"
           />
         )}
       </div>
 
       {photos.length > 0 && (
-        <ul className="mt-2 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <ul className="mt-2 grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 lg:grid-cols-4">
           {photos.map((photo, index) => (
             <li key={photo.id}>
               <button
@@ -153,7 +153,7 @@ export function GalleryBrowser() {
                   setOpenIndex(index);
                 }}
                 aria-label={`${text(GALLERY_COPY.openPhoto, locale)}: ${text(photo.alt, locale)}`}
-                className="group bg-secondary-bg relative block aspect-[4/3] w-full overflow-hidden rounded-xl"
+                className="group bg-secondary-bg relative block aspect-[4/3] w-full overflow-hidden"
               >
                 <Image
                   src={photo.src}
@@ -162,6 +162,12 @@ export function GalleryBrowser() {
                   sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
+                <span
+                  aria-hidden="true"
+                  className="bg-primary/85 text-primary-foreground absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+                >
+                  <Plus className="size-10" />
+                </span>
               </button>
             </li>
           ))}
