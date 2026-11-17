@@ -50,8 +50,10 @@ test.describe('links', () => {
   test('contact links dial and email the document details', async ({ page }) => {
     await page.goto('/en/contact');
     await expect(page.locator('a[href="mailto:Nehemiah.center@yahoo.com"]').first()).toBeVisible();
-    await expect(page.locator('a[href="tel:+251930012652"]').first()).toBeVisible();
-    await expect(page.locator('a[href="tel:+251979050917"]').first()).toBeVisible();
+    // The redesigned header carries a phone-only link (hidden from tablet width up), so look for a
+    // link a visitor can actually see rather than the first one in the DOM.
+    await expect(page.locator('a[href="tel:+251930012652"]:visible').first()).toBeVisible();
+    await expect(page.locator('a[href="tel:+251979050917"]:visible').first()).toBeVisible();
   });
 });
 
