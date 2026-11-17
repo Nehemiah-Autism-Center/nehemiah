@@ -1,94 +1,110 @@
-import PageBanner from '@/shared/components/common/PageBanner';
-import SectionHeading from '@/shared/components/common/SectionHeading';
-import AnimateOnScroll from '@/shared/components/common/AnimateOnScroll';
-import HistoryTimeline from '@/shared/components/common/HistoryTimeline';
-import CTASection from '@/shared/components/common/CTASection';
-import SponsorLogos from '@/shared/components/common/SponsorLogos';
-import TeamCard from '@/features/team/components/TeamCard';
-import { teamMembers } from '@/features/team/data';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/shared/components/ui/accordion';
-import { sponsorLogos, faqs, timelineEvents } from '@/features/about/data';
+import Image from 'next/image';
+import type { Locale } from '@/shared/i18n/config';
+import { resolve, text } from '@/shared/i18n/localized';
+import { LocalizedParagraphs, LocalizedText } from '@/shared/i18n/LocalizedText';
+import { ui } from '@/shared/i18n/ui';
+import { MEDIA } from '@/shared/content/media';
+import { PageBanner } from '@/shared/components/common/PageBanner';
+import { Section } from '@/shared/components/common/Section';
+import { SectionHeading } from '@/shared/components/common/SectionHeading';
+import { ServiceCards } from '@/features/services/components/ServiceCards';
+import { ImpactStats } from '@/features/home/components/ImpactStats';
+import { ClosingCtaSection } from '@/features/home/components/ClosingCtaSection';
+import { ABOUT_HEADINGS, ABOUT_HISTORY, ABOUT_INTRO, ABOUT_MISSION } from '@/features/about/data';
 
-export default function AboutPage() {
+export function AboutPage({ locale }: { locale: Locale }) {
+  const mission = resolve(ABOUT_MISSION, locale);
+
   return (
     <>
-      {/* 1. Page Banner */}
       <PageBanner
-        title="About Us"
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'About Us' }]}
+        locale={locale}
+        title={ui['nav.about']}
+        trail={[{ label: ui['nav.about'] }]}
+        image={MEDIA.aboutBanner}
       />
 
-      {/* 2. History Timeline — 15 Years of Nehemiah */}
-      <section className="py-20 overflow-hidden">
-        <div className="mx-auto max-w-5xl px-4">
-          <AnimateOnScroll animation="fadeUp">
+      {/* Introduction */}
+      <Section labelledBy="about-intro-heading">
+        <div className="grid items-start gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14">
+          <div className="min-w-0">
             <SectionHeading
-              title="15 Years of"
-              highlightedWord="Impact"
-              subtitle="From a small group of passionate advocates to a nationally recognized organization — explore the milestones that shaped Nehemiah's journey."
-              align="center"
+              locale={locale}
+              id="about-intro-heading"
+              title={ABOUT_HEADINGS.intro}
+              className="mb-6"
             />
-          </AnimateOnScroll>
-        </div>
-
-        <div className="mx-auto mt-12 w-full max-w-5xl px-4 md:px-8">
-          <HistoryTimeline events={timelineEvents} />
-        </div>
-      </section>
-
-      {/* 3. Team Section */}
-      <section className="bg-secondary-bg py-20">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeading
-            title="Our"
-            highlightedWord="Volunteers"
-            subtitle="Meet the dedicated individuals who donate their time and skills to make our mission possible."
-            align="center"
-          />
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            {teamMembers.map((member) => (
-              <AnimateOnScroll key={member.slug} animation="fadeUp">
-                <TeamCard {...member} />
-              </AnimateOnScroll>
-            ))}
+            <div className="max-w-prose space-y-5 text-lg">
+              <LocalizedParagraphs value={ABOUT_INTRO} locale={locale} />
+            </div>
+          </div>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-lg lg:sticky lg:top-6">
+            <Image
+              src={MEDIA.aboutSide.src}
+              alt={text(MEDIA.aboutSide.alt, locale)}
+              fill
+              sizes="(min-width: 1024px) 38vw, 100vw"
+              className="object-cover"
+            />
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* 4. CTA Section */}
-      <CTASection
-        title="Join with us to create an inclusive Ethiopia for children with Autism"
-        buttonLabel="Join With Us"
-        buttonHref="/contact"
-      />
+      {/* Mission */}
+      <Section labelledBy="about-mission-heading" tone="muted">
+        <SectionHeading locale={locale} id="about-mission-heading" title={ABOUT_HEADINGS.mission} />
+        <ol className="grid gap-6 md:grid-cols-2">
+          {mission.value.map((statement, index) => (
+            <li key={index} className="flex min-w-0 gap-4 rounded-xl border bg-white p-6 shadow-sm">
+              <span
+                aria-hidden="true"
+                className="bg-primary flex size-10 shrink-0 items-center justify-center rounded-full font-serif text-lg font-bold text-white"
+              >
+                {index + 1}
+              </span>
+              <p lang={mission.isFallback ? mission.lang : undefined} className="text-lg">
+                {statement}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </Section>
 
-      {/* 5. FAQ Section */}
-      <section id="faq" className="py-20">
-        <div className="mx-auto max-w-4xl px-4">
-          <SectionHeading title="Frequently Asked" highlightedWord="Questions" align="center" />
+      {/* History */}
+      <Section labelledBy="about-history-heading">
+        <SectionHeading locale={locale} id="about-history-heading" title={ABOUT_HEADINGS.history} />
+        <LocalizedText
+          as="p"
+          value={ABOUT_HISTORY}
+          locale={locale}
+          className="border-secondary text-heading max-w-3xl border-l-4 pl-5 font-serif text-2xl leading-snug"
+        />
+      </Section>
 
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="font-serif text-base font-semibold text-heading">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="leading-relaxed text-foreground">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </section>
+      {/* Services overview */}
+      <Section labelledBy="about-services-heading" tone="muted">
+        <SectionHeading
+          locale={locale}
+          id="about-services-heading"
+          title={ABOUT_HEADINGS.services}
+        />
+        <ServiceCards locale={locale} />
+      </Section>
 
-      {/* 6. Sponsor Logos */}
-      <SponsorLogos logos={sponsorLogos} />
+      {/* Impact */}
+      <Section labelledBy="about-impact-heading" tone="brand">
+        <SectionHeading
+          locale={locale}
+          id="about-impact-heading"
+          title={ABOUT_HEADINGS.impact}
+          tone="onDark"
+          align="center"
+          className="mx-auto"
+        />
+        <ImpactStats locale={locale} />
+      </Section>
+
+      <ClosingCtaSection locale={locale} />
     </>
   );
 }

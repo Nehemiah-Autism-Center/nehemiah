@@ -45,7 +45,8 @@ export const SITE_CONFIG = {
   social: {
     facebook: 'https://www.facebook.com/NehemiahAutismCenter',
     twitter: ' https://x.com/NehemiahAutism?s=20',
-    instagram: '  https://www.instagram.com/nehemiah_autism_center?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
+    instagram:
+      '  https://www.instagram.com/nehemiah_autism_center?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     youtube: '#',
     linkedin: 'https://www.linkedin.com/company/nehemiah-autism-center',
   },

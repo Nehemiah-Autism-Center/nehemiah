@@ -1,2 +1,3 @@
-export { default as BlogCard } from './components/BlogCard';
-export type { BlogPost } from './types';
+export { BlogPage } from './components/BlogPage';
+export { BlogPostPage } from './components/BlogPostPage';
+export { BlogCard } from './components/BlogCard';

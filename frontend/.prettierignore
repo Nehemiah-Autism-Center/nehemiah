@@ -1,0 +1,7 @@
+# Generated or tool-managed files: Prettier must not rewrite these.
+.next
+node_modules
+coverage
+playwright-report
+test-results
+pnpm-lock.yaml

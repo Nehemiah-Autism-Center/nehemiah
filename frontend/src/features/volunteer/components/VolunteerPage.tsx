@@ -1,108 +1,95 @@
-import PageBanner from '@/shared/components/common/PageBanner';
-import { VolunteerForm } from './VolunteerForm';
-import { Heart, Users, Shield, Clock } from 'lucide-react';
+import type { Locale } from '@/shared/i18n/config';
+import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
+import { ROUTES } from '@/shared/i18n/routing';
+import { ui } from '@/shared/i18n/ui';
+import { MEDIA } from '@/shared/content/media';
+import { PageBanner } from '@/shared/components/common/PageBanner';
+import { Section } from '@/shared/components/common/Section';
+import { SectionHeading } from '@/shared/components/common/SectionHeading';
+import { ButtonLink } from '@/shared/components/common/ButtonLink';
+import { EmailLink, PhoneLinks } from '@/shared/components/common/ContactDetails';
+import { VOLUNTEER_HOW_TO, VOLUNTEER_INTRO, VOLUNTEER_ROLES } from '@/features/volunteer/data';
 
-const highlights = [
-  {
-    icon: Heart,
-    title: 'Make a Real Difference',
-    description:
-      'Directly support children with autism and the families who care for them — your time creates lasting impact.',
-  },
-  {
-    icon: Users,
-    title: 'Join a Dedicated Team',
-    description:
-      'Work alongside our therapists, educators, and staff who share a passion for inclusion and compassionate care.',
-  },
-  {
-    icon: Shield,
-    title: 'Safe & Structured Environment',
-    description:
-      'All volunteers receive an orientation and are supported throughout their service by our experienced team.',
-  },
-  {
-    icon: Clock,
-    title: 'Flexible Commitment',
-    description:
-      'Choose your available days and hours. We work with your schedule to find a meaningful role for you.',
-  },
-];
-
-export function VolunteerPage() {
+export function VolunteerPage({ locale }: { locale: Locale }) {
   return (
     <>
-      {/* Page Banner */}
       <PageBanner
-        title="Volunteer With Us"
-        breadcrumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Volunteer' },
-        ]}
+        locale={locale}
+        title={ui['cta.volunteerWithUs']}
+        trail={[{ label: ui['nav.volunteer'] }]}
+        image={MEDIA.volunteerBanner}
       />
 
-      {/* Why Volunteer Section */}
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-              Get Involved
-            </span>
-            <hr className="mx-auto my-3 h-0.5 w-12 border-0 bg-primary" />
-            <h1 className="font-serif text-3xl font-medium text-heading sm:text-4xl">
-              Become a <span className="text-primary">Volunteer</span>
-            </h1>
-            <p className="mt-4 leading-relaxed text-foreground">
-              At Nehemiah Autism Center, our volunteers are the heart of what
-              we do. Whether you are a student, a professional, or simply
-              someone who cares — your time, skills, and compassion can
-              transform a child&apos;s world.
-            </p>
-          </div>
+      <Section labelledBy="volunteer-intro-heading">
+        <div className="max-w-3xl">
+          <SectionHeading
+            locale={locale}
+            id="volunteer-intro-heading"
+            title={ui['nav.volunteer']}
+            className="mb-6"
+          />
+          <LocalizedText as="p" value={VOLUNTEER_INTRO} locale={locale} className="text-lg" />
+        </div>
+      </Section>
 
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {highlights.map(({ icon: Icon, title, description }) => (
-              <div
-                key={title}
-                className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition hover:shadow-md"
-              >
-                <div className="mb-4 flex size-11 items-center justify-center rounded-full bg-primary/10">
-                  <Icon className="size-5 text-primary" />
-                </div>
-                <h3 className="mb-2 font-serif font-semibold text-heading">
-                  {title}
-                </h3>
-                <p className="text-sm leading-relaxed text-foreground">
-                  {description}
-                </p>
-              </div>
-            ))}
+      <Section labelledBy="volunteer-roles-heading" tone="muted">
+        <SectionHeading
+          locale={locale}
+          id="volunteer-roles-heading"
+          title={{ en: 'Volunteer roles', am: 'የበጎ ፈቃደኞች ሚናዎች', amProvisional: true }}
+        />
+        <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {VOLUNTEER_ROLES.map((role, index) => (
+            <li key={role.id} className="flex">
+              <article className="flex w-full min-w-0 flex-col rounded-xl border bg-white p-6 shadow-sm">
+                <span
+                  aria-hidden="true"
+                  className="bg-primary mb-4 flex size-10 items-center justify-center rounded-full font-serif text-lg font-bold text-white"
+                >
+                  {index + 1}
+                </span>
+                <LocalizedText
+                  as="h3"
+                  value={role.title}
+                  locale={locale}
+                  className="text-heading font-serif text-xl font-semibold"
+                />
+                <LocalizedText as="p" value={role.description} locale={locale} className="mt-3" />
+              </article>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section labelledBy="volunteer-how-heading">
+        <div className="bg-primary on-dark mx-auto max-w-3xl rounded-2xl p-8 text-center text-white sm:p-10">
+          <LocalizedText
+            as="h2"
+            id="volunteer-how-heading"
+            value={VOLUNTEER_HOW_TO.heading}
+            locale={locale}
+            className="font-serif text-3xl text-white"
+          />
+          <LocalizedText
+            as="p"
+            value={VOLUNTEER_HOW_TO.body}
+            locale={locale}
+            className="mt-4 text-lg text-white/95"
+          />
+          <ButtonLink
+            href={`${ROUTES.contact}?topic=volunteer`}
+            locale={locale}
+            variant="light"
+            className="mt-6"
+          >
+            <UiText k="cta.volunteerWithUs" locale={locale} />
+          </ButtonLink>
+          <div className="mt-6 flex flex-col items-center gap-1 text-base">
+            <EmailLink />
+            <PhoneLinks className="flex flex-wrap justify-center gap-x-4" />
           </div>
         </div>
-      </section>
-
-      {/* Application Form Section */}
-      <section className="bg-secondary-bg py-16">
-        <div className="mx-auto max-w-4xl px-4">
-          <div className="mb-10 text-center">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-              Apply Now
-            </span>
-            <hr className="mx-auto my-3 h-0.5 w-12 border-0 bg-primary" />
-            <h2 className="font-serif text-2xl font-medium text-heading sm:text-3xl">
-              Volunteer <span className="text-primary">Application</span>
-            </h2>
-            <p className="mt-3 text-sm text-foreground">
-              Fields marked with <span className="text-red-500">*</span> are
-              required.
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-white p-6 shadow-sm sm:p-10">
-            <VolunteerForm />
-          </div>
-        </div>
-      </section>
+      </Section>
     </>
   );
 }

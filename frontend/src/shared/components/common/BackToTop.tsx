@@ -1,40 +1,37 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronUp } from 'lucide-react';
+import { useLocale } from '@/shared/i18n/LocaleProvider';
+import { t } from '@/shared/i18n/ui';
 
+/** Appears after the visitor has scrolled well down the page; jumps back without animation if they prefer reduced motion. */
 export default function BackToTop() {
+  const locale = useLocale();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 300);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setVisible(window.scrollY > 600);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  if (!visible) return null;
+
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
   };
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.2 }}
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-colors hover:bg-primary-hover"
-          aria-label="Back to top"
-        >
-          <ChevronUp className="h-6 w-6" />
-        </motion.button>
-      )}
-    </AnimatePresence>
+    <button
+      type="button"
+      onClick={scrollToTop}
+      aria-label={t('common.backToTop', locale)}
+      className="bg-primary hover:bg-primary-hover fixed right-4 bottom-4 z-40 flex size-12 items-center justify-center rounded-full text-white shadow-lg transition-colors sm:right-6 sm:bottom-6"
+    >
+      <ChevronUp aria-hidden="true" className="size-6" />
+    </button>
   );
 }

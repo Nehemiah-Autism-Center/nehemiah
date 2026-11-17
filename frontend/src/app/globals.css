@@ -1,8 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: 'Open Sans', sans-serif;
-  --font-serif: 'Trirong', serif;
+  /* Font variables are provided by next/font (see src/app/fonts.ts) and set on <html>. */
+  --font-sans: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-trirong), ui-serif, Georgia, serif;
 
   --color-primary: hsl(var(--primary));
   --color-primary-hover: hsl(var(--primary-hover));
@@ -32,6 +33,7 @@
   --color-footer-bg: hsl(var(--footer-bg));
   --color-topbar-bg: hsl(var(--topbar-bg));
   --color-footer-text: hsl(var(--footer-text));
+  --color-footer-accent: hsl(var(--footer-accent));
   --color-secondary-bg: hsl(var(--secondary-bg));
 }
 
@@ -46,20 +48,17 @@
   /* Backgrounds */
   --background: 40 20% 99%;
   --secondary-bg: 40 15% 96%;
-  --footer-bg: 215 50% 12%;
-  /* #0F1B2D - Deep Navy */
-  --topbar-bg: 215 50% 12%;
-  /* #0F1B2D - Deep Navy */
+  --footer-bg: 215 50% 12%; /* #0F1B2D - Deep Navy */
+  --topbar-bg: 215 50% 12%; /* #0F1B2D - Deep Navy */
 
-  /* Text */
-  --foreground: 215 20% 35%;
-  --heading: 215 40% 16%;
-  /* #162338 */
+  /* Text. Every text/background pair below meets WCAG AA (4.5:1); measured values are in
+     docs/frontend-review/NAC-IMPLEMENTATION-REPORT.md. */
+  --foreground: 215 20% 35%; /* 7.3:1 on background */
+  --heading: 215 40% 16%; /* 15:1 */
   --text-dark: 215 40% 16%;
-  /* #162338 */
-  --text-medium: 215 12% 50%;
-  /* #6B7A8D */
-  --footer-text: 215 15% 88%;
+  --text-medium: 215 14% 40%; /* 5.9:1 (was 4.1:1) */
+  --footer-text: 215 15% 88%; /* 12.9:1 on footer */
+  --footer-accent: 170 45% 62%; /* 8.9:1 on footer — links, icons, hover */
 
   /* Card */
   --card: 0 0% 100%;
@@ -69,94 +68,115 @@
   --popover: 0 0% 100%;
   --popover-foreground: 215 40% 16%;
 
-  /* Secondary - Warm Gold #D4A03C — energetic accent for CTAs and highlights */
+  /* Secondary - Warm Gold #D4A03C — highlights only; use dark text on it, never gold text on white */
   --secondary: 40 62% 53%;
-  /* #D4A03C */
   --secondary-foreground: 215 40% 16%;
 
   /* Muted */
   --muted: 40 10% 95%;
-  --muted-foreground: 215 12% 50%;
-  /* #6B7A8D */
+  --muted-foreground: 215 14% 40%; /* 5.9:1 (was 4.1:1) */
 
   /* Accent — Warm Gold to complement teal */
   --accent: 40 62% 53%;
-  /* #D4A03C */
   --accent-foreground: 215 40% 16%;
 
-  /* Destructive - Soft Red #C44B4B */
-  --destructive: 0 50% 53%;
+  /* Destructive */
+  --destructive: 0 55% 45%; /* 6.1:1 on white (was 4.7:1) — used for error text */
   --destructive-foreground: 0 0% 100%;
 
-  /* Border & Input */
+  /* Border (decorative dividers) and Input (form control edge, needs 3:1 — WCAG 1.4.11) */
   --border: 215 15% 88%;
-  --input: 215 15% 88%;
+  --input: 215 12% 55%; /* 3.5:1 on white (was 1.3:1) */
   --ring: 170 65% 29%;
-  /* matches primary teal */
 
   --radius: 0.5rem;
 }
 
-* {
-  border-color: hsl(var(--border));
+/* Amharic: Noto Sans Ethiopic first, Latin fonts as fallback for embedded English words. */
+:lang(am) {
+  --font-sans: var(--font-ethiopic), var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-ethiopic), var(--font-trirong), ui-serif, serif;
 }
 
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 28px;
-  letter-spacing: 0.01em;
+/* Base rules live in @layer base: un-layered CSS would beat Tailwind utilities (e.g. `text-white`
+   on a heading) regardless of specificity. */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    color: hsl(var(--heading));
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  /* Ethiopic glyphs are taller and need more leading; letter-spacing breaks the script's rhythm. */
+  :lang(am) body,
+  body:lang(am) {
+    line-height: 1.85;
+  }
+  :lang(am) h1,
+  :lang(am) h2,
+  :lang(am) h3,
+  :lang(am) h4 {
+    line-height: 1.45;
+  }
+
+  /* Visible keyboard focus everywhere; white ring on dark surfaces. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid hsl(var(--ring));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .on-dark :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline-color: #fff;
+  }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  color: hsl(var(--heading));
+/* Ethiopic script: letter-spacing breaks its rhythm, so it is forced off. */
+:lang(am),
+:lang(am) * {
+  letter-spacing: normal !important;
 }
 
-.btn-autism-red {
-  background-color: hsl(var(--autism-red));
-  color: white;
-}
-
-.btn-autism-red:hover {
-  background-color: hsl(var(--autism-red-dark));
-}
-
-/* Google Translate Overrides */
-#google_translate_element,
-#goog-gt-tt,
-#goog-gt-tt *,
-.goog-te-banner-frame,
-.goog-te-balloon-frame {
-  display: none !important;
-}
-
-body>.skiptranslate {
-  display: none !important;
-}
-
-body,
-html {
-  top: 0 !important;
-  position: static !important;
-}
-
-.goog-text-highlight,
-.goog-text-highlight *,
-font {
-  background-color: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-div[class*="VIpgJd-Zvi9od-aZ2wEe"] {
-  display: none !important;
+/* Calm by default: no parallax, auto-play or scroll-triggered motion is used anywhere, and any
+   remaining transition is disabled for visitors who ask their system for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
