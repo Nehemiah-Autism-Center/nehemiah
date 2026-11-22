@@ -29,7 +29,7 @@ export default function BackToTop() {
       type="button"
       onClick={scrollToTop}
       aria-label={t('common.backToTop', locale)}
-      className="bg-primary hover:bg-primary-hover fixed right-4 bottom-4 z-40 flex size-12 items-center justify-center rounded-full text-white shadow-lg transition-colors sm:right-6 sm:bottom-6"
+      className="bg-primary text-primary-foreground hover:bg-primary-hover fixed right-4 bottom-4 z-40 flex size-12 items-center justify-center rounded-[5px] shadow-lg transition-colors sm:right-6 sm:bottom-6"
     >
       <ChevronUp aria-hidden="true" className="size-6" />
     </button>

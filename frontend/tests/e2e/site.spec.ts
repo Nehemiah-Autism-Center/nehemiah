@@ -72,7 +72,12 @@ test.describe('language routing', () => {
     await page.goto('/am/about');
     await page.getByRole('link', { name: 'English' }).first().click();
     await expect(page).toHaveURL(/\/en\/about$/);
-    expect((await context.cookies()).find((c) => c.name === 'NEXT_LOCALE')?.value).toBe('en');
+    // The switcher writes the cookie from the page (document.cookie); the browser's cookie store
+    // can lag that write by a few milliseconds, so poll for it instead of reading it once. (Seen
+    // in 8 of 30 repeated runs: the store always converged to "en" and the next visit was English.)
+    await expect
+      .poll(async () => (await context.cookies()).find((c) => c.name === 'NEXT_LOCALE')?.value)
+      .toBe('en');
     await page.goto('/');
     await expect(page).toHaveURL(/\/en$/);
   });

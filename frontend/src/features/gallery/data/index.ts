@@ -159,7 +159,7 @@ export const GALLERY_PHOTOS: readonly GalleryPhoto[] = [
   photo('small-chairs', DEMO_PHOTOS.smallChairs),
 ];
 
-/** Photographs shown in the homepage preview. */
+/** Photographs shown in the homepage preview: two full rows of four on desktop. */
 export const GALLERY_PREVIEW_IDS = [
   'children-playing',
   'families-event',
@@ -167,6 +167,8 @@ export const GALLERY_PREVIEW_IDS = [
   'parachute',
   'arts-and-crafts',
   'volunteers-certificates',
+  'mascot-cones',
+  'walk-crowd',
 ] as const;
 
 /** Interface text for the gallery; short labels carry provisional Amharic, sentences are English only. */

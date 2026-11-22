@@ -1,6 +1,7 @@
 import type { Locale } from '@/shared/i18n/config';
 import { LocalizedText } from '@/shared/i18n/LocalizedText';
 import { ui } from '@/shared/i18n/ui';
+import { PAGE_BANNERS } from '@/shared/content/media';
 import { PageBanner } from '@/shared/components/common/PageBanner';
 import { Section } from '@/shared/components/common/Section';
 import { SectionHeading } from '@/shared/components/common/SectionHeading';
@@ -15,6 +16,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
         locale={locale}
         title={ui['nav.services']}
         trail={[{ label: ui['nav.services'] }]}
+        image={PAGE_BANNERS.services}
       />
 
       <Section labelledBy="services-page-heading">
@@ -24,7 +26,7 @@ export function ServicesPage({ locale }: { locale: Locale }) {
           as="p"
           value={SERVICES_SUMMARY}
           locale={locale}
-          className="border-secondary mt-10 max-w-3xl border-l-4 pl-5 text-lg"
+          className="border-primary mt-10 max-w-3xl border-l-4 pl-5 text-lg"
         />
       </Section>
 

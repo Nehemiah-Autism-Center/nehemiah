@@ -3,13 +3,22 @@ import { LocalizedText } from '@/shared/i18n/LocalizedText';
 import { ORGANIZATION } from '@/shared/content/organization';
 import { cn } from '@/shared/lib/utils';
 
-// min-h-11 (44px): tap-to-call and email links must be comfortable touch targets, not 20px text lines.
-const LINK =
-  'inline-flex min-h-11 items-center underline-offset-4 hover:underline [overflow-wrap:anywhere]';
+// Default links are min-h-11 (44px): tap-to-call and email links must be comfortable touch targets,
+// not 20px text lines. The dense desktop header bar opts into `compact` (24px, WCAG 2.5.8 minimum).
+const LINK = 'inline-flex items-center underline-offset-4 hover:underline [overflow-wrap:anywhere]';
+const SIZE = { default: 'min-h-11', compact: 'min-h-6' } as const;
 
-export function EmailLink({ className }: { className?: string }) {
+type LinkSize = keyof typeof SIZE;
+
+export function EmailLink({
+  className,
+  size = 'default',
+}: {
+  className?: string;
+  size?: LinkSize;
+}) {
   return (
-    <a href={`mailto:${ORGANIZATION.email}`} className={cn(LINK, className)}>
+    <a href={`mailto:${ORGANIZATION.email}`} className={cn(LINK, SIZE[size], className)}>
       {ORGANIZATION.email}
     </a>
   );
@@ -19,15 +28,17 @@ export function EmailLink({ className }: { className?: string }) {
 export function PhoneLinks({
   className,
   itemClassName,
+  size = 'default',
 }: {
   className?: string;
   itemClassName?: string;
+  size?: LinkSize;
 }) {
   return (
     <ul className={className}>
       {ORGANIZATION.phones.map((phone) => (
         <li key={phone.tel} className={itemClassName}>
-          <a href={`tel:${phone.tel}`} className={cn(LINK, 'whitespace-nowrap')}>
+          <a href={`tel:${phone.tel}`} className={cn(LINK, SIZE[size], 'whitespace-nowrap')}>
             {phone.display}
           </a>
         </li>

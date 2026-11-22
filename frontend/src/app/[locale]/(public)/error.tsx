@@ -39,7 +39,7 @@ export default function ErrorPage({
         <button
           type="button"
           onClick={reset}
-          className="bg-primary hover:bg-primary-hover inline-flex min-h-11 items-center justify-center rounded-md px-6 py-2.5 text-base font-semibold text-white"
+          className="bg-primary text-primary-foreground hover:bg-primary-hover inline-flex min-h-11 items-center justify-center rounded-[5px] px-7 py-2.5 text-sm font-semibold tracking-wide uppercase"
         >
           <LocalizedText value={RETRY} locale={locale} />
         </button>

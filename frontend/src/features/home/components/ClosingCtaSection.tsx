@@ -1,29 +1,30 @@
 import type { Locale } from '@/shared/i18n/config';
-import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
+import { UiText } from '@/shared/i18n/LocalizedText';
 import { ROUTES } from '@/shared/i18n/routing';
-import { Section } from '@/shared/components/common/Section';
+import { PAGE_BANNERS } from '@/shared/content/media';
 import { ButtonLink } from '@/shared/components/common/ButtonLink';
+import { PhotoSection } from '@/shared/components/common/PhotoSection';
+import { SectionHeading } from '@/shared/components/common/SectionHeading';
 import { CLOSING_CTA } from '@/features/home/data';
 
-/** "Help Us Reach More Children": one primary action, two secondary ways to get involved. */
+/**
+ * "Help Us Reach More Children": dark photographic band with one primary action (green) and two
+ * secondary ways to get involved (outlined white).
+ */
 export function ClosingCtaSection({ locale }: { locale: Locale }) {
   return (
-    <Section labelledBy="closing-cta-heading" tone="brand">
+    <PhotoSection labelledBy="closing-cta-heading" image={PAGE_BANNERS.closing}>
       <div className="mx-auto max-w-3xl text-center">
-        <LocalizedText
-          as="h2"
+        <SectionHeading
+          locale={locale}
           id="closing-cta-heading"
-          value={CLOSING_CTA.heading}
-          locale={locale}
-          className="font-serif text-3xl text-white md:text-4xl"
+          title={CLOSING_CTA.heading}
+          subtitle={CLOSING_CTA.body}
+          tone="onDark"
+          align="center"
+          className="mb-8"
         />
-        <LocalizedText
-          as="p"
-          value={CLOSING_CTA.body}
-          locale={locale}
-          className="mt-4 text-lg text-white/95"
-        />
-        <ButtonLink href={ROUTES.donate} locale={locale} variant="light" className="mt-8">
+        <ButtonLink href={ROUTES.donate} locale={locale}>
           <UiText k="cta.supportMission" locale={locale} />
         </ButtonLink>
         <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -40,6 +41,6 @@ export function ClosingCtaSection({ locale }: { locale: Locale }) {
           </ButtonLink>
         </div>
       </div>
-    </Section>
+    </PhotoSection>
   );
 }

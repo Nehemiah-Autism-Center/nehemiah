@@ -20,13 +20,18 @@ interface PageBannerProps {
   title: Localized<string>;
   /** Trail after "Home". The last item is the current page. */
   trail?: Crumb[];
+  /** Decorative photograph behind the title; a dark overlay keeps the white text readable. */
   image?: MediaAsset;
 }
 
-/** The page's <h1> with a breadcrumb trail. The photograph, when given, is decorative. */
+/**
+ * The page's <h1> with a breadcrumb trail: a dark photographic banner with the title and
+ * breadcrumbs centred, as in the template. The photograph is decorative (alt=""), and the
+ * charcoal fallback keeps the contrast whether or not the image loads.
+ */
 export function PageBanner({ locale, title, trail = [], image }: PageBannerProps) {
   return (
-    <section className="on-dark bg-primary-dark relative isolate overflow-hidden text-white">
+    <section className="on-dark bg-charcoal-dark relative isolate overflow-hidden text-white">
       {image && (
         <>
           <Image
@@ -37,17 +42,24 @@ export function PageBanner({ locale, title, trail = [], image }: PageBannerProps
             sizes="100vw"
             className="-z-20 object-cover"
           />
-          <div aria-hidden="true" className="bg-primary-dark/85 absolute inset-0 -z-10" />
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-black/75" />
         </>
       )}
-      <Container className="py-12 md:py-16">
-        <nav aria-label={t('common.breadcrumb', locale)}>
-          <ol className="flex flex-wrap items-center gap-x-1 gap-y-1 text-sm text-white/90">
+      <Container className="py-14 text-center md:py-20">
+        <LocalizedText
+          as="h1"
+          value={title}
+          locale={locale}
+          className="mx-auto max-w-4xl font-serif text-3xl leading-tight font-semibold text-white sm:text-4xl md:text-5xl"
+        />
+        <div aria-hidden="true" className="bg-primary mx-auto mt-4 h-[3px] w-14" />
+        <nav aria-label={t('common.breadcrumb', locale)} className="mt-5">
+          <ol className="flex flex-wrap items-center justify-center gap-x-1 gap-y-1 text-sm text-white">
             <li>
               <LocalizedLink
                 href={ROUTES.home}
                 locale={locale}
-                className="underline-offset-4 hover:underline"
+                className="hover:text-primary underline-offset-4 hover:underline"
               >
                 <UiText k="nav.home" locale={locale} />
               </LocalizedLink>
@@ -58,13 +70,13 @@ export function PageBanner({ locale, title, trail = [], image }: PageBannerProps
                 <li key={text(crumb.label, 'en')} className="flex items-center gap-1">
                   <ChevronRight
                     aria-hidden="true"
-                    className="size-4 shrink-0 text-white/70 rtl:rotate-180"
+                    className="text-primary size-4 shrink-0 rtl:rotate-180"
                   />
                   {crumb.href && !isLast ? (
                     <LocalizedLink
                       href={crumb.href}
                       locale={locale}
-                      className="underline-offset-4 hover:underline"
+                      className="hover:text-primary underline-offset-4 hover:underline"
                     >
                       <LocalizedText value={crumb.label} locale={locale} />
                     </LocalizedLink>
@@ -73,7 +85,7 @@ export function PageBanner({ locale, title, trail = [], image }: PageBannerProps
                       value={crumb.label}
                       locale={locale}
                       aria-current={isLast ? 'page' : undefined}
-                      className="font-semibold"
+                      className="text-primary font-semibold"
                     />
                   )}
                 </li>
@@ -81,12 +93,6 @@ export function PageBanner({ locale, title, trail = [], image }: PageBannerProps
             })}
           </ol>
         </nav>
-        <LocalizedText
-          as="h1"
-          value={title}
-          locale={locale}
-          className="mt-4 max-w-4xl font-serif text-3xl leading-tight text-white sm:text-4xl md:text-5xl"
-        />
       </Container>
     </section>
   );

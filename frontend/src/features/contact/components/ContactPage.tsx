@@ -3,6 +3,7 @@ import type { Locale } from '@/shared/i18n/config';
 import { LocalizedText, UiText } from '@/shared/i18n/LocalizedText';
 import type { UiKey } from '@/shared/i18n/ui';
 import { ui } from '@/shared/i18n/ui';
+import { PAGE_BANNERS } from '@/shared/content/media';
 import { Section } from '@/shared/components/common/Section';
 import { PageBanner } from '@/shared/components/common/PageBanner';
 import { SectionHeading } from '@/shared/components/common/SectionHeading';
@@ -29,8 +30,8 @@ function InfoCard({
   children: React.ReactNode;
 }) {
   return (
-    <li className="flex min-w-0 gap-4 rounded-xl border bg-white p-5 shadow-sm">
-      <div className="bg-primary/10 text-primary flex size-12 shrink-0 items-center justify-center rounded-full">
+    <li className="flex min-w-0 gap-4 rounded-[5px] border bg-white p-5 shadow-sm">
+      <div className="bg-primary text-primary-foreground flex size-12 shrink-0 items-center justify-center rounded-full">
         <Icon aria-hidden="true" className="size-6" />
       </div>
       <div className="min-w-0">
@@ -53,6 +54,7 @@ export function ContactPage({ locale }: { locale: Locale }) {
         locale={locale}
         title={ui['nav.contact']}
         trail={[{ label: ui['nav.contact'] }]}
+        image={PAGE_BANNERS.contact}
       />
 
       <Section labelledBy="contact-details-heading">
@@ -92,11 +94,11 @@ export function ContactPage({ locale }: { locale: Locale }) {
                 locale={locale}
                 className="text-heading font-serif text-lg font-semibold"
               />
-              <SocialLinks locale={locale} tone="onLight" className="mt-1 -ml-3" />
+              <SocialLinks locale={locale} tone="onLight" className="mt-3" />
             </div>
           </div>
 
-          <div className="min-w-0 rounded-xl border bg-white p-6 shadow-sm sm:p-8">
+          <div className="min-w-0 rounded-[5px] border bg-white p-6 shadow-sm sm:p-8">
             <LocalizedText
               as="h2"
               value={CONTACT_COPY.formHeading}

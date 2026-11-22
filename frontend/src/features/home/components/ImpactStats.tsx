@@ -3,7 +3,10 @@ import { LocalizedText } from '@/shared/i18n/LocalizedText';
 import { cn } from '@/shared/lib/utils';
 import { IMPACT_STATS } from '@/features/home/data';
 
-/** Figures are static numbers: no count-up animation. */
+/**
+ * The three approved figures as static cards: bright green with near-black text on the dark
+ * band (7.1:1), white cards on light pages. No count-up animation and no invented fourth figure.
+ */
 export function ImpactStats({
   locale,
   tone = 'onDark',
@@ -17,9 +20,10 @@ export function ImpactStats({
         <div
           key={stat.id}
           className={cn(
-            'flex min-w-0 flex-col-reverse gap-1 rounded-xl p-6 text-center',
-            // A white overlay would lighten the teal band and push white text below 4.5:1.
-            tone === 'onDark' ? 'bg-primary-dark/55' : 'border bg-white shadow-sm',
+            'flex min-w-0 flex-col-reverse gap-2 rounded-[5px] p-8 text-center',
+            tone === 'onDark'
+              ? 'bg-primary text-primary-foreground'
+              : 'text-text-dark border bg-white shadow-sm',
           )}
         >
           <LocalizedText
@@ -30,8 +34,8 @@ export function ImpactStats({
           />
           <dd
             className={cn(
-              'font-serif text-5xl leading-none font-bold',
-              tone === 'onDark' ? 'text-white' : 'text-primary',
+              'font-serif text-5xl leading-none font-bold md:text-6xl',
+              tone === 'onDark' ? 'text-primary-foreground' : 'text-green-display',
             )}
           >
             {stat.value}

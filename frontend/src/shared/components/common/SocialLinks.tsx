@@ -44,17 +44,38 @@ export function SocialIcon({ name, className }: { name: SocialKey; className?: s
   }
 }
 
+type Tone = 'square' | 'onDark' | 'onLight';
+
 interface SocialLinksProps {
   locale: Locale;
-  tone?: 'onDark' | 'onLight';
+  /**
+   * square  - the template's small white squares on the charcoal utility bar
+   * onDark  - outlined squares with green icons (footer, mobile menu)
+   * onLight - outlined squares on white (contact page)
+   */
+  tone?: Tone;
   className?: string;
 }
 
-/** Row of the organisation's six official profiles. Every link opens in a new tab and says so. */
+const LINK: Record<Tone, string> = {
+  square: 'size-7 bg-white text-charcoal hover:bg-primary hover:text-primary-foreground',
+  onDark:
+    'size-11 border border-white/25 text-primary lg:size-10 hover:border-primary hover:bg-primary hover:text-primary-foreground',
+  onLight:
+    'size-11 border border-border bg-white text-green-ink hover:border-primary hover:bg-primary hover:text-primary-foreground',
+};
+
+/** The organisation's six official profiles. Every link opens in a new tab and says so. */
 export function SocialLinks({ locale, tone = 'onDark', className }: SocialLinksProps) {
   const suffix = t('common.opensInNewTab', locale);
   return (
-    <ul className={cn('flex flex-wrap items-center gap-1', className)}>
+    <ul
+      className={cn(
+        'flex flex-wrap items-center',
+        tone === 'square' ? 'gap-1.5' : 'gap-2',
+        className,
+      )}
+    >
       {SOCIAL_LINKS.map((link) => (
         <li key={link.key}>
           <a
@@ -63,13 +84,11 @@ export function SocialLinks({ locale, tone = 'onDark', className }: SocialLinksP
             rel="noopener noreferrer"
             aria-label={`${link.label} ${suffix}`}
             className={cn(
-              'flex size-11 items-center justify-center rounded-full transition-colors',
-              tone === 'onDark'
-                ? 'text-footer-accent hover:bg-white/10 hover:text-white'
-                : 'text-primary hover:bg-primary hover:text-white',
+              'flex items-center justify-center rounded-[2px] transition-colors',
+              LINK[tone],
             )}
           >
-            <SocialIcon name={link.key} />
+            <SocialIcon name={link.key} className={tone === 'square' ? 'size-3.5' : 'size-5'} />
           </a>
         </li>
       ))}

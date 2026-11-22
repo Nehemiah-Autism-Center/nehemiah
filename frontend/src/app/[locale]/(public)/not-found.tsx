@@ -14,7 +14,10 @@ export default function NotFound() {
   const locale = useLocale();
   return (
     <Container className="flex min-h-[55vh] flex-col items-center justify-center py-16 text-center">
-      <p aria-hidden="true" className="text-primary font-serif text-8xl leading-none font-bold">
+      <p
+        aria-hidden="true"
+        className="text-green-display font-serif text-8xl leading-none font-bold"
+      >
         404
       </p>
       <UiText

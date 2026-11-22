@@ -167,3 +167,23 @@ export const DEMO_PHOTOS = {
     'Children sitting on small green chairs outdoors',
   ),
 } as const satisfies Record<string, MediaAsset>;
+
+/**
+ * Photographic backdrops for the page headers (dark overlay applied in PageBanner). All are
+ * existing demonstration photographs — nothing from the design template — and are purely
+ * decorative (`alt=""` at the point of use). Replace them together with the other demo media.
+ */
+export const PAGE_BANNERS = {
+  about: DEMO_PHOTOS.walkCrowd,
+  services: DEMO_PHOTOS.foamMats,
+  events: DEMO_PHOTOS.heroFamilies,
+  blog: DEMO_PHOTOS.artsAndCrafts,
+  gallery: DEMO_PHOTOS.parachute,
+  volunteer: DEMO_PHOTOS.volunteers,
+  faq: DEMO_PHOTOS.seatedGroup,
+  contact: DEMO_PHOTOS.smallChairs,
+  donate: DEMO_PHOTOS.ribbonGame,
+  /** Backdrops for the dark statistics band and the closing call to action on the homepage. */
+  impact: DEMO_PHOTOS.foamMats,
+  closing: DEMO_PHOTOS.marchOnRoad,
+} as const satisfies Record<string, MediaAsset>;

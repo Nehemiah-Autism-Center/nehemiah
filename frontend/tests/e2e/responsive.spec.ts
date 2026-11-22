@@ -46,23 +46,37 @@ for (const viewport of VIEWPORTS) {
       }
     });
 
-    test('tap targets in the header are at least 44px', async ({ page }) => {
+    /**
+     * Generosity redesign: the desktop utility bar is a dense 40px strip with 28px social squares
+     * and 24px inline contact links, as specified. WCAG 2.5.8 (AA) requires 24px, so that is the
+     * floor for those (social, utility and language links, inline contact links); everything else
+     * keeps 44px: all controls on phones (< 768px), and on larger screens the main navigation,
+     * the Support button and the menu button.
+     */
+    test('tap targets in the header meet the size rules', async ({ page }) => {
       await page.goto('/en');
-      const small = await page.evaluate(() => {
+      const small = await page.evaluate((isPhone) => {
         const header = document.querySelector('header');
         const bad: string[] = [];
         for (const el of header?.querySelectorAll('a, button') ?? []) {
           const r = el.getBoundingClientRect();
           // Skip elements hidden at this width (display:none has no box) and the visually hidden skip link.
           if (r.width === 0 || r.height === 0) continue;
-          if (r.height < 43.5 || r.width < 43.5) {
+          const label = (el.getAttribute('aria-label') || el.textContent || '').trim();
+          const strict =
+            isPhone ||
+            el.tagName === 'BUTTON' ||
+            el.closest('nav[aria-label="Main navigation"]') !== null ||
+            el.getAttribute('href')?.endsWith('/donate') === true;
+          const min = strict ? 43.5 : 24;
+          if (r.height < min || r.width < min) {
             bad.push(
-              `${el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 25)}" ${Math.round(r.width)}x${Math.round(r.height)}`,
+              `${el.tagName.toLowerCase()} "${label.slice(0, 25)}" ${Math.round(r.width)}x${Math.round(r.height)} (needs ${strict ? 44 : 24})`,
             );
           }
         }
         return bad;
-      });
+      }, viewport.width < 768);
       expect(small).toEqual([]);
     });
   });
